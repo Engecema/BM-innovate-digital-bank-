@@ -25,3 +25,14 @@ jobs:
         env:
           CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
           CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
+      - name: Executar Transferencia de 200 Reais
+        run: node transferir.js
+        env:
+          CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
+          CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
+
+      - name: Consultar Saldo Atualizado
+        run: node consultar-saldo.js
+        env:
+          CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
+          CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
