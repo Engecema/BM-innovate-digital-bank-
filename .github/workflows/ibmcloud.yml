@@ -19,4 +19,10 @@ jobs:
         env:
           CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
           CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
+                - name: Consultar Saldo do Cliente
+        run: node consultar-saldo.js
+        env:
+          CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
+          CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
+
           
