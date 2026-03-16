@@ -3,41 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Innovate | Private Bank</title>
+    <title>Innovate | Brokerage</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #000; color: #fff; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .currency-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; width: 100%; max-width: 340px; margin-bottom: 20px; }
-        .currency-box { background: #111; padding: 15px; border-radius: 15px; border: 1px solid #333; text-align: center; }
-        .chart-container { background: #111; border-radius: 20px; padding: 20px; width: 100%; max-width: 340px; border: 1px solid #222; }
-        .chart-line { display: flex; align-items: flex-end; justify-content: space-between; height: 100px; padding-top: 20px; }
-        .bar { width: 30px; background: #27ae60; border-radius: 5px 5px 0 0; position: relative; }
-        .bar::after { content: ''; position: absolute; top: -15px; left: 50%; transform: translateX(-50%); font-size: 0.6rem; color: #888; }
+        .asset-card { background: #111; border-radius: 20px; padding: 20px; width: 100%; max-width: 340px; border: 1px solid #333; margin-bottom: 15px; }
+        .asset-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #222; }
+        .btn-report { background: #fff; color: #000; border: none; padding: 15px; border-radius: 12px; width: 100%; max-width: 340px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        .report-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; padding: 40px 20px; box-sizing: border-box; }
     </style>
 </head>
 <body>
-    <div style="text-align: center; margin-bottom: 30px;">
-        <div style="font-size: 2.2rem; font-weight: bold; color: #27ae60;">R$ 1.537,02</div>
-        <small style="color: #888;">Crescimento de 14.90% a.a.</small>
+    <div style="text-align: center; margin-bottom: 25px;">
+        <div style="font-size: 0.8rem; color: #888;">Patrimônio sob Custódia</div>
+        <div style="font-size: 2.2rem; font-weight: bold; color: #27ae60;">R$ 4.627,02</div>
     </div>
 
-    <!-- Conversor Multi-Moeda -->
-    <div class="currency-grid">
-        <div class="currency-box">🇺🇸 USD <div style="font-weight: bold; color: #27ae60; margin-top: 5px;">$ 301.37</div></div>
-        <div class="currency-box">🇪🇺 EUR <div style="font-weight: bold; color: #27ae60; margin-top: 5px;">€ 279.45</div></div>
-    </div>
-
-    <!-- Gráfico de Investimentos -->
-    <div class="chart-container">
-        <small style="color: #888; text-transform: uppercase; font-size: 0.7rem;">Evolução do Patrimônio (7d)</small>
-        <div class="chart-line">
-            <div class="bar" style="height: 60%;"></div>
-            <div class="bar" style="height: 65%;"></div>
-            <div class="bar" style="height: 70%;"></div>
-            <div class="bar" style="height: 75%;"></div>
-            <div class="bar" style="height: 85%;"></div>
-            <div class="bar" style="height: 95%;"></div>
-            <div class="bar" style="height: 100%; background: #fff; box-shadow: 0 0 10px #27ae60;"></div>
+    <!-- Cofre de Ativos -->
+    <div class="asset-card">
+        <small style="color: #27ae60; font-weight: bold;">🛡️ COFRE DE ATIVOS</small>
+        <div class="asset-item">
+            <span>₿ Bitcoin (BTC)</span>
+            <strong>R$ 1.250,00</strong>
+        </div>
+        <div class="asset-item">
+            <span>🍎 Apple (AAPL)</span>
+            <strong>R$ 1.840,00</strong>
         </div>
     </div>
+
+    <button class="btn-report" onclick="gerarInforme()">📄 Informe de Rendimentos 2024</button>
+
+    <!-- Overlay do Informe -->
+    <div id="overlay" class="report-overlay" onclick="this.style.display='none'">
+        <div style="background: #fff; color: #000; padding: 30px; border-radius: 15px; text-align: left;">
+            <h3 style="margin-top: 0; color: #27ae60;">INFORME DE RENDIMENTOS</h3>
+            <p><strong>Titular:</strong> Geonimatos</p>
+            <p><strong>Patrimônio:</strong> R$ 4.627,02</p>
+            <p><strong>Rendimentos Isentos:</strong> R$ 145,20</p>
+            <hr>
+            <p style="font-size: 0.7rem; color: #666;">Documento gerado pela IA Innovate Bank para fins de declaração.</p>
+        </div>
+    </div>
+
+    <script>
+        function gerarInforme() {
+            document.getElementById('overlay').style.display = 'block';
+        }
+    </script>
 </body>
 </html>
