@@ -1,21 +1,40 @@
-name: Integracao IBM Cloud
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Innovate Bank | Sistema Interbancário</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background-color: #e8f5e9; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
+        .card { background: #ffffff; border-radius: 28px; box-shadow: 0 15px 35px rgba(39, 174, 96, 0.15); width: 340px; padding: 25px; text-align: center; border-top: 10px solid #27ae60; margin-bottom: 20px; }
+        .logo { color: #27ae60; font-weight: bold; font-size: 1.1rem; letter-spacing: 1.5px; margin-bottom: 20px; text-transform: uppercase; }
+        .balance-value { font-size: 2.2rem; font-weight: 800; color: #1b5e20; margin-bottom: 15px; }
+        .market-badge { background: #1b5e20; color: white; padding: 10px; border-radius: 12px; font-size: 0.75rem; text-align: left; line-height: 1.6; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="logo">INNOVATE BANK</div>
+        <p style="color: #666; font-size: 0.85rem; margin: 0;">Saldo Interbancário <span id="toggle-eye" style="cursor:pointer">👁️</span></p>
+        <div id="saldo-valor" class="balance-value">R$ 2.046,02</div>
+        
+        <div class="market-badge">
+            <strong>SISTEMA DE LIQUIDEZ (BACEN)</strong><br>
+            • CDI: 14.90% | SELIC: 15.00%<br>
+            • Status: Patrimônio em Títulos Ativo<br>
+            • Monitoramento: Redesconto Conectado
+        </div>
+    </div>
 
-on:
-  push:
-    branches: [ main, master ]
-
-jobs:
-  banco-digital-job:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Instalar dependencias
-        run: npm install @ibm-cloud/cloudant ibm-cloud-sdk-core
-
-      - name: SELIC - Registrar Operacao Compromissada
-        run: node operacao-selic.js
-        env:
-          CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
-          CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
+    <script>
+        const eye = document.getElementById('toggle-eye');
+        const saldo = document.getElementById('saldo-valor');
+        let visivel = true;
+        eye.addEventListener('click', () => {
+            if(visivel) { saldo.innerText = "R$ ••••••"; eye.innerText = "🙈"; } 
+            else { saldo.innerText = "R$ 2.046,02"; eye.innerText = "👁️"; }
+            visivel = !visivel;
+        });
+    </script>
+</body>
+</html>
