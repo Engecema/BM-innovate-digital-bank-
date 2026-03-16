@@ -3,33 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Innovate Bank | Super App</title>
+    <title>Innovate Bank | Sistema Integrado</title>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background-color: #e8f5e9; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
         .card-main { background: #ffffff; border-radius: 28px; box-shadow: 0 15px 35px rgba(39, 174, 96, 0.15); width: 340px; padding: 25px; text-align: center; border-top: 10px solid #27ae60; margin-bottom: 20px; }
         .logo { color: #27ae60; font-weight: bold; font-size: 1.1rem; letter-spacing: 1.5px; margin-bottom: 20px; text-transform: uppercase; }
         .balance-value { font-size: 2.2rem; font-weight: 800; color: #1b5e20; margin-bottom: 15px; }
         .limit-section { text-align: left; margin-top: 15px; padding: 15px; background: #f1f8e9; border-radius: 15px; }
-        .limit-label { font-size: 0.75rem; color: #27ae60; font-weight: bold; }
-        .limit-bar { background: #ddd; height: 6px; border-radius: 3px; margin-top: 8px; overflow: hidden; }
-        .limit-fill { background: #27ae60; width: 75%; height: 100%; }
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 340px; }
-        .menu-item { background: #ffffff; padding: 20px; border-radius: 20px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); cursor: pointer; border: 1px solid transparent; }
+        .menu-item { background: #ffffff; padding: 18px; border-radius: 20px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.05); cursor: pointer; }
         .menu-text { font-size: 0.75rem; font-weight: bold; color: #333; text-transform: uppercase; display: block; margin-top: 5px; }
     </style>
 </head>
 <body>
     <div class="card-main">
         <div class="logo">INNOVATE BANK</div>
-        <p style="color: #666; font-size: 0.85rem; margin: 0;">Saldo disponível <span id="toggle-eye" style="cursor:pointer">👁️</span></p>
-        <div id="saldo-valor" class="balance-value">R$ 4.196,02</div>
+        <p style="color: #666; font-size: 0.85rem; margin: 0;">Saldo em conta <span id="toggle-eye" style="cursor:pointer">👁️</span></p>
+        <div id="saldo-valor" class="balance-value">R$ 3.046,02</div>
         
         <div class="limit-section">
             <div style="display: flex; justify-content: space-between;">
-                <span class="limit-label">LIMITE DE CRÉDITO</span>
+                <span style="font-size: 0.75rem; color: #27ae60; font-weight: bold;">LIMITE DISPONÍVEL</span>
                 <span style="font-size: 0.75rem; color: #333; font-weight: bold;">R$ 5.000,00</span>
             </div>
-            <div class="limit-bar"><div class="limit-fill"></div></div>
+            <div style="background: #ddd; height: 6px; border-radius: 3px; margin-top: 8px; overflow: hidden;">
+                <div style="background: #27ae60; width: 100%; height: 100%;"></div>
+            </div>
         </div>
     </div>
 
@@ -46,7 +45,7 @@
         let visivel = true;
         eye.addEventListener('click', () => {
             if(visivel) { saldo.innerText = "R$ ••••••"; eye.innerText = "🙈"; } 
-            else { saldo.innerText = "R$ 4.196,02"; eye.innerText = "👁️"; }
+            else { saldo.innerText = "R$ 3.046,02"; eye.innerText = "👁️"; }
             visivel = !visivel;
         });
     </script>
