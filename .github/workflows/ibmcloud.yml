@@ -14,8 +14,14 @@ jobs:
       - name: Instalar dependencias
         run: npm install @ibm-cloud/cloudant ibm-cloud-sdk-core
 
-      - name: PASSO FINAL - Pagar Fatura do Cartao
-        run: node pagar-fatura.js
+      - name: PASSO PIX - Enviar Pagamento Instantaneo
+        run: node enviar-pix.js
+        env:
+          CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
+          CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
+
+      - name: CONSULTA - Saldo Pos-Pix
+        run: node consultar-saldo.js
         env:
           CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
           CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
