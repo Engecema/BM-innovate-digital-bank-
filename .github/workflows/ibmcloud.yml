@@ -8,20 +8,14 @@ jobs:
   banco-digital-job:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout do Codigo
+      - name: Checkout
         uses: actions/checkout@v3
 
       - name: Instalar dependencias
         run: npm install @ibm-cloud/cloudant ibm-cloud-sdk-core
 
-      - name: PASSO INTERNACIONAL - Executar Remessa Global
-        run: node enviar-internacional.js
-        env:
-          CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
-          CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
-
-      - name: CONSULTA - Saldo Final Atualizado
-        run: node consultar-saldo.js
+      - name: FECHAMENTO - Tesouraria
+        run: node mercado-interbancario.js
         env:
           CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
           CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
