@@ -14,14 +14,8 @@ jobs:
       - name: Instalar dependencias
         run: npm install @ibm-cloud/cloudant ibm-cloud-sdk-core
 
-      - name: PASSO 1 - Processar Venda na Maquininha
-        run: node venda-maquininha.js
-        env:
-          CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
-          CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
-
-      - name: PASSO 2 - Consultar Saldo Final
-        run: node consultar-saldo.js
+      - name: PASSO FINAL - Pagar Fatura do Cartao
+        run: node pagar-fatura.js
         env:
           CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
           CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
