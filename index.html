@@ -2,38 +2,41 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Innovate App | IA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Innovate Super App</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #000; color: #fff; margin: 0; padding: 0; display: flex; justify-content: center; }
-        .app-container { width: 100%; max-width: 400px; background: #000; min-height: 100vh; padding: 20px; box-sizing: border-box; }
-        .ia-bubble { background: #27ae60; color: white; padding: 15px; border-radius: 15px 15px 15px 0; margin-bottom: 25px; font-size: 0.85rem; border-left: 5px solid #fff; }
-        .card-balance { background: #1a1a1a; border-radius: 25px; padding: 25px; border: 1px solid #333; margin-bottom: 20px; }
-        .btn-action { background: #27ae60; color: #000; border: none; padding: 15px; border-radius: 12px; width: 100%; font-weight: bold; font-size: 1rem; margin-top: 10px; }
+        body { font-family: 'Segoe UI', sans-serif; background: #000; color: #fff; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .push-notificacao { background: #333; border-left: 5px solid #27ae60; padding: 15px; border-radius: 12px; width: 100%; max-width: 360px; margin-bottom: 20px; font-size: 0.8rem; animation: slideIn 0.5s ease-out; }
+        .card-app { background: #111; border-radius: 25px; padding: 25px; width: 100%; max-width: 360px; border: 1px solid #222; margin-bottom: 20px; }
+        .grafico-container { margin-top: 20px; text-align: left; }
+        .barra-gasto { height: 10px; border-radius: 5px; background: #222; margin-bottom: 10px; position: relative; }
+        .preenchimento { height: 100%; border-radius: 5px; background: #27ae60; }
+        @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <div class="ia-bubble">
-            <strong>🤖 Gerente Virtual Innovate:</strong><br>
-            <span id="conselho">Analisando suas finanças...</span>
-        </div>
+    <div id="alerta" class="push-notificacao">
+        <strong>🔔 Notificação:</strong><br>
+        Processando última transação...
+    </div>
 
-        <div class="card-balance">
-            <small style="color: #888;">Saldo Total</small>
-            <div style="font-size: 2.2rem; font-weight: bold; margin: 10px 0;">R$ 1.535,52</div>
-            <small style="color: #27ae60;">● Rendendo 14.90% a.a.</small>
+    <div class="card-app">
+        <small style="color: #666;">Saldo em conta</small>
+        <div style="font-size: 2rem; font-weight: bold; color: #27ae60;">R$ 1.535,52</div>
+        
+        <div class="grafico-container">
+            <small style="color: #aaa;">Gastos por Categoria</small>
+            <div style="font-size: 0.7rem; margin: 10px 0 5px;">Lazer (R$ 150,00)</div>
+            <div class="barra-gasto"><div class="preenchimento" style="width: 40%;"></div></div>
+            <div style="font-size: 0.7rem; margin: 10px 0 5px;">Mercado (R$ 400,00)</div>
+            <div class="barra-gasto"><div class="preenchimento" style="width: 70%;"></div></div>
         </div>
-
-        <button class="btn-action">Pagar com Pix</button>
-        <button class="btn-action" style="background: #333; color: #fff;">Investimentos</button>
     </div>
 
     <script>
-        // Simulando a resposta da IA vinda da IBM Cloud
         setTimeout(() => {
-            document.getElementById('conselho').innerText = "Sua reserva está abaixo da meta. Sugiro mover R$ 200 do saldo para a Reserva.";
-        }, 1500);
+            document.getElementById('alerta').innerHTML = "<strong>🔔 Notificação:</strong><br>Você gastou R$ 150,00 em Lazer. Saldo atualizado!";
+        }, 2000);
     </script>
 </body>
 </html>
