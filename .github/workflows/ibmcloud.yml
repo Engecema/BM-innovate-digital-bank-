@@ -1,33 +1,11 @@
-name: Integracao IBM Cloud
-
-on:
-  push:
-    branches: [ main, master ]
-
-jobs:
-  banco-digital-job:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout do Codigo
-        uses: actions/checkout@v3
-
-      - name: Instalar dependencias
-        run: npm install @ibm-cloud/cloudant ibm-cloud-sdk-core
-
-      - name: PASSO 1 - Saldo Inicial
-        run: node consultar-saldo.js
-        env:
-          CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
-          CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
-
-      - name: PASSO 2 - Pagamento de 200 Reais
+      - name: PASSO 2 - Realizar Pagamento de 200 Reais
         run: node transferir.js
         env:
           CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
           CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
 
-      - name: PASSO 3 - Saldo Final
-        run: node consultar-saldo.js
+      - name: PASSO 2.5 - Registrar no Extrato
+        run: node registrar-extrato.js
         env:
           CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
           CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
