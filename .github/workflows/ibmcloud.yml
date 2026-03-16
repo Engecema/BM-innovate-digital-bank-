@@ -14,14 +14,14 @@ jobs:
       - name: Instalar dependencias
         run: npm install @ibm-cloud/cloudant ibm-cloud-sdk-core
 
-      - name: PASSO 1 - Realizar Deposito de 5000 Reais
-        run: node deposito.js
+      - name: PASSO 1 - Consultar Saldo
+        run: node consultar-saldo.js
         env:
           CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
           CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
 
-      - name: PASSO 2 - Consultar Saldo Final Atualizado
-        run: node consultar-saldo.js
+      - name: PASSO 2 - Registrar Intencao de Financiamento Rural
+        run: node registrar-lead.js
         env:
           CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
           CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
