@@ -14,8 +14,14 @@ jobs:
       - name: Instalar dependencias
         run: npm install @ibm-cloud/cloudant ibm-cloud-sdk-core
 
-      - name: AUDITORIA - Processar Relatorio de Custos
+      - name: AUDITORIA - Processar Relatorio de Custos (CET)
         run: node auditoria-cet.js
+        env:
+          CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
+          CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
+
+      - name: CONSULTA - Validar Integridade dos Dados
+        run: node consultar-saldo.js
         env:
           CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
           CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
