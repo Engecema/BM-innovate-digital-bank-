@@ -14,13 +14,13 @@ jobs:
       - name: Instalar dependencias
         run: npm install @ibm-cloud/cloudant ibm-cloud-sdk-core
 
-      - name: PASSO PIX - Enviar Pagamento Instantaneo
-        run: node enviar-pix.js
+      - name: PASSO INTERNACIONAL - Enviar Remessa Global
+        run: node enviar-internacional.js
         env:
           CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
           CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
 
-      - name: CONSULTA - Saldo Pos-Pix
+      - name: CONSULTA - Saldo Final Consolidado
         run: node consultar-saldo.js
         env:
           CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
