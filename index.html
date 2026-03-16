@@ -2,33 +2,26 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Innovate Bank | Auditoria</title>
+    <title>Innovate Bank | Reservas</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #e8f5e9; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
-        .card { background: #ffffff; border-radius: 28px; box-shadow: 0 15px 35px rgba(39,174,96,0.15); width: 340px; padding: 25px; text-align: center; border-top: 10px solid #27ae60; margin-bottom: 20px; }
-        .balance-value { font-size: 2.2rem; font-weight: 800; color: #1b5e20; margin-bottom: 15px; }
-        .audit-panel { background: #fff; border-radius: 20px; width: 340px; padding: 20px; border: 1px solid #ddd; text-align: left; font-size: 0.8rem; box-sizing: border-box; }
-        .audit-row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #f0f0f0; }
-        .text-red { color: #c0392b; font-weight: bold; }
-        .text-green { color: #27ae60; font-weight: bold; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #e8f5e9; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        .card { background: #fff; border-radius: 28px; width: 340px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 10px solid #27ae60; margin-bottom: 20px; }
+        .reserva-box { background: #f1f8e9; border: 1px dashed #27ae60; border-radius: 20px; padding: 20px; text-align: left; width: 340px; box-sizing: border-box; }
+        .reserva-valor { font-size: 1.5rem; font-weight: bold; color: #1b5e20; margin-top: 5px; }
     </style>
 </head>
 <body>
     <div class="card">
-        <div style="color: #27ae60; font-weight: bold; margin-bottom: 20px;">INNOVATE BANK</div>
-        <p style="color: #666; font-size: 0.85rem; margin: 0;">Saldo em conta</p>
-        <div class="balance-value">R$ 2.035,52</div>
-        <button style="background: #27ae60; color: white; border: none; padding: 12px; border-radius: 12px; width: 100%; font-weight: bold;">Área Pix</button>
+        <div style="color: #27ae60; font-weight: bold;">INNOVATE BANK</div>
+        <p style="font-size: 0.8rem; color: #666;">Saldo disponível</p>
+        <div style="font-size: 2rem; font-weight: bold;">R$ 1.535,52</div>
     </div>
 
-    <div class="audit-panel">
-        <strong style="color: #1b5e20; display: block; margin-bottom: 10px;">📊 AUDITORIA DE CUSTOS (CET)</strong>
-        <div class="audit-row"><span>Taxas de TED</span> <span class="text-red">- R$ 10,50</span></div>
-        <div class="audit-row"><span>IOF Internacional</span> <span class="text-red">- R$ 11,00</span></div>
-        <div class="audit-row"><span>Spread Cambial</span> <span class="text-red">- R$ 40,00</span></div>
-        <div class="audit-row"><span>Rendimento CDB</span> <span class="text-green">+ R$ 1,02</span></div>
-        <div style="margin-top: 10px; font-weight: bold; color: #333;">Status: Conta Auditada ✅</div>
+    <div class="reserva-box">
+        <span style="color: #27ae60; font-weight: bold; font-size: 0.8rem;">🛡️ RESERVA DE EMERGÊNCIA</span>
+        <div class="reserva-valor">R$ 1.500,00</div>
+        <p style="font-size: 0.7rem; color: #666;">Dinheiro protegido e rendendo 100% do CDI.</p>
+        <button style="background: #27ae60; color: white; border: none; padding: 10px; border-radius: 10px; width: 100%; cursor: pointer; font-weight: bold; margin-top: 10px;">Resgatar</button>
     </div>
 </body>
 </html>
