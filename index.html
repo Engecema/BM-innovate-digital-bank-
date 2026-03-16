@@ -2,26 +2,40 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Innovate Bank | Reservas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Innovate Bank | Premium</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #e8f5e9; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-        .card { background: #fff; border-radius: 28px; width: 340px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 10px solid #27ae60; margin-bottom: 20px; }
-        .reserva-box { background: #f1f8e9; border: 1px dashed #27ae60; border-radius: 20px; padding: 20px; text-align: left; width: 340px; box-sizing: border-box; }
-        .reserva-valor { font-size: 1.5rem; font-weight: bold; color: #1b5e20; margin-top: 5px; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #e8f5e9; display: flex; flex-direction: column; align-items: center; padding: 20px; margin: 0; }
+        .card-main { background: #ffffff; border-radius: 28px; box-shadow: 0 15px 35px rgba(39, 174, 96, 0.15); width: 340px; padding: 25px; text-align: center; border-top: 10px solid #27ae60; margin-bottom: 20px; }
+        .balance-value { font-size: 2.2rem; font-weight: 800; color: #1b5e20; margin-bottom: 15px; }
+        .reserva-box { background: #1b5e20; color: white; border-radius: 20px; width: 340px; padding: 20px; margin-bottom: 20px; box-sizing: border-box; }
+        .audit-tag { background: #fff3e0; color: #ef6c00; font-size: 0.7rem; padding: 5px 10px; border-radius: 8px; font-weight: bold; margin-top: 10px; display: inline-block; }
     </style>
 </head>
 <body>
-    <div class="card">
-        <div style="color: #27ae60; font-weight: bold;">INNOVATE BANK</div>
-        <p style="font-size: 0.8rem; color: #666;">Saldo disponível</p>
-        <div style="font-size: 2rem; font-weight: bold;">R$ 1.535,52</div>
+    <div class="card-main">
+        <div style="color: #27ae60; font-weight: bold; margin-bottom: 15px;">INNOVATE BANK</div>
+        <p style="color: #666; font-size: 0.85rem; margin: 0;">Saldo disponível <span id="toggle-eye" style="cursor:pointer">👁️</span></p>
+        <div id="saldo-valor" class="balance-value">R$ 1.535,52</div>
+        <button style="background: #27ae60; color: white; border: none; padding: 12px; border-radius: 12px; width: 100%; font-weight: bold; cursor: pointer;">Área Pix</button>
+        <div class="audit-tag">CONTA AUDITADA (CET) ✅</div>
     </div>
 
     <div class="reserva-box">
-        <span style="color: #27ae60; font-weight: bold; font-size: 0.8rem;">🛡️ RESERVA DE EMERGÊNCIA</span>
-        <div class="reserva-valor">R$ 1.500,00</div>
-        <p style="font-size: 0.7rem; color: #666;">Dinheiro protegido e rendendo 100% do CDI.</p>
-        <button style="background: #27ae60; color: white; border: none; padding: 10px; border-radius: 10px; width: 100%; cursor: pointer; font-weight: bold; margin-top: 10px;">Resgatar</button>
+        <span style="font-size: 0.8rem; font-weight: bold; color: #a5d6a7;">🛡️ RESERVA DE EMERGÊNCIA</span>
+        <div style="font-size: 1.5rem; font-weight: bold; margin-top: 5px;">R$ 1.500,00</div>
+        <p style="font-size: 0.7rem; color: #c8e6c9;">Protegido contra saques e rendendo 100% do CDI.</p>
     </div>
+
+    <script>
+        const eye = document.getElementById('toggle-eye');
+        const saldo = document.getElementById('saldo-valor');
+        let visivel = true;
+        eye.addEventListener('click', () => {
+            if(visivel) { saldo.innerText = "R$ ••••••"; eye.innerText = "🙈"; } 
+            else { saldo.innerText = "R$ 1.535,52"; eye.innerText = "👁️"; }
+            visivel = !visivel;
+        });
+    </script>
 </body>
 </html>
