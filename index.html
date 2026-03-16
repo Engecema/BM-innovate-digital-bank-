@@ -3,52 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Innovate | Brokerage</title>
+    <title>Innovate | Black Concierge</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #000; color: #fff; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .asset-card { background: #111; border-radius: 20px; padding: 20px; width: 100%; max-width: 340px; border: 1px solid #333; margin-bottom: 15px; }
-        .asset-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #222; }
-        .btn-report { background: #fff; color: #000; border: none; padding: 15px; border-radius: 12px; width: 100%; max-width: 340px; font-weight: bold; cursor: pointer; margin-top: 20px; }
-        .report-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; padding: 40px 20px; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', sans-serif; background: #000; color: #fff; margin: 0; padding: 20px; transition: background 2s; }
+        .gold-theme { color: #d4af37 !important; border-color: #d4af37 !important; }
+        .black-card { background: linear-gradient(145deg, #111, #333); border-radius: 20px; padding: 30px; width: 100%; max-width: 340px; border: 1px solid #d4af37; box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); position: relative; overflow: hidden; margin: 0 auto; }
+        .milhas-card { background: #111; border-radius: 20px; padding: 20px; width: 100%; max-width: 340px; margin: 20px auto; border: 1px solid #444; }
+        .btn-black { background: #d4af37; color: #000; border: none; padding: 15px; border-radius: 12px; width: 100%; max-width: 340px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .shimmer { position: absolute; top: -100%; left: -100%; width: 50%; height: 300%; background: rgba(255,255,255,0.1); transform: rotate(45deg); animation: shine 4s infinite; }
+        @keyframes shine { 0% { left: -100%; } 100% { left: 200%; } }
     </style>
 </head>
-<body>
-    <div style="text-align: center; margin-bottom: 25px;">
-        <div style="font-size: 0.8rem; color: #888;">Patrimônio sob Custódia</div>
-        <div style="font-size: 2.2rem; font-weight: bold; color: #27ae60;">R$ 4.627,02</div>
+<body id="body">
+    <div style="text-align: center; margin-bottom: 30px;">
+        <div id="status-label" style="font-size: 0.7rem; letter-spacing: 3px; color: #27ae60;">DETECTANDO PATRIMÔNIO...</div>
+        <div style="font-size: 2.5rem; font-weight: bold;">R$ 4.627,02</div>
     </div>
 
-    <!-- Cofre de Ativos -->
-    <div class="asset-card">
-        <small style="color: #27ae60; font-weight: bold;">🛡️ COFRE DE ATIVOS</small>
-        <div class="asset-item">
-            <span>₿ Bitcoin (BTC)</span>
-            <strong>R$ 1.250,00</strong>
-        </div>
-        <div class="asset-item">
-            <span>🍎 Apple (AAPL)</span>
-            <strong>R$ 1.840,00</strong>
+    <div class="black-card" id="card">
+        <div class="shimmer"></div>
+        <div style="font-size: 0.6rem; letter-spacing: 3px;">INNOVATE METAL</div>
+        <div style="margin: 40px 0; font-size: 1.2rem; letter-spacing: 4px;">•••• •••• •••• 0001</div>
+        <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+            <span>GEONIMATOS</span>
+            <span id="categoria-txt">BLACK</span>
         </div>
     </div>
 
-    <button class="btn-report" onclick="gerarInforme()">📄 Informe de Rendimentos 2024</button>
-
-    <!-- Overlay do Informe -->
-    <div id="overlay" class="report-overlay" onclick="this.style.display='none'">
-        <div style="background: #fff; color: #000; padding: 30px; border-radius: 15px; text-align: left;">
-            <h3 style="margin-top: 0; color: #27ae60;">INFORME DE RENDIMENTOS</h3>
-            <p><strong>Titular:</strong> Geonimatos</p>
-            <p><strong>Patrimônio:</strong> R$ 4.627,02</p>
-            <p><strong>Rendimentos Isentos:</strong> R$ 145,20</p>
-            <hr>
-            <p style="font-size: 0.7rem; color: #666;">Documento gerado pela IA Innovate Bank para fins de declaração.</p>
-        </div>
+    <div class="milhas-card">
+        <div style="color: #d4af37; font-weight: bold; font-size: 0.8rem;">✈️ CONCIERGE DE MILHAS</div>
+        <div style="font-size: 1.5rem; font-weight: bold; margin: 5px 0;">24.060 Milhas</div>
+        <small style="color: #888;">Destinos Disponíveis: Paris, Miami, Maldivas</small>
     </div>
+
+    <button class="btn-black">Solicitar Concierge</button>
 
     <script>
-        function gerarInforme() {
-            document.getElementById('overlay').style.display = 'block';
-        }
+        setTimeout(() => {
+            document.getElementById('body').style.background = '#050505';
+            document.getElementById('status-label').innerText = "UPGRADE BLACK ATIVADO";
+            document.getElementById('status-label').style.color = "#d4af37";
+            document.getElementById('card').style.borderColor = "#d4af37";
+        }, 2500);
     </script>
 </body>
 </html>
