@@ -14,14 +14,8 @@ jobs:
       - name: Instalar dependencias
         run: npm install @ibm-cloud/cloudant ibm-cloud-sdk-core
 
-      - name: PASSO 1 - Executar Reserva de Emergencia
-        run: node guardar-reserva.js
-        env:
-          CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
-          CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
-
-      - name: PASSO 2 - Consultar Saldo e Reserva Atualizados
-        run: node consultar-saldo.js
+      - name: AUDITORIA - Processar Relatorio de Custos
+        run: node auditoria-cet.js
         env:
           CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
           CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
