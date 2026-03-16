@@ -10,8 +10,8 @@ jobs:
         uses: actions/checkout@v3
       - name: Instalar dependencias
         run: npm install @ibm-cloud/cloudant ibm-cloud-sdk-core
-      - name: GLOBAL - Mercado e Conversao Cambial
-        run: node mercado-global.js
+      - name: BROKERAGE - Atualizar Custodia e Informe
+        run: node custodia-ativa.js
         env:
           CLOUDANT_API_KEY: ${{ secrets.CLOUDANT_API_KEY }}
           CLOUDANT_URL: ${{ secrets.CLOUDANT_URL }}
