@@ -1,69 +1,81 @@
-<!-- Substituição Total para a #123: Extrato Dinâmico -->
+<!-- Substituição Total para a #124: Fluxo Completo Pix + Extrato -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NOME_FANTASIA_AQUI | Extrato</title>
+    <title>NOME_FANTASIA_AQUI | Full App</title>
     <link rel="icon" type="image/png" href="logo.png">
     <style>
         :root { --primary: #0a192f; --accent: #00d2ff; --success: #00ff88; --danger: #ff4d4d; --card: #112240; }
         body { font-family: 'Inter', sans-serif; margin: 0; background: var(--primary); color: #fff; }
-        .app-container { padding: 20px; max-width: 400px; margin: 0 auto; }
-        .main-card { background: var(--card); padding: 25px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
-        .balance { font-size: 2.2rem; font-weight: 800; color: var(--success); margin: 10px 0; }
+        .app { padding: 20px; max-width: 400px; margin: 0 auto; }
+        .card { background: var(--card); padding: 25px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); }
+        .balance { font-size: 2.2rem; font-weight: 800; color: var(--success); margin: 10px 0; text-align: center; }
         
-        /* Estilo do Extrato */
-        .extrato-container { margin-top: 30px; text-align: left; }
-        .extrato-title { font-size: 0.9rem; color: #8892b0; text-transform: uppercase; margin-bottom: 15px; letter-spacing: 1px; }
-        .transacao { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #233554; }
-        .transacao:last-child { border-bottom: none; }
-        .transacao-info { font-size: 0.9rem; font-weight: 500; }
-        .transacao-data { font-size: 0.7rem; color: #495670; }
-        .valor-negativo { color: var(--danger); font-weight: 700; }
-        .valor-positivo { color: var(--success); font-weight: 700; }
+        .extrato { margin-top: 30px; text-align: left; }
+        .item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #233554; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
         
-        .btn-pix { background: var(--accent); color: #000; width: 100%; padding: 15px; border-radius: 12px; border: none; font-weight: bold; margin-top: 20px; }
+        .negativo { color: var(--danger); font-weight: 700; }
+        #modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 100; padding: 50px 20px; }
+        input { width: 100%; padding: 15px; border-radius: 12px; margin-bottom: 15px; background: #1d2d50; color: #fff; border: 1px solid #233554; box-sizing: border-box; }
+        .btn { width: 100%; padding: 15px; border-radius: 12px; font-weight: bold; border: none; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        <header style="padding-bottom: 20px;"><img src="logo.png" alt="Logo" style="max-width: 100px;"></header>
+    <div class="app">
+        <header style="text-align: center; padding-bottom: 20px;"><img src="logo.png" alt="Logo" style="max-width: 110px;"></header>
         
-        <main class="main-card">
+        <main class="card">
             <div style="color: #8892b0; font-size: 0.8rem; text-align: center;">Saldo Disponível</div>
-            <div class="balance" style="text-align: center;">R$ 1.550,50</div>
+            <div class="balance">R$ <span id="val-saldo">1.550,50</span></div>
             
-            <button class="btn-pix" onclick="alert('Iniciando Fluxo Pix...')">NOVO PIX</button>
+            <button class="btn" style="background: var(--accent); color: #000; margin-top: 15px;" onclick="document.getElementById('modal').style.display='block'">ENVIAR NOVO PIX</button>
 
-            <div class="extrato-container">
-                <div class="extrato-title">Últimas Atividades</div>
-                
-                <!-- Item de Extrato (Vindo do Cloudant) -->
-                <div class="transacao">
-                    <div>
-                        <div class="transacao-info">Pix Enviado</div>
-                        <div class="transacao-data">17 Mar 2026 - 14:30</div>
-                    </div>
-                    <div class="valor-negativo">- R$ 50,00</div>
-                </div>
-
-                <div class="transacao">
-                    <div>
-                        <div class="transacao-info">Depósito Recebido</div>
-                        <div class="transacao-data">16 Mar 2026 - 09:15</div>
-                    </div>
-                    <div class="valor-positivo">+ R$ 1.600,50</div>
+            <div class="extrato" id="lista-extrato">
+                <div style="font-size: 0.8rem; color: #8892b0; margin-bottom: 10px;">HISTÓRICO</div>
+                <div class="item">
+                    <div style="font-size: 0.8rem;">Depósito Inicial<br><small style="color: #495670;">17 Mar 2026</small></div>
+                    <div style="color: var(--success); font-weight: 700;">+ R$ 1.550,50</div>
                 </div>
             </div>
         </main>
-
-        <div style="margin-top: 40px; font-size: 0.7rem; color: #495670; text-align: center;">
-            <strong>RAZAO_SOCIAL_AQUI</strong><br>
-            CNPJ: 00.000.000/0001-00 | Action #123
-        </div>
     </div>
 
+    <!-- MODAL PIX -->
+    <div id="modal">
+        <h2 style="color: var(--accent);">Transferência Pix</h2>
+        <input type="text" placeholder="Chave do destinatário">
+        <input type="number" id="v-pix" placeholder="Valor R$">
+        <button class="btn" style="background: var(--success); color: #000;" onclick="executarPix()">CONFIRMAR PAGAMENTO</button>
+        <p onclick="document.getElementById('modal').style.display='none'" style="color: var(--danger); margin-top: 20px; cursor: pointer;">Cancelar</p>
+    </div>
+
+    <script>
+        function executarPix() {
+            const valor = parseFloat(document.getElementById('v-pix').value);
+            if(!valor || valor <= 0) return alert("Valor inválido");
+
+            // 1. Atualizar Saldo Visual
+            let atual = 1550.50;
+            let novo = atual - valor;
+            document.getElementById('val-saldo').innerText = novo.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+
+            // 2. Inserir no Extrato dinamicamente (Ação A)
+            const novoItem = `
+                <div class="item">
+                    <div style="font-size: 0.8rem;">Pix Enviado<br><small style="color: #495670;">Agora</small></div>
+                    <div class="negativo">- R$ ${valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+                </div>`;
+            document.getElementById('lista-extrato').insertAdjacentHTML('afterbegin', novoItem);
+
+            // 3. Fechar e Limpar
+            document.getElementById('modal').style.display = 'none';
+            document.getElementById('v-pix').value = '';
+            alert("Transação realizada com sucesso!");
+        }
+    </script>
 </body>
 </html>
