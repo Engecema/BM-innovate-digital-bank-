@@ -1,44 +1,38 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BM Innovate | Corporate Dashboard</title>
+    <!-- Nome Fantasia na aba do navegador e no ícone do App -->
+    <title>NOME_FANTASIA_AQUI</title>
+    <link rel="icon" href="logo.png" type="image/png">
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #050505; color: #fff; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
-        .header-empresa { width: 100%; max-width: 360px; display: flex; align-items: center; margin-bottom: 25px; border-bottom: 1px solid #222; padding-bottom: 15px; }
-        .logo-box { width: 50px; height: 50px; background: #d4af37; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-right: 15px; }
-        .empresa-nome { font-weight: bold; color: #d4af37; text-transform: uppercase; font-size: 0.9rem; }
-        .empresa-cnpj { font-size: 0.7rem; color: #888; }
-        .black-card { background: linear-gradient(145deg, #111, #222); border-radius: 20px; padding: 25px; width: 100%; max-width: 340px; border: 1px solid #d4af37; position: relative; margin-bottom: 15px; text-align: center; }
-        .badge-status { position: absolute; top: 15px; right: 15px; background: #d4af37; color: #000; font-size: 0.6rem; font-weight: bold; padding: 3px 8px; border-radius: 5px; }
-        .info-widget { width: 100%; max-width: 340px; background: #111; padding: 15px; border-radius: 15px; border: 1px solid #333; font-size: 0.8rem; margin-top: 10px; box-sizing: border-box; text-align: left; }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 20px; text-align: center; color: #333; }
+        header { margin-bottom: 30px; }
+        .logo { max-width: 150px; height: auto; margin-bottom: 10px; }
+        .info-container { background: #f4f4f4; padding: 20px; border-radius: 8px; display: inline-block; text-align: left; }
+        .label { font-weight: bold; color: #555; }
     </style>
 </head>
 <body>
-    <div class="header-empresa">
-        <div class="logo-box"><span style="font-size: 1.5rem;">🏢</span></div>
-        <div class="empresa-info">
-            <div class="empresa-nome">ENGECEMA ENGENHARIA FOMENTO E TECNOLOGIA LTDA</div>
-            <div class="empresa-cnpj">CNPJ: 05.368.602/0001-10</div>
+
+    <header>
+        <!-- Logomarca da Empresa -->
+        <img src="logo.png" alt="Logomarca NOME_FANTASIA_AQUI" class="logo">
+        <!-- Nome Fantasia -->
+        <h1>NOME_FANTASIA_AQUI</h1>
+    </header>
+
+    <main>
+        <div class="info-container">
+            <p><span class="label">Razão Social:</span> RAZAO_SOCIAL_AQUI</p>
+            <p><span class="label">CNPJ:</span> 00.000.000/0001-00</p>
         </div>
-    </div>
+    </main>
 
-    <div class="black-card">
-        <div class="badge-status">CORPORATE BLACK</div>
-        <small style="color: #888;">Capital de Giro Consolidado</small>
-        <div style="font-size: 2.2rem; font-weight: bold; margin: 10px 0; color: #d4af37;">R$ 4.627,02</div>
-        <div style="color: #27ae60; font-size: 0.65rem; font-weight: bold;">🛡️ CONGELAMENTO DE AUDITORIA ATIVO</div>
-    </div>
+    <footer>
+        <p>© 2026 NOME_FANTASIA_AQUI - Todos os direitos reservados.</p>
+    </footer>
 
-    <div class="info-widget">
-        <strong style="color: #d4af37; display: block; margin-bottom: 5px;">👥 GESTÃO DE PESSOAS:</strong>
-        <span>Folha Salarial Provisionada: <strong>R$ 15.360,00</strong></span>
-    </div>
-
-    <div class="info-widget" style="border-left: 5px solid #27ae60;">
-        <strong style="color: #27ae60; display: block; margin-bottom: 5px;">🤖 CFO IA VEREDITO:</strong>
-        <span>Empresa auditada. Saúde financeira excelente sob o CNPJ informado.</span>
-    </div>
 </body>
 </html>
