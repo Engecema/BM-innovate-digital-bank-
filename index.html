@@ -3,148 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ENGECEMA | Bradesco Style</title>
-    <!-- Motor de E-mail para Token Real -->
+    <title>ENGECEMA | Bradesco Style Full</title>
     <script src="https://cdn.jsdelivr.net"></script>
     <style>
-        :root { 
-            --enge-emerald: #2ecc71; 
-            --enge-dark: #27ae60; 
-            --brad-red: #cc092f; 
-            --bg-gray: #f4f4f4; 
-            --white: #ffffff;
-            --text: #333; 
-        }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; margin: 0; background: var(--bg-gray); color: var(--text); }
+        :root { --enge-emerald: #2ecc71; --enge-dark: #27ae60; --brad-red: #cc092f; --bg: #f4f4f4; --white: #fff; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: #333; overflow-x: hidden; }
+        .header { background: var(--enge-emerald); color: white; padding: 15px; text-align: center; font-weight: bold; position: sticky; top: 0; z-index: 100; }
+        .screen { display: none; padding: 15px; max-width: 500px; margin: 0 auto; min-height: 90vh; }
+        .active { display: block; animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         
-        /* HEADER PADRÃO BRADESCO COM COR ENGECEMA */
-        .header { background: var(--enge-emerald); color: white; padding: 15px; text-align: center; font-weight: bold; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        
-        .screen { display: none; padding: 15px; max-width: 500px; margin: 0 auto; }
-        .active { display: block; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        
-        /* CARD DE SALDO IDENTICO AO BRADESCO */
         .card-saldo { background: var(--white); border-radius: 8px; padding: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 15px; border-top: 5px solid var(--enge-emerald); }
-        .user-info { font-size: 14px; color: #666; margin-bottom: 5px; font-weight: 600; }
-        .saldo-label { font-size: 12px; color: #888; }
         .saldo-val { font-size: 28px; font-weight: bold; color: var(--enge-dark); margin: 5px 0; }
-        .cheque-especial { font-size: 11px; color: var(--enge-emerald); font-weight: bold; }
-
-        /* MENU DE 8 BOTÕES (IGUAL APP BRADESCO) */
+        
         .menu-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
-        .menu-item { background: var(--white); padding: 15px 5px; border-radius: 8px; text-align: center; font-size: 10px; font-weight: 700; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: 0.2s; }
-        .menu-item:active { transform: scale(0.95); background: #eee; }
-        .menu-item span { font-size: 24px; display: block; margin-bottom: 5px; color: var(--enge-emerald); }
+        .menu-item { background: var(--white); padding: 12px 5px; border-radius: 8px; text-align: center; font-size: 10px; font-weight: 700; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .menu-item span { font-size: 22px; display: block; margin-bottom: 5px; color: var(--enge-emerald); }
 
-        /* DESTAQUES E PROMOÇÕES */
-        .section-title { font-size: 15px; font-weight: bold; margin: 20px 0 10px; color: #444; border-left: 4px solid var(--brad-red); padding-left: 10px; }
-        .promo-card { background: var(--white); border-radius: 8px; padding: 15px; margin-bottom: 10px; display: flex; align-items: center; gap: 15px; cursor: pointer; border: 1px solid transparent; }
-        .promo-card:hover { border-color: var(--enge-emerald); }
+        .btn-action { background: var(--enge-emerald); color: white; border: none; padding: 15px; border-radius: 4px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-back { background: #666; color: white; border: none; padding: 10px; border-radius: 4px; width: 100%; margin-top: 10px; cursor: pointer; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
         
-        /* BOTÕES */
-        .btn-principal { background: var(--enge-emerald); color: white; border: none; padding: 15px; border-radius: 4px; width: 100%; font-weight: bold; cursor: pointer; font-size: 16px; }
-        .btn-vermelho { background: var(--brad-red); color: white; border: none; padding: 12px; border-radius: 4px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        
-        input { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
+        .box-servico { background: white; padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--brad-red); }
     </style>
 </head>
 <body>
 
-    <div class="header" id="main-header">ENGECEMA Private</div>
+    <div class="header" id="txt-header">ENGECEMA Private</div>
 
-    <!-- LOGIN -->
+    <!-- TELA LOGIN -->
     <div id="screen-login" class="screen active">
-        <div style="text-align: center; margin-top: 40px;">
-            <div style="font-size: 40px; font-weight: 900; color: var(--enge-emerald); margin-bottom: 30px;">ENGECEMA</div>
-            <input type="text" id="login-cpf" placeholder="Digite seu CPF" maxlength="14" oninput="mascaraCPF(this)">
-            <input type="password" placeholder="Senha de 4 dígitos" maxlength="4">
-            <button class="btn-principal" onclick="mudarTela('screen-dash')">Entrar</button>
-            <p onclick="mudarTela('screen-cadastro')" style="font-size: 14px; color: var(--brad-red); margin-top: 25px; font-weight: bold; cursor: pointer;">Abra sua conta agora</p>
+        <div style="text-align: center; margin-top: 50px;">
+            <div style="font-size: 35px; font-weight: 900; color: var(--enge-emerald); margin-bottom: 30px;">ENGECEMA</div>
+            <input type="text" placeholder="CPF" oninput="this.value=this.value.replace(/\D/g,'')">
+            <input type="password" placeholder="Senha">
+            <button class="btn-action" onclick="mudarTela('screen-dash')">Acessar Conta</button>
         </div>
     </div>
 
-    <!-- DASHBOARD (ESTRUTURA BRADESCO) -->
+    <!-- DASHBOARD PRINCIPAL -->
     <div id="screen-dash" class="screen">
         <div class="card-saldo">
-            <div class="user-info">Olá, Geonni Cesar de Matos</div>
-            <div class="saldo-label">Saldo disponível em conta</div>
-            <div class="saldo-val" id="saldo-display">R$ 142.880,50</div>
-            <div class="cheque-especial">Limite de Cheque Especial: R$ 50.000,00</div>
+            <div style="font-size: 14px; color: #666;">Geonni Cesar de Matos</div>
+            <div class="saldo-val" id="display-saldo">R$ 142.880,50</div>
+            <div style="font-size: 11px; color: var(--enge-emerald);">Limite Bradesco/ENGECEMA: R$ 50.000,00</div>
         </div>
 
-        <!-- MENU DE 8 RECURSOS -->
         <div class="menu-grid">
-            <div class="menu-item" onclick="operar('PIX')"><span>💠</span>Pix</div>
-            <div class="menu-item" onclick="operar('PAGAR')"><span>📄</span>Pagar</div>
-            <div class="menu-item" onclick="operar('TRANSF')"><span>💸</span>Transf.</div>
-            <div class="menu-item" onclick="operar('CARTAO')"><span>💳</span>Cartões</div>
-            <div class="menu-item" onclick="operar('CREDITO')"><span>🏦</span>Crédito</div>
-            <div class="menu-item" onclick="operar('INVEST')"><span>📈</span>Investir</div>
-            <div class="menu-item" onclick="operar('SEGURO')"><span>🛡️</span>Seguros</div>
-            <div class="menu-item" onclick="operar('CONS')"><span>🏠</span>Consórcio</div>
+            <div class="menu-item" onclick="mudarTela('screen-pix')"><span>💠</span>Pix</div>
+            <div class="menu-item" onclick="mudarTela('screen-pagar')"><span>📄</span>Pagar</div>
+            <div class="menu-item" onclick="mudarTela('screen-transf')"><span>💸</span>Transf.</div>
+            <div class="menu-item" onclick="mudarTela('screen-cartao')"><span>💳</span>Cartões</div>
+            <div class="menu-item" onclick="mudarTela('screen-credito')"><span>🏦</span>Crédito</div>
+            <div class="menu-item" onclick="mudarTela('screen-invest')"><span>📈</span>Investir</div>
+            <div class="menu-item" onclick="mudarTela('screen-seguro')"><span>🛡️</span>Seguros</div>
+            <div class="menu-item" onclick="mudarTela('screen-cons')"><span>🏠</span>Consórcio</div>
         </div>
 
-        <div class="section-title">Sugestões para você</div>
-        
-        <div class="promo-card" onclick="operar('VEICULO')">
-            <span style="font-size: 32px;">🚗</span>
-            <div>
-                <div style="font-weight: bold; font-size: 14px;">Financiamento de Veículos</div>
-                <div style="font-size: 12px; color: #777;">Contrate online com taxas de 0,99% a.m.</div>
-            </div>
+        <div style="font-weight: bold; margin: 15px 0;">Oportunidades</div>
+        <div class="box-servico" onclick="mudarTela('screen-credito')">
+            <b>Crédito Imobiliário</b><br>
+            <small>Taxas exclusivas a partir de 8% ao ano.</small>
         </div>
+        <button onclick="location.reload()" style="background: var(--brad-red); color:white; border:none; width:100%; padding:12px; border-radius:4px;">Sair com Segurança</button>
+    </div>
 
-        <div class="promo-card" onclick="operar('IMOVEL')">
-            <span style="font-size: 32px;">🏠</span>
-            <div>
-                <div style="font-weight: bold; font-size: 14px;">Crédito Imobiliário</div>
-                <div style="font-size: 12px; color: #777;">Realize o sonho da casa própria hoje.</div>
-            </div>
+    <!-- TELA PIX -->
+    <div id="screen-pix" class="screen">
+        <h3>Área Pix 💠</h3>
+        <div class="card-saldo">Saldo: <b id="pix-saldo">R$ 142.880,50</b></div>
+        <input type="text" id="pix-chave" placeholder="Chave CPF, E-mail ou Telefone">
+        <input type="number" id="pix-valor" placeholder="Valor R$">
+        <button class="btn-action" onclick="processar('PIX')">Confirmar Envio</button>
+        <button class="btn-back" onclick="mudarTela('screen-dash')">Voltar</button>
+    </div>
+
+    <!-- TELA CRÉDITO -->
+    <div id="screen-credito" class="screen">
+        <h3>Crédito 🏦</h3>
+        <p>Limite disponível: <b>R$ 50.000,00</b></p>
+        <input type="number" id="cred-valor" placeholder="Quanto você precisa?">
+        <select id="cred-parc">
+            <option value="12">12 parcelas</option>
+            <option value="24">24 parcelas</option>
+            <option value="48">48 parcelas</option>
+        </select>
+        <button class="btn-action" onclick="processar('CRED')">Contratar Agora</button>
+        <button class="btn-back" onclick="mudarTela('screen-dash')">Voltar</button>
+    </div>
+
+    <!-- TELA SEGUROS -->
+    <div id="screen-seguro" class="screen">
+        <h3>Seguros ENGECEMA 🛡️</h3>
+        <div class="box-servico">
+            <b>Seguro de Vida</b><br>Proteção completa por R$ 45,90/mês.
+            <button class="btn-action" style="padding:5px; font-size:12px;" onclick="alert('Seguro Contratado!')">Contratar</button>
         </div>
+        <div class="box-servico">
+            <b>Seguro Auto</b><br>Cotação personalizada para seu veículo.
+            <button class="btn-action" style="padding:5px; font-size:12px;" onclick="alert('Cotação enviada ao e-mail!')">Cotar</button>
+        </div>
+        <button class="btn-back" onclick="mudarTela('screen-dash')">Voltar</button>
+    </div>
 
-        <button onclick="location.reload()" class="btn-vermelho">Sair com Segurança</button>
+    <!-- TELA CONSÓRCIO -->
+    <div id="screen-cons" class="screen">
+        <h3>Consórcio 🏠</h3>
+        <label>O que deseja conquistar?</label>
+        <select id="cons-tipo">
+            <option>Imóvel (Cartas de 200k a 1M)</option>
+            <option>Veículo (Cartas de 30k a 150k)</option>
+        </select>
+        <input type="number" placeholder="Valor da Parcela Desejada">
+        <button class="btn-action" onclick="alert('Simulação enviada para Geonni Cesar!')">Simular</button>
+        <button class="btn-back" onclick="mudarTela('screen-dash')">Voltar</button>
     </div>
 
     <script>
-        // CONFIGURAÇÕES DE SALDO E INTERAÇÃO
-        let saldoReal = 142880.50;
-
-        function mascaraCPF(i) {
-            let v = i.value.replace(/\D/g, "");
-            v = v.replace(/(\d{3})(\d)/, "$1.$2");
-            v = v.replace(/(\d{3})(\d)/, "$1.$2");
-            v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-            i.value = v;
-        }
+        let saldo = 142880.50;
 
         function mudarTela(id) {
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            if(id === 'screen-dash') document.getElementById('main-header').innerText = "Área Logada";
-            else document.getElementById('main-header').innerText = "ENGECEMA Private";
+            window.scrollTo(0,0);
+            
+            // Atualiza saldos nas telas
+            if(id === 'screen-pix') document.getElementById('pix-saldo').innerText = formatar(saldo);
         }
 
-        function atualizarSaldo() {
-            document.getElementById('saldo-display').innerText = saldoReal.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
+        function formatar(v) {
+            return v.toLocaleString('pt-br',{style: 'currency', currency: 'BRL'});
         }
 
-        function operar(tipo) {
-            let val = prompt(`ENGECEMA | Operação: ${tipo}\nInforme o valor:`);
-            if(!val || isNaN(val)) return;
-            val = parseFloat(val);
+        function atualizarDisplays() {
+            document.getElementById('display-saldo').innerText = formatar(saldo);
+        }
 
-            if(['PIX', 'PAGAR', 'TRANSF', 'INVEST'].includes(tipo)) {
-                if(val > saldoReal) return alert("Saldo insuficiente na conta corrente.");
-                saldoReal -= val;
-                alert(`${tipo} processado com sucesso.`);
-            } else if(tipo === 'CREDITO') {
-                saldoReal += val;
-                alert("Crédito ENGECEMA liberado no saldo.");
-            } else {
-                alert(`Sua solicitação de ${tipo} foi enviada ao seu gerente de conta.`);
+        function processar(tipo) {
+            if(tipo === 'PIX') {
+                let v = parseFloat(document.getElementById('pix-valor').value);
+                if(!v || v > saldo) return alert("Saldo insuficiente ou valor inválido.");
+                saldo -= v;
+                alert("Pix enviado com sucesso!");
+            } 
+            if(tipo === 'CRED') {
+                let v = parseFloat(document.getElementById('cred-valor').value);
+                if(!v || v > 50000) return alert("Valor excede seu limite pré-aprovado.");
+                saldo += v;
+                alert("Crédito liberado na conta!");
             }
-            atualizarSaldo();
+            atualizarDisplays();
+            mudarTela('screen-dash');
         }
     </script>
 </body>
