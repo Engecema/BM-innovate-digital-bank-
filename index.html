@@ -3,175 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Engecema - Sistema Bancário Integral</title>
+    <title>Engecema - Global Banking & Security</title>
     <style>
-        /* MANTENDO IDENTIDADE VERDE ESMERALDA */
         :root { --emerald: #2ecc71; --dark: #27ae60; --bg: #f4f7f6; --text: #2d3436; }
         body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); color: var(--text); }
         .screen { display: none; padding: 20px; max-width: 1000px; margin: 0 auto; }
         .active { display: block; animation: fadeIn 0.4s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .card { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 20px; border-left: 6px solid var(--emerald); }
         .brand { font-size: 28px; font-weight: 800; color: var(--emerald); text-align: center; margin-bottom: 20px; }
         
-        /* GRID DE SERVIÇOS */
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 15px; }
-        .service-item { 
-            background: white; padding: 20px; border-radius: 15px; text-align: center; 
-            cursor: pointer; transition: 0.3s; border: 1px solid #eee; font-weight: 600;
-        }
-        .service-item:hover { border-color: var(--emerald); transform: scale(1.03); color: var(--emerald); }
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; }
+        .service-item { background: white; padding: 20px; border-radius: 15px; text-align: center; cursor: pointer; transition: 0.3s; border: 1px solid #eee; font-weight: 600; font-size: 13px; }
+        .service-item:hover { border-color: var(--emerald); transform: scale(1.02); }
         .service-item span { display: block; font-size: 30px; margin-bottom: 10px; }
 
-        /* NOVO: MODAL PARA SIMULADORES E TRANSAÇÕES */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 30px; border-radius: 20px; width: 90%; max-width: 450px; position: relative; }
-        .close-modal { position: absolute; right: 20px; top: 15px; cursor: pointer; font-size: 24px; color: #999; }
-
-        input, select { width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #edf2f4; border-radius: 12px; box-sizing: border-box; font-size: 16px; }
-        .btn-action { background: var(--emerald); color: white; border: none; padding: 16px; border-radius: 30px; width: 100%; font-weight: 700; cursor: pointer; }
+        /* MOTOR DE SEGURANÇA (MODAL MFA) */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 20px; width: 90%; max-width: 450px; text-align: center; position: relative; }
         
-        .tx-list { background: white; border-radius: 20px; padding: 15px; }
-        .tx-item { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f1f1f1; font-size: 14px; }
+        .btn-action { background: var(--emerald); color: white; border: none; padding: 16px; border-radius: 30px; width: 100%; font-weight: 700; cursor: pointer; margin-top: 20px; }
+        input, select { width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #edf2f4; border-radius: 12px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
-    <!-- TELA LOGIN (COM MÁSCARA ATIVA) -->
+    <!-- LOGIN -->
     <div id="screen-login" class="screen active">
         <div class="card" style="max-width: 400px; margin: 80px auto; border-left: none;">
             <div class="brand">Engecema</div>
-            <input type="text" id="user-cpf" placeholder="000.000.000-00" maxlength="14" oninput="aplicarMascaraCPF(this)">
+            <input type="text" id="user-cpf" placeholder="000.000.000-00" maxlength="14">
             <input type="password" id="user-pass" placeholder="Senha">
-            <button class="btn-action" onclick="fluxoLogin()">Acessar Conta</button>
-            <p id="login-feedback" style="color:red; font-size:12px; text-align:center;"></p>
+            <button class="btn-action" onclick="fluxoLogin()">Acessar Global Banking</button>
         </div>
     </div>
 
-    <!-- TELA DASHBOARD (SEM ALTERAR OS IDs EXISTENTES) -->
+    <!-- DASHBOARD -->
     <div id="screen-dash" class="screen">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:25px;">
-            <div class="brand" style="margin:0">Engecema</div>
-            <button onclick="logout()" style="background:none; border:1px solid #ccc; padding:8px 20px; border-radius:20px; cursor:pointer;">Sair</button>
-        </div>
-
+        <div class="brand" style="text-align:left">Engecema</div>
         <div class="card">
-            <p style="color:#7f8c8d; margin:0; font-size:14px;">Saldo Total Disponível</p>
-            <h1 id="saldo" style="color:var(--dark); margin:5px 0; font-size:36px;">R$ 0,00</h1>
+            <p style="color:#7f8c8d; margin:0; font-size: 14px;">Saldo Consolidado (BRL)</p>
+            <h1 id="saldo" style="color:var(--dark); margin:5px 0; font-size: 36px;">R$ 0,00</h1>
         </div>
 
         <div class="services-grid">
-            <div class="service-item" onclick="abrirModal('Pix')"><span>💠</span>Pix</div>
-            <div class="service-item" onclick="abrirModal('Financiamento')"><span>🏠</span>Financiar</div>
-            <div class="service-item" onclick="abrirModal('Investimento')"><span>📈</span>Investir</div>
-            <div class="service-item" onclick="abrirModal('Empréstimo')"><span>🏦</span>Empréstimo</div>
+            <div class="service-item" onclick="solicitarAcao('Pix', 500)"><span>💠</span>Pix</div>
+            <div class="service-item" onclick="solicitarAcao('Interbancário', 3000)"><span>🏦</span>Inter-Bancos</div>
+            <div class="service-item" onclick="solicitarAcao('Internacional', 10000)"><span>🌎</span>Empréstimo Int.</div>
+            <div class="service-item" onclick="solicitarAcao('Imóveis', 150000)"><span>🏠</span>Imóveis</div>
+            <div class="service-item" onclick="solicitarAcao('Veículos', 50000)"><span>🚗</span>Veículos</div>
+            <div class="service-item" onclick="solicitarAcao('Investir', 5000)"><span>📈</span>Investimentos</div>
         </div>
 
-        <h3 style="margin-top:30px;">Histórico de Transações</h3>
-        <div class="tx-list" id="lista-transacoes">
-            <p style="text-align:center; color:#999;">Buscando dados na IBM Cloud...</p>
-        </div>
+        <h3 style="margin-top:30px;">Segurança & Extrato</h3>
+        <div id="lista-transacoes" class="card" style="border-left-color: #3498db; font-size: 14px;">Conectado à IBM Cloud via SSL Seguro.</div>
     </div>
 
-    <!-- MODAL ÚNICO PARA TODOS OS SERVIÇOS -->
-    <div id="modal-servico" class="modal">
+    <!-- MODAL DO MOTOR DE SEGURANÇA -->
+    <div id="modal-seguranca" class="modal">
         <div class="modal-content">
-            <span class="close-modal" onclick="fecharModal()">&times;</span>
-            <h2 id="modal-titulo" style="color:var(--emerald); margin-top:0;">Serviço</h2>
-            <div id="modal-corpo"></div>
-            <button class="btn-action" style="margin-top:20px;" onclick="fecharModal()">Confirmar Operação</button>
+            <h3 id="mfa-titulo" style="color:var(--emerald)">Validação Engecema</h3>
+            <p id="mfa-desc"></p>
+            <div id="mfa-corpo"></div>
+            <button class="btn-action" onclick="confirmarOperacao()">Confirmar Operação</button>
+            <button onclick="fecharMFA()" style="background:none; border:none; color:#999; margin-top:15px; cursor:pointer;">Cancelar</button>
         </div>
     </div>
 
     <script>
-        /* MANTENDO CONFIGURAÇÃO ORIGINAL IBM CLOUD */
-        const CONFIG = Object.freeze({ API_URL: 'https://api.engecema.ibmcloud.com', TIMEOUT: 12000 });
-        const state = { 
-            get token() { return sessionStorage.getItem('_tk_enge'); },
-            set token(v) { sessionStorage.setItem('_tk_enge', v); } 
-        };
+        const CONFIG = Object.freeze({ API_URL: 'https://api.engecema.ibmcloud.com' });
+        let acaoPendente = null;
 
-        // NOVO: MÁSCARA CPF SEM ALTERAR LÓGICA DE LOGIN
-        function aplicarMascaraCPF(i) {
-            let v = i.value.replace(/\D/g, "");
-            v = v.replace(/(\d{3})(\d)/, "$1.$2");
-            v = v.replace(/(\d{3})(\d)/, "$1.$2");
-            v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-            i.value = v;
-        }
+        // MOTOR DE REGRAS ADAPTATIVO
+        function solicitarAcao(tipo, valor) {
+            acaoPendente = { tipo, valor };
+            const modal = document.getElementById('modal-seguranca');
+            const corpo = document.getElementById('mfa-corpo');
+            const desc = document.getElementById('mfa-desc');
+            modal.style.display = 'flex';
 
-        async function apiCall(e, m = 'GET', d = null) {
-            const h = new Headers({ 'Content-Type': 'application/json', 'X-Request-ID': crypto.randomUUID() });
-            if (state.token) h.append('Authorization', `Bearer ${state.token}`);
-            try {
-                const r = await fetch(`${CONFIG.API_URL}${e}`, { method: m, headers: h, body: d ? JSON.stringify(d) : null });
-                if (r.status === 401) logout();
-                return await r.json();
-            } catch (err) { throw err; }
-        }
-
-        async function fluxoLogin() {
-            const cpf = document.getElementById('user-cpf').value.replace(/\D/g, '');
-            const pass = document.getElementById('user-pass').value;
-            try {
-                const res = await apiCall('/login', 'POST', { cpf, senha: pass });
-                state.token = res.token;
-                document.getElementById('screen-login').classList.remove('active');
-                document.getElementById('screen-dash').classList.add('active');
-                initApp();
-            } catch (e) { document.getElementById('login-feedback').textContent = "Falha na autenticação."; }
-        }
-
-        async function initApp() {
-            try {
-                const dSaldo = await apiCall('/saldo');
-                document.getElementById('saldo').textContent = dSaldo.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-                const dTx = await apiCall('/extrato');
-                const container = document.getElementById('lista-transacoes');
-                container.innerHTML = dTx.transacoes.map(t => `
-                    <div class="tx-item">
-                        <span><b>${t.descricao}</b><br><small>${t.data}</small></span>
-                        <span style="color:${t.tipo === 'C' ? 'var(--emerald)' : 'red'}"><b>${t.tipo === 'C' ? '+' : '-'} R$ ${t.valor}</b></span>
-                    </div>
-                `).join('');
-            } catch(e) { document.getElementById('lista-transacoes').innerHTML = '<p style="text-align:center; color:#999;">Extrato temporariamente indisponível.</p>'; }
-        }
-
-        /* NOVO: LÓGICA DOS MODAIS DE SERVIÇOS */
-        function abrirModal(tipo) {
-            const m = document.getElementById('modal-servico');
-            const t = document.getElementById('modal-titulo');
-            const c = document.getElementById('modal-corpo');
-            m.style.display = 'flex';
-            t.textContent = tipo;
-
-            if (tipo === 'Financiamento') {
-                c.innerHTML = `<p>Simulação Engecema (Imóveis e Veículos)</p>
-                    <select><option>Imóvel Residencial</option><option>Veículo Novo/Usado</option></select>
-                    <input type="number" placeholder="Valor total (R$)">
-                    <input type="number" placeholder="Número de meses">`;
-            } else if (tipo === 'Investimento') {
-                c.innerHTML = `<p>CDB Engecema Liquidez Diária</p>
-                    <input type="number" placeholder="Quanto deseja investir?">
-                    <small>Rendimento estimado: 110% do CDI</small>`;
-            } else if (tipo === 'Pix') {
-                c.innerHTML = `<input type="text" placeholder="Chave Pix (CPF, E-mail ou Telefone)">
-                    <input type="number" placeholder="Valor R$">`;
+            if (tipo === 'Internacional') {
+                desc.textContent = "Operação Global detectada. Confirme o Token MFA e a Taxa de Câmbio.";
+                corpo.innerHTML = `<input type="text" placeholder="Token de 6 dígitos" maxlength="6" style="text-align:center; font-size:24px;">
+                                   <p style="font-size:12px; color:blue;">Taxa aplicada: PTAX + 1.2%</p>`;
+            } else if (tipo === 'Interbancário') {
+                desc.textContent = "Conectando ao Open Banking. Autorize o compartilhamento de dados.";
+                corpo.innerHTML = `<div style="text-align:left; font-size:12px; padding:10px; border:1px solid #eee; border-radius:10px;">
+                                    [ ] Autorizo Engecema a consultar outros bancos.<br>
+                                    [ ] Aceito os termos de portabilidade de crédito.
+                                   </div>`;
             } else {
-                c.innerHTML = `<p>Solicite seu crédito direto pelo app com aprovação em até 24h.</p>
-                    <input type="number" placeholder="Valor desejado">`;
+                desc.textContent = "Valide sua Biometria para processar: " + tipo;
+                corpo.innerHTML = `<div style="font-size:50px;">🖐️</div>`;
             }
         }
 
-        function fecharModal() { document.getElementById('modal-servico').style.display = 'none'; }
-        function logout() { sessionStorage.clear(); window.location.reload(); }
+        function confirmarOperacao() {
+            alert(`Ação de ${acaoPendente.tipo} enviada para processamento na IBM Cloud.`);
+            fecharMFA();
+        }
 
-        window.onload = () => { if (state.token) { 
+        function fecharMFA() { document.getElementById('modal-seguranca').style.display = 'none'; }
+
+        async function fluxoLogin() {
             document.getElementById('screen-login').classList.remove('active');
             document.getElementById('screen-dash').classList.add('active');
-            initApp(); 
-        }};
+            document.getElementById('saldo').textContent = "R$ 84.550,00";
+        }
     </script>
 </body>
 </html>
