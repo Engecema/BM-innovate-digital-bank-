@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>ENGECEMA | Painel Administrativo</title>
+    <style>
+        :root { --enge-emerald: #2ecc71; --dark: #2c3e50; --bg: #ecf0f1; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: var(--bg); }
+        .sidebar { width: 250px; background: var(--dark); height: 100vh; position: fixed; color: white; padding: 20px; }
+        .main-content { margin-left: 290px; padding: 30px; }
+        .header-adm { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .stat-card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); flex: 1; margin-right: 20px; border-bottom: 4px solid var(--enge-emerald); }
+        table { width: 100%; background: white; border-collapse: collapse; border-radius: 10px; overflow: hidden; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background: #f8f9fa; color: #7f8c8d; text-transform: uppercase; font-size: 12px; }
+        .badge { padding: 5px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; }
+        .status-pendente { background: #ffeaa7; color: #d63031; }
+        .btn-approve { background: var(--enge-emerald); color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <h2>ENGECEMA ADM</h2>
+        <p style="color: #bdc3c7; font-size: 12px;">Área Comercial</p>
+        <hr>
+        <nav>
+            <p>📊 Dashboard</p>
+            <p>👥 Clientes</p>
+            <p>🏦 Propostas de Crédito</p>
+            <p>💳 Gestão de Cartões</p>
+        </nav>
+    </div>
+
+    <div class="main-content">
+        <div class="header-adm">
+            <h1>Gestão de Novos Clientes</h1>
+            <button class="btn-approve" onclick="location.reload()">Atualizar Lista</button>
+        </div>
+
+        <div style="display: flex; margin-bottom: 30px;">
+            <div class="stat-card">
+                <small>Novos Cadastros</small>
+                <h2 id="total-cadastros">Carregando...</h2>
+            </div>
+            <div class="stat-card">
+                <small>Aguardando Crédito</small>
+                <h2 style="color: #e67e22;">12</h2>
+            </div>
+            <div class="stat-card">
+                <small>Volume em Análise</small>
+                <h2 style="color: var(--enge-emerald);">R$ 1.2M</h2>
+            </div>
+        </div>
+
+        <div class="card" style="background: white; padding: 20px; border-radius: 10px;">
+            <h3>Fila de Aprovação (Cloudant Real-Time)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Nome do Cliente</th>
+                        <th>CPF</th>
+                        <th>E-mail</th>
+                        <th>Status</th>
+                        <th>Ação Comercial</th>
+                    </tr>
+                </thead>
+                <tbody id="lista-clientes">
+                    <!-- Os dados do seu Cloudant aparecerão aqui -->
+                    <tr>
+                        <td>Geonni Cesar de Matos</td>
+                        <td>***.***.***-**</td>
+                        <td>geonni***@gmail.com</td>
+                        <td><span class="badge status-pendente">AGUARDANDO CRÉDITO</span></td>
+                        <td><button class="btn-approve" onclick="aprovar()">Liberar Conta</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Esta função irá se conectar ao seu banco de dados na IBM Cloud
+        function aprovar() {
+            alert("Sucesso: Conta liberada e limite de R$ 50.000,00 ativado para o cliente.");
+        }
+
+        // Lógica para ler do Cloudant (Simulado para visualização imediata)
+        document.getElementById('total-cadastros').innerText = "284";
+    </script>
+</body>
+</html>
