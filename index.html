@@ -1,71 +1,120 @@
-<script>
-    // 1. CONFIGURAÇÃO DE ACESSO (IBM CLOUD)
-    const API_BASE = 'https://api.engecema.ibmcloud.com';
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engecema - Banco Digital</title>
+    <style>
+        /* CSS - DESIGN NUBANK STYLE */
+        :root { --purple: #820ad1; --dark-purple: #6c09b1; }
+        body { font-family: 'Inter', sans-serif; margin: 0; background: #f5f5f5; }
+        .screen { display: none; padding: 20px; }
+        .active { display: block; }
+        .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .btn-main { background: var(--purple); color: white; border: none; padding: 15px; border-radius: 25px; width: 100%; font-weight: bold; cursor: pointer; }
+        .btn-main:disabled { opacity: 0.5; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+    </style>
+</head>
+<body>
 
-    // 2. LÓGICA DE LOGIN REAL
-    async function fazerLogin() {
-        const cpf = document.getElementById('user-cpf').value.replace(/\D/g, ''); // Limpa pontos/traços
-        const pass = document.getElementById('user-pass').value;
-        const btn = document.querySelector('.btn-main');
+    <!-- TELA 1: LOGIN -->
+    <div id="screen-login" class="screen active">
+        <div class="card">
+            <h2 style="color: var(--purple)">Olá! Digite seu CPF</h2>
+            <input type="text" id="user-cpf" placeholder="000.000.000-00">
+            <input type="password" id="user-pass" placeholder="Sua senha">
+            <button class="btn-main" onclick="fazerLogin()">Entrar no Engecema</button>
+        </div>
+    </div>
 
-        if (cpf.length < 11 || pass.length < 4) {
-            alert("Por favor, preencha o CPF e a senha corretamente.");
-            return;
+    <!-- TELA 2: DASHBOARD -->
+    <div id="screen-dash" class="screen">
+        <div class="card">
+            <p>Saldo disponível</p>
+            <h1 id="saldo">R$ 0,00</h1>
+            <button class="btn-main" onclick="logout()">Sair com segurança</button>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * LÓGICA DE INTEGRAÇÃO IBM CLOUD
+         */
+        const API_BASE = 'https://api.engecema.ibmcloud.com';
+        const state = { token: sessionStorage.getItem('token') || null };
+
+        // Função Central de Requisição
+        async function requestIBM(endpoint, method = 'GET', body = null) {
+            const options = {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(state.token && { 'Authorization': `Bearer ${state.token}` })
+                }
+            };
+            if (body) options.body = JSON.stringify(body);
+
+            try {
+                const response = await fetch(`${API_BASE}${endpoint}`, options);
+                if (!response.ok) throw new Error("Falha na comunicação com IBM");
+                return await response.json();
+            } catch (err) {
+                console.error("Erro na API:", err);
+                throw err;
+            }
         }
 
-        // Estilo de "Carregando" (Feedback Visual Nubank)
-        btn.innerText = "Autenticando...";
-        btn.style.opacity = "0.7";
-        btn.disabled = true;
+        // Fluxo de Login
+        async function fazerLogin() {
+            const cpf = document.getElementById('user-cpf').value;
+            const pass = document.getElementById('user-pass').value;
+            const btn = document.querySelector('.btn-main');
 
-        try {
-            // Chamada para o seu backend na IBM Cloud
-            const response = await fetch(`${API_BASE}/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ cpf, senha: pass })
-            });
+            btn.innerText = "Autenticando...";
+            btn.disabled = true;
 
-            if (response.ok) {
-                const data = await response.json();
-                // Armazena o Token de Sessão (Segurança)
+            try {
+                const data = await requestIBM('/login', 'POST', { cpf, senha: pass });
+                state.token = data.token;
                 sessionStorage.setItem('token', data.token);
                 
-                // Transição de Tela
                 document.getElementById('screen-login').classList.remove('active');
                 document.getElementById('screen-dash').classList.add('active');
-                
-                // Busca o saldo real do usuário autenticado
-                getIBMBalance();
-            } else {
-                throw new Error("Credenciais Inválidas");
+                atualizarDashboard();
+            } catch (e) {
+                alert("Erro ao acessar conta na IBM Cloud.");
+            } finally {
+                btn.innerText = "Entrar no Engecema";
+                btn.disabled = false;
             }
-        } catch (error) {
-            console.error("Erro no Login:", error);
-            alert("Erro de autenticação. Verifique seus dados ou conexão com a IBM Cloud.");
-            // Fallback para teste (Remova em produção)
-            // document.getElementById('screen-login').classList.remove('active');
-            // document.getElementById('screen-dash').classList.add('active');
-        } finally {
-            btn.innerText = "Entrar no Engecema";
-            btn.style.opacity = "1";
-            btn.disabled = false;
         }
-    }
 
-    // 3. BUSCA DE SALDO POR TOKEN
-    async function getIBMBalance() {
-        const token = sessionStorage.getItem('token');
-        const display = document.getElementById('saldo');
-        
-        try {
-            const response = await fetch(`${API_BASE}/saldo`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const data = await response.json();
-            display.innerText = data.valor.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-        } catch (e) {
-            display.innerText = "1.550,50"; // Valor de demonstração
+        // Busca de Saldo
+        async function atualizarDashboard() {
+            const display = document.getElementById('saldo');
+            try {
+                const data = await requestIBM('/saldo');
+                display.innerText = data.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            } catch (e) {
+                display.innerText = "Indisponível";
+            }
         }
-    }
-</script>
+
+        // Logout
+        function logout() {
+            sessionStorage.clear();
+            location.reload();
+        }
+
+        // Verifica login ao carregar
+        window.onload = () => {
+            if (state.token) {
+                document.getElementById('screen-login').classList.remove('active');
+                document.getElementById('screen-dash').classList.add('active');
+                atualizarDashboard();
+            }
+        };
+    </script>
+</body>
+</html>
