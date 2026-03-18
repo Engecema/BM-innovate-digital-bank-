@@ -158,3 +158,32 @@
     </script>
 </body>
 </html>
+// PONTE INVISÍVEL PARA A ÁREA COMERCIAL (IBM CLOUD)
+async function ponteComercialENGECEMA(nome, email, cpf) {
+    const cloudantURL = "SUA_URL_DO_CLOUDANT/usuarios"; // Substitua pela sua URL
+    const apiKey = "SUA_API_KEY_AQUI"; // Substitua pela sua ApiKey
+    const auth = btoa("apikey:" + apiKey);
+
+    try {
+        await fetch(cloudantURL, {
+            method: 'POST',
+            headers: { 'Authorization': 'Basic ' + auth, 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nome, email, cpf, status: "PENDENTE", data: new Date().toISOString() })
+        });
+        console.log("Sincronizado com a Área Comercial.");
+    } catch (e) { console.error("Erro na ponte:", e); }
+}
+
+// ESTA LINHA "OUVE" O SEU CÓDIGO ATUAL SEM ALTERAR A FUNÇÃO ORIGINAL
+const btnAtivarOriginal = document.querySelector('button[onclick="validarTokenFinal()"]');
+if(btnAtivarOriginal) {
+    btnAtivarOriginal.addEventListener('click', () => {
+        const n = document.getElementById('cad-nome').value;
+        const e = document.getElementById('cad-email').value;
+        const c = document.getElementById('cad-cpf').value;
+        if(document.getElementById('input-token').value === tokenGerado) {
+            ponteComercialENGECEMA(n, e, c);
+        }
+    });
+}
+
