@@ -2,45 +2,73 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Engecema Private - Cadastro</title>
-    <!-- Favicon com caminho relativo para não sumir -->
+    <title>Engecema Private - Abertura de Conta</title>
+    <!-- Favicon preservado -->
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; padding: 50px; background-color: #f4f4f4; }
+        body { font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding: 40px; background-color: #f0f2f5; }
         form { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        h2 { margin-top: 0; color: #0f62fe; text-align: center; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
-        button { width: 100%; padding: 14px; background-color: #0f62fe; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; }
+        h2 { color: #0f62fe; text-align: center; margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
+        input { width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; }
+        .erro-senha { color: red; font-size: 12px; display: none; margin-bottom: 10px; }
+        button { width: 100%; padding: 14px; background-color: #0f62fe; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; }
+        button:hover { background-color: #0353e9; }
     </style>
 </head>
 <body>
 
-<form id="meuFormulario">
-    <h2>Abertura de Conta</h2>
-    <input type="text" name="nome" placeholder="Nome Completo" required>
-    <input type="email" name="email" placeholder="E-mail Corporativo" required>
-    <button type="submit">Finalizar Cadastro</button>
+<form id="formCadastro">
+    <h2>Dados da Conta</h2>
+    
+    <label>Nome Completo</label>
+    <input type="text" name="nome" placeholder="Seu nome" required>
+
+    <label>E-mail Corporativo</label>
+    <input type="email" name="email" placeholder="seu@email.com" required>
+
+    <label>CPF</label>
+    <input type="text" name="cpf" placeholder="000.000.000-00" required>
+
+    <label>Crie uma Senha</label>
+    <input type="password" id="senha" name="senha" placeholder="******" required>
+
+    <label>Confirme a Senha</label>
+    <input type="password" id="confirmar_senha" placeholder="******" required>
+    <span id="msgErro" class="erro-senha">As senhas não coincidem!</span>
+
+    <button type="submit" id="btnFinalizar">Finalizar Cadastro</button>
 </form>
 
 <script>
-document.getElementById('meuFormulario').addEventListener('submit', async (e) => {
+document.getElementById('formCadastro').addEventListener('submit', async (e) => {
     e.preventDefault();
+    
+    const senha = document.getElementById('senha').value;
+    const confirma = document.getElementById('confirmar_senha').value;
+    const msgErro = document.getElementById('msgErro');
 
-    // 1. CONFIGURAÇÕES TÉCNICAS (ENCHEMA PRIVATE)
-    const API_KEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n"; 
-    const CLOUDANT_URL = "https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
-    const DB_NAME = "cliente_engecema";
+    // Validação de segurança de senha
+    if (senha !== confirma) {
+        msgErro.style.display = 'block';
+        return;
+    } else {
+        msgErro.style.display = 'none';
+    }
 
-    // 2. COLETA DOS DADOS
+    // DADOS TÉCNICOS IBM (Suas chaves enviadas anteriormente)
+    const API_KEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
+    const URL_CL = "https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
+    const DB = "cliente_engecema";
+
     const formData = new FormData(e.target);
     const dados = Object.fromEntries(formData.entries());
-    dados.criado_em = new Date().toISOString();
+    delete dados.confirmar_senha; // Não envia o campo repetido para o banco
+    dados.data_abertura = new Date().toISOString();
 
-    // 3. BLOCO DE ENVIO SIMPLIFICADO (MENOR E DIRETO)
     try {
         const auth = btoa("apikey:" + API_KEY.trim());
-
-        const response = await fetch(`${CLOUDANT_URL}/${DB_NAME}`, {
+        const response = await fetch(`${URL_CL}/${DB}`, {
             method: 'POST',
             mode: 'cors',
             headers: {
@@ -51,14 +79,13 @@ document.getElementById('meuFormulario').addEventListener('submit', async (e) =>
         });
 
         if (response.ok) {
-            alert("Sucesso! O Engecema Private recebeu seus dados.");
+            alert("Sucesso! Conta Engecema Private criada com os 5 itens.");
             e.target.reset();
         } else {
-            alert("Erro na IBM: Verifique se o CORS está em 'Allow all domains (*)'");
+            alert("Erro de autenticação na IBM (401). Verifique o CORS.");
         }
     } catch (error) {
-        console.error("Erro de rede:", error);
-        alert("Erro de rede. Verifique se o banco de dados está online e o CORS liberado.");
+        alert("Erro de rede. A IBM bloqueou a conexão direta do navegador.");
     }
 });
 </script>
