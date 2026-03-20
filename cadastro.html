@@ -4,19 +4,25 @@
     <meta charset="UTF-8">
     <title>Cadastro - Engecema Private</title>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; padding: 50px; background-color: #f4f4f4; }
-        form { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        h2 { margin-top: 0; color: #0f62fe; text-align: center; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background-color: #0f62fe; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; width: 100%; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; padding: 50px; background-color: #f0f2f5; }
+        form { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { margin-top: 0; color: #0f62fe; text-align: center; margin-bottom: 25px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #333; }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #dde1e6; border-radius: 6px; box-sizing: border-box; }
+        button { width: 100%; padding: 14px; background-color: #0f62fe; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; transition: background 0.2s; }
+        button:hover { background-color: #0353e9; }
     </style>
 </head>
 <body>
 
 <form id="meuFormulario">
     <h2>Abertura de Conta</h2>
-    <input type="text" name="nome" placeholder="Nome Completo" required>
-    <input type="email" name="email" placeholder="E-mail Corporativo" required>
+    <label>Nome Completo</label>
+    <input type="text" name="nome" placeholder="Digite seu nome" required>
+    
+    <label>E-mail Corporativo</label>
+    <input type="email" name="email" placeholder="seu@email.com" required>
+    
     <button type="submit">Finalizar Cadastro</button>
 </form>
 
@@ -24,25 +30,27 @@
 document.getElementById('meuFormulario').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // 1. CONFIGURAÇÕES TÉCNICAS (ENCHEMA PRIVATE)
-    const API_KEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n"; 
+    // 1. CREDENCIAIS FORNECIDAS
+    const APIKEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
+    const IAM_ID = "ApiKey-71c5e05c-1176-4fa6-bd22-e0514e317b4e"; 
     const CLOUDANT_URL = "https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
     const DB_NAME = "cliente_engecema";
 
-    // 2. CAPTURA DOS DADOS
+    // 2. PREPARAÇÃO DOS DADOS
     const formData = new FormData(e.target);
     const dados = Object.fromEntries(formData.entries());
     dados.criado_em = new Date().toISOString();
-    dados.origem = "GitHub_Pages_Private";
+    dados.auth_ref = IAM_ID; // Referência da IAM Key para auditoria interna
 
     try {
-        // Autenticação Basic exigida pelo Cloudant (apikey:SUA_CHAVE)
-        const auth = btoa("apikey:" + API_KEY.trim()); 
+        // A "SENHA" para o Cloudant é sempre a APIKEY (G4mi3u...)
+        // O "USUÁRIO" para o Cloudant é sempre a palavra 'apikey'
+        const authHeader = btoa("apikey:" + APIKEY.trim());
 
         const response = await fetch(`${CLOUDANT_URL}/${DB_NAME}`, {
             method: 'POST',
             headers: {
-                'Authorization': 'Basic ' + auth,
+                'Authorization': 'Basic ' + authHeader,
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
@@ -50,16 +58,16 @@ document.getElementById('meuFormulario').addEventListener('submit', async (e) =>
         });
 
         if (response.ok) {
-            alert("Sucesso! O Engecema Private recebeu seus dados.");
+            alert("Sucesso! Sua conta Engecema Private está sendo processada.");
             e.target.reset();
         } else {
             const erroData = await response.json();
-            console.error("Erro IBM:", erroData);
-            alert("Erro 401: Verifique se o CORS está em 'Allow all domains (*)' no painel da IBM.");
+            console.error("Erro na Resposta IBM:", erroData);
+            alert("Erro 401: Verifique se o CORS no painel da IBM está em 'Allow all domains (*)'");
         }
     } catch (error) {
-        console.error("Erro de Rede:", error);
-        alert("Falha de conexão. Verifique o painel da IBM Cloud.");
+        console.error("Erro de Conexão:", error);
+        alert("Falha de rede. Verifique a conexão com a IBM Cloud.");
     }
 });
 </script>
