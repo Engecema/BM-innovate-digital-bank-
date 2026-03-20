@@ -1,8 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Engecema Private</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; padding: 50px; background-color: #f4f4f4; }
+        form { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background-color: #0f62fe; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<form id="meuFormulario">
+    <h2>Abertura de Conta</h2>
+    <input type="text" name="nome" placeholder="Nome Completo" required>
+    <input type="email" name="email" placeholder="E-mail" required>
+    <button type="submit">Finalizar Cadastro</button>
+</form>
+
+<script>
 document.getElementById('meuFormulario').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // 1. CONFIGURAÇÕES (Certifique-se de que a API_KEY é a da credencial MANAGER)
-    const API_KEY = "SUA_NOVA_API_KEY_AQUI"; 
+    // 1. CONFIGURAÇÕES - COLE A CHAVE E URL APENAS ENTRE AS ASPAS ""
+    const API_KEY = "2iYmkEX16F2bd9aeE_8_JnSeWjabD8RMmKKeiCCJF918"; 
     const CLOUDANT_URL = "https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
     const DB_NAME = "cliente_engecema";
 
@@ -11,11 +34,9 @@ document.getElementById('meuFormulario').addEventListener('submit', async (e) =>
     const dados = Object.fromEntries(formData.entries());
     dados.criado_em = new Date().toISOString();
 
-    // 3. O NOVO BLOCO TRY (Substitua a partir daqui)
     try {
-        const cleanKey = API_KEY.trim(2iYmkEX16F2bd9aeE_8_JnSeWjabD8RMmKKeiCCJF918);
-        const cleanURL = CLOUDANT_URL.trim(https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud
-);
+        const cleanKey = API_KEY.trim();
+        const cleanURL = CLOUDANT_URL.trim();
 
         const response = await fetch(`${cleanURL}/${DB_NAME}`, {
             method: 'POST',
@@ -32,12 +53,15 @@ document.getElementById('meuFormulario').addEventListener('submit', async (e) =>
             e.target.reset();
         } else {
             const erroData = await response.json();
-            console.error("Erro 401 detalhado:", erroData);
-            alert("Erro 401: Verifique se a API Key é de uma credencial MANAGER.");
+            console.error("Erro:", erroData);
+            alert("Erro 401: Verifique se a API Key é MANAGER.");
         }
     } catch (error) {
-        console.error("Erro de Rede/CORS:", error);
-        alert("Falha de conexão. O CORS no Cloudant deve estar em 'Allow all domains (*)' para este teste.");
+        console.error("Erro de Rede:", error);
+        alert("Falha de conexão. Verifique o CORS no Cloudant.");
     }
 });
 </script>
+
+</body>
+</html>
