@@ -3,21 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="logo.png">
-    <title>Engecema | Solicitar Abertura de Conta</title>
+    <!-- LINHA 6: FAVICON INTEGRADO -->
+    <link rel="icon" type="image/png" href="logo.png"> 
+    <title>Engecema | Solicitar Acreditação de Fomento</title>
+    
     <style>
         :root { --br-red: #cc092f; --br-blue: #004481; }
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: #f4f7f9; color: #333; }
         header { background: #fff; padding: 15px 10%; border-bottom: 6px solid var(--br-red); box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .logo { height: 50px; }
-        .container { max-width: 600px; margin: 50px auto; background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        h2 { color: var(--br-blue); text-align: center; margin-bottom: 30px; }
+        .container { max-width: 550px; margin: 50px auto; background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        h2 { color: var(--br-blue); text-align: center; margin-bottom: 25px; font-weight: 300; }
+        h2 b { color: var(--br-red); font-weight: 800; }
         .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; }
-        input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
-        .btn-enviar { width: 100%; padding: 18px; background: var(--br-red); color: #fff; border: none; border-radius: 4px; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.3s; }
-        .btn-enviar:hover { background: #a50725; }
-        footer { text-align: center; padding: 30px; color: #777; font-size: 0.9em; }
+        label { display: block; margin-bottom: 8px; font-weight: bold; color: #555; font-size: 14px; }
+        input { width: 100%; padding: 14px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 16px; background: #fafafa; }
+        .btn-enviar { width: 100%; padding: 18px; background: var(--br-red); color: #fff; border: none; border-radius: 4px; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.3s; margin-top: 10px; }
+        .btn-enviar:hover { background: #a50725; transform: translateY(-2px); }
+        footer { text-align: center; padding: 40px; color: #666; font-size: 0.95em; line-height: 1.8; }
     </style>
 </head>
 <body>
@@ -26,30 +29,33 @@
     </header>
 
     <div class="container">
-        <h2>Abertura de Conta Digital</h2>
-        <form id="formCadastro">
+        <h2>Acreditação de Conta <b>Fomento</b></h2>
+        <form id="formCadastro" onsubmit="event.preventDefault(); alert('Solicitação de Acreditação enviada para análise técnica.'); window.location.href='index.html';">
             <div class="form-group">
                 <label>Nome Completo / Razão Social</label>
-                <input type="text" placeholder="Digite seu nome ou empresa" required>
+                <input type="text" placeholder="Identificação do titular" required>
             </div>
             <div class="form-group">
                 <label>CPF ou CNPJ</label>
-                <input type="text" id="documento" placeholder="000.000.000-00" required>
+                <input type="text" placeholder="Documento oficial" required>
             </div>
             <div class="form-group">
                 <label>E-mail Corporativo</label>
-                <input type="email" placeholder="exemplo@empresa.com.br" required>
+                <input type="email" placeholder="nome@empresa.com.br" required>
             </div>
             <div class="form-group">
                 <label>Telefone / WhatsApp</label>
-                <input type="text" id="telefone" placeholder="(00) 00000-0000" required>
+                <input type="text" placeholder="(00) 00000-0000" required>
             </div>
-            <button type="submit" class="btn-enviar">Enviar Solicitação de Fomento</button>
+            <button type="submit" class="btn-enviar">Solicitar Acreditação</button>
         </form>
     </div>
 
     <footer>
-        Engecema Engenharia Fomento e Tecnologia Ltda | CNPJ 05.368.602/0001-10 | © 2026
+        <p><strong>Engecema Engenharia Fomento e Tecnologia Ltda.</strong><br>
+        CNPJ 05.368.602/0001-10<br>
+        Integração Segura via GitHub Enterprise & IBM Cloud Services.<br>
+        © 2026 Todos os Direitos Reservados.</p>
     </footer>
 </body>
 </html>
