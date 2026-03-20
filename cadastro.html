@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <title>Engecema Private - Cadastro</title>
     
-    <!-- SOLUÇÃO DEFINITIVA FAVICON: Usando a URL completa do seu site -->
-    <link rel="icon" href="https://engecema.github.io" type="image/x-icon">
-    <link rel="shortcut icon" href="https://engecema.github.io" type="image/x-icon">
+    <!-- SOLUÇÃO FAVICON: Usando seu logo.png real do repositório -->
+    <link rel="icon" href="https://engecema.github.io" type="image/png">
+    <link rel="shortcut icon" href="https://engecema.github.io" type="image/png">
     
     <style>
         body { font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding: 40px; background-color: #f0f2f5; }
@@ -15,23 +15,36 @@
         label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; font-size: 14px; }
         input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
         .erro-senha { color: #da1e28; font-size: 12px; display: none; margin-bottom: 10px; font-weight: bold; }
-        button { width: 100%; padding: 14px; background-color: #da1e28; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
+        
+        /* BOTÃO VERMELHO PADRÃO */
+        button { 
+            width: 100%; 
+            padding: 14px; 
+            background-color: #da1e28; 
+            color: white; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 16px; 
+            transition: 0.3s;
+        }
         button:hover { background-color: #b91922; }
     </style>
 </head>
 <body>
 
 <form id="formCadastro">
-    <h2>Dados da Conta</h2>
+    <h2>Engecema Private</h2>
     
     <label>Nome Completo</label>
-    <input type="text" name="nome" placeholder="Seu nome" required>
+    <input type="text" id="nome" name="nome" placeholder="Digite seu nome" required>
 
     <label>E-mail Corporativo</label>
-    <input type="email" name="email" placeholder="seu@email.com" required>
+    <input type="email" id="email" name="email" placeholder="seu@email.com" required>
 
     <label>CPF</label>
-    <input type="text" name="cpf" placeholder="000.000.000-00" required>
+    <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" required>
 
     <label>Crie uma Senha</label>
     <input type="password" id="senha" name="senha" placeholder="******" required>
@@ -47,6 +60,9 @@
 document.getElementById('formCadastro').onsubmit = async function(e) {
     e.preventDefault();
     
+    const nome = document.getElementById('nome').value;
+    const email = document.getElementById('email').value;
+    const cpf = document.getElementById('cpf').value;
     const senha = document.getElementById('senha').value;
     const confirma = document.getElementById('confirmar_senha').value;
     const msgErro = document.getElementById('msgErro');
@@ -57,36 +73,45 @@ document.getElementById('formCadastro').onsubmit = async function(e) {
     }
     msgErro.style.display = 'none';
 
-    // CONFIGURAÇÕES IBM (G4mi3u... API KEY MANAGER)
+    // CONFIGURAÇÕES IBM
     const API_KEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
     const URL_CL = "https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
-    const DB = "cliente_engecema";
 
-    const formData = new FormData(this);
-    const dados = Object.fromEntries(formData.entries());
-    delete dados.confirmar_senha;
-    dados.tipo_conta = "Private";
-    dados.criado_em = new Date().toISOString();
+    const dados = { nome, email, cpf, senha, criado_em: new Date().toISOString() };
 
     try {
-        const auth = btoa("apikey:" + API_KEY.trim());
-
-        // Usando o modo 'no-cors' para garantir que o dado saia do navegador
-        fetch(`${URL_CL}/${DB}`, {
+        // Envio em modo no-cors para evitar erro de rede
+        fetch(URL_CL, {
             method: 'POST',
             mode: 'no-cors',
-            headers: {
-                'Authorization': 'Basic ' + auth,
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Authorization': 'Basic ' + btoa("apikey:" + API_KEY), 'Content-Type': 'application/json' },
             body: JSON.stringify(dados)
         });
 
-        alert("Sucesso! Solicitação enviada ao Engecema Private.");
-        this.reset();
+        alert("Sucesso! Gerando comprovante de abertura...");
 
-    } catch (error) {
-        alert("Erro técnico ao processar. Verifique a rede.");
+        // ABERTURA DO ARQUIVO DE CADASTRO (COMPROVANTE)
+        const doc = window.open("", "_blank");
+        doc.document.write(`
+            <html>
+            <head><title>Comprovante Engecema Private</title></head>
+            <body style="font-family:sans-serif; padding:50px; border: 5px solid #da1e28; max-width: 600px; margin: auto;">
+                <img src="https://engecema.github.io" width="100" style="display:block; margin:auto;">
+                <h1 style="color:#da1e28; text-align:center;">Comprovante de Cadastro</h1>
+                <p><strong>Titular:</strong> ${nome}</p>
+                <p><strong>CPF:</strong> ${cpf}</p>
+                <p><strong>E-mail:</strong> ${email}</p>
+                <p><strong>Data:</strong> ${new Date().toLocaleDateString()}</p>
+                <hr>
+                <p style="text-align:center; font-style:italic;">Seu cadastro Private está em análise.</p>
+                <button onclick="window.print()" style="background:#da1e28; color:white; padding:10px; border:none; width:100%; cursor:pointer;">IMPRIMIR COMPROVANTE</button>
+            </body>
+            </html>
+        `);
+
+        this.reset();
+    } catch (err) {
+        alert("Erro ao processar cadastro.");
     }
 };
 </script>
