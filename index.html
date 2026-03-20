@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <!-- FAVICON INTEGRADO -->
+    <!-- FAVICON INTEGRADO (logo.png na raiz) -->
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="shortcut icon" type="image/png" href="logo.png">
 
     <title>Engecema | Fomento Mercantil e Tecnologia</title>
     
     <style>
-        /* LAYOUT BANCÁRIO FIXO E LIMPO - ONTEM 18H */
+        /* LAYOUT BANCÁRIO LIMPO - FOCO NO CLIENTE */
         body { 
             font-family: 'Segoe UI', Arial, sans-serif; 
             margin: 0; 
@@ -26,39 +26,38 @@
             background: #fff; 
             padding: 25px 10%; 
             border-bottom: 6px solid #cc092f;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            text-align: left;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         }
 
         .logo-header { height: 65px; }
 
-        .hero-text { 
+        /* TEXTO SUPERIOR PERSONALIZADO (FOCO BANCÁRIO) */
+        .hero-section { 
             background: #fff; 
             padding: 80px 20px 40px; 
             text-align: center;
         }
 
-        .hero-text h1 { 
+        .hero-section h1 { 
             font-size: 2.8em; 
             color: #1a1a1a; 
             margin: 0; 
             font-weight: 300;
         }
 
-        .hero-text h1 b { color: #cc092f; font-weight: 800; }
+        .hero-section h1 b { color: #cc092f; font-weight: 800; }
 
-        .hero-text p { 
+        .hero-section p { 
             font-size: 1.3em; 
             color: #555; 
             margin-top: 15px; 
         }
 
-        /* CONTAINER DOS BOTÕES TRAVADOS NO CENTRO */
-        .action-container { 
+        /* CONTAINER CENTRAL DE ACESSO DO CLIENTE */
+        .client-portal { 
             max-width: 450px; 
             margin: 0 auto 80px; 
             padding: 20px;
-            text-align: center;
         }
 
         .btn-bank { 
@@ -71,23 +70,25 @@
             border-radius: 4px; 
             text-transform: uppercase;
             font-size: 1.1em;
+            text-align: center;
             letter-spacing: 1px;
             transition: 0.3s;
         }
 
         .btn-open { background: #cc092f; color: #fff; }
         .btn-login { background: #004481; color: #fff; }
+        .btn-bank:hover { filter: brightness(1.1); transform: translateY(-2px); }
 
         /* RODAPÉ CORPORATIVO COMPLETO E LIMPO */
         footer { 
             margin-top: auto;
             background: #fff; 
             text-align: center; 
-            padding: 40px 20px; 
+            padding: 50px 20px; 
             border-top: 1px solid #eee;
             color: #444;
             font-size: 0.95em;
-            line-height: 1.8;
+            line-height: 2;
         }
     </style>
 </head>
@@ -97,14 +98,14 @@
         <img src="logo.png" alt="Engecema" class="logo-header">
     </header>
 
-    <div class="hero-text">
-        <!-- TEXTO SUPERIOR QUE VOCÊ ELOGIOU -->
+    <div class="hero-section">
+        <!-- TEXTO SUPERIOR QUE VOCÊ ACERTOU DE PRIMEIRA -->
         <h1><b>Fomento Mercantil</b> e Tecnologia</h1>
         <p>Acesse seu Internet Banking ou abra sua conta digital agora.</p>
     </div>
 
-    <div class="action-container">
-        <!-- AÇÕES DO CLIENTE -->
+    <div class="client-portal">
+        <!-- ACESSO EXCLUSIVO DO CLIENTE -->
         <a href="#" class="btn-bank btn-login">ENTRAR NA MINHA CONTA</a>
         <a href="#" class="btn-bank btn-open">ABRIR MINHA CONTA DIGITAL</a>
     </div>
