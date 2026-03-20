@@ -18,45 +18,45 @@
     <h2>Abertura de Conta</h2>
     <input type="text" name="nome" placeholder="Nome Completo" required>
     <input type="email" name="email" placeholder="E-mail Corporativo" required>
-    <button type="submit">Finalizar Cadastro</button>
+    <button type="submit" id="btnEnviar">Finalizar Cadastro</button>
 </form>
 
 <script>
 document.getElementById('meuFormulario').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const btn = document.getElementById('btnEnviar');
+    btn.innerText = "Enviando...";
 
-    // 1. CREDENCIAIS INTEGRADAS (Método de Alta Compatibilidade)
-    const APIKEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
-    const DB_NAME = "cliente_engecema";
-    
-    // Inserindo a APIKEY diretamente na URL para evitar bloqueio de Header pelo Navegador
-    const URL_DIRETA = `https://apikey:${APIKEY}@7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud/${DB_NAME}`;
+    // 1. DADOS DO WEBHOOK (APP CONFIGURATION)
+    const IAM_APIKEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
+    // COPIE A URL DO WEBHOOK NO PAINEL DO APP CONFIGURATION
+    const WEBHOOK_URL = "https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
 
     const formData = new FormData(e.target);
     const dados = Object.fromEntries(formData.entries());
-    dados.criado_em = new Date().toISOString();
+    dados.timestamp = new Date().toISOString();
 
     try {
-        const response = await fetch(URL_DIRETA, {
+        const response = await fetch(WEBHOOK_URL, {
             method: 'POST',
+            // O Webhook não exige Authorization complexo no navegador
             headers: {
                 'Content-Type': 'application/json'
-                // O Authorization foi removido daqui pois já está na URL_DIRETA
             },
             body: JSON.stringify(dados)
         });
 
         if (response.ok) {
-            alert("Sucesso! O Engecema Private recebeu seus dados.");
+            alert("Sucesso! O Engecema Private recebeu sua solicitação.");
             e.target.reset();
         } else {
-            const erroData = await response.json();
-            console.error(erroData);
-            alert("Erro na IBM: Verifique se o banco 'cliente_engecema' existe.");
+            alert("Erro no servidor. Verifique se o Webhook está configurado no App Configuration.");
         }
     } catch (error) {
-        console.error(error);
-        alert("Ocorreu um erro de rede. Verifique se o banco de dados está online.");
+        // Se der erro de rede aqui, o problema é a URL do Webhook que está incorreta
+        alert("Erro de conexão. Verifique a URL do Webhook no painel da IBM.");
+    } finally {
+        btn.innerText = "Finalizar Cadastro";
     }
 });
 </script>
