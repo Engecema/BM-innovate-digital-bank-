@@ -2,21 +2,21 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Engecema Private - Cadastro</title>
+    <title>Engecema Private - Abertura de Conta</title>
     
-    <!-- SOLUÇÃO FAVICON: Usando seu logo.png real do repositório -->
-    <link rel="icon" href="https://engecema.github.io" type="image/png">
-    <link rel="shortcut icon" href="https://engecema.github.io" type="image/png">
+    <!-- Link direto para o arquivo favicon.ico que você subiu -->
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     
     <style>
-        body { font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding: 40px; background-color: #f0f2f5; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; padding: 40px; background-color: #f0f2f5; }
         form { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        h2 { color: #da1e28; text-align: center; margin-bottom: 20px; font-size: 24px; }
+        h2 { color: #da1e28; text-align: center; margin-bottom: 25px; font-size: 26px; }
         label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; font-size: 14px; }
         input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
-        .erro-senha { color: #da1e28; font-size: 12px; display: none; margin-bottom: 10px; font-weight: bold; }
+        .erro-senha { color: #da1e28; font-size: 13px; display: none; margin-bottom: 10px; font-weight: bold; text-align: center; }
         
-        /* BOTÃO VERMELHO PADRÃO */
+        /* BOTÃO VERMELHO PADRÃO ENGECEMA */
         button { 
             width: 100%; 
             padding: 14px; 
@@ -35,10 +35,10 @@
 <body>
 
 <form id="formCadastro">
-    <h2>Engecema Private</h2>
+    <h2>Dados Cadastrais</h2>
     
     <label>Nome Completo</label>
-    <input type="text" id="nome" name="nome" placeholder="Digite seu nome" required>
+    <input type="text" id="nome" name="nome" placeholder="Seu nome completo" required>
 
     <label>E-mail Corporativo</label>
     <input type="email" id="email" name="email" placeholder="seu@email.com" required>
@@ -51,7 +51,7 @@
 
     <label>Confirme a Senha</label>
     <input type="password" id="confirmar_senha" placeholder="******" required>
-    <span id="msgErro" class="erro-senha">As senhas não coincidem!</span>
+    <div id="msgErro" class="erro-senha">As senhas não coincidem!</div>
 
     <button type="submit" id="btnFinalizar">Finalizar Cadastro</button>
 </form>
@@ -60,9 +60,6 @@
 document.getElementById('formCadastro').onsubmit = async function(e) {
     e.preventDefault();
     
-    const nome = document.getElementById('nome').value;
-    const email = document.getElementById('email').value;
-    const cpf = document.getElementById('cpf').value;
     const senha = document.getElementById('senha').value;
     const confirma = document.getElementById('confirmar_senha').value;
     const msgErro = document.getElementById('msgErro');
@@ -73,14 +70,18 @@ document.getElementById('formCadastro').onsubmit = async function(e) {
     }
     msgErro.style.display = 'none';
 
-    // CONFIGURAÇÕES IBM
+    const dados = {
+        nome: document.getElementById('nome').value,
+        email: document.getElementById('email').value,
+        cpf: document.getElementById('cpf').value,
+        data: new Date().toLocaleDateString('pt-BR')
+    };
+
     const API_KEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
     const URL_CL = "https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
 
-    const dados = { nome, email, cpf, senha, criado_em: new Date().toISOString() };
-
     try {
-        // Envio em modo no-cors para evitar erro de rede
+        // Envio para o Cloudant (Modo que evitou o erro de rede)
         fetch(URL_CL, {
             method: 'POST',
             mode: 'no-cors',
@@ -88,30 +89,36 @@ document.getElementById('formCadastro').onsubmit = async function(e) {
             body: JSON.stringify(dados)
         });
 
-        alert("Sucesso! Gerando comprovante de abertura...");
+        alert("Cadastro enviado com sucesso! Abrindo seu comprovante Engecema...");
 
-        // ABERTURA DO ARQUIVO DE CADASTRO (COMPROVANTE)
-        const doc = window.open("", "_blank");
-        doc.document.write(`
-            <html>
-            <head><title>Comprovante Engecema Private</title></head>
-            <body style="font-family:sans-serif; padding:50px; border: 5px solid #da1e28; max-width: 600px; margin: auto;">
-                <img src="https://engecema.github.io" width="100" style="display:block; margin:auto;">
-                <h1 style="color:#da1e28; text-align:center;">Comprovante de Cadastro</h1>
-                <p><strong>Titular:</strong> ${nome}</p>
-                <p><strong>CPF:</strong> ${cpf}</p>
-                <p><strong>E-mail:</strong> ${email}</p>
-                <p><strong>Data:</strong> ${new Date().toLocaleDateString()}</p>
-                <hr>
-                <p style="text-align:center; font-style:italic;">Seu cadastro Private está em análise.</p>
-                <button onclick="window.print()" style="background:#da1e28; color:white; padding:10px; border:none; width:100%; cursor:pointer;">IMPRIMIR COMPROVANTE</button>
-            </body>
-            </html>
-        `);
+        // ABERTURA DO COMPROVANTE EM NOVA ABA
+        const win = window.open("", "_blank");
+        if (win) {
+            win.document.write(`
+                <html>
+                <head><title>Comprovante Engecema Private</title></head>
+                <body style="font-family:sans-serif; padding:50px; text-align:center; border: 10px solid #da1e28; max-width: 700px; margin: auto;">
+                    <img src="https://engecema.github.io" width="150" style="margin-bottom:20px;">
+                    <h1 style="color:#da1e28;">Comprovante de Solicitação de Abertura</h1>
+                    <hr>
+                    <div style="text-align:left; font-size:18px; line-height:1.6;">
+                        <p><strong>Titular:</strong> ${dados.nome}</p>
+                        <p><strong>CPF:</strong> ${dados.cpf}</p>
+                        <p><strong>E-mail:</strong> ${dados.email}</p>
+                        <p><strong>Data do Registro:</strong> ${dados.data}</p>
+                        <p><strong>Status:</strong> Em Processamento</p>
+                    </div>
+                    <br>
+                    <button onclick="window.print()" style="background:#da1e28; color:white; padding:15px 30px; border:none; border-radius:5px; cursor:pointer; font-weight:bold; font-size:18px;">IMPRIMIR COMPROVANTE</button>
+                    <p style="margin-top:30px; color:gray; font-size:12px;">Engecema Private Banking - Documento Digital</p>
+                </body>
+                </html>
+            `);
+        }
 
         this.reset();
     } catch (err) {
-        alert("Erro ao processar cadastro.");
+        alert("Erro técnico ao processar abertura de conta.");
     }
 };
 </script>
