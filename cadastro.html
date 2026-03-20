@@ -2,43 +2,45 @@
 document.getElementById('meuFormulario').addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const APIKEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
+    // 1. SUAS CREDENCIAIS ENGEGEMA
+    const API_KEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
     const CLOUDANT_URL = "https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
     const DB_NAME = "cliente_engecema";
 
     const formData = new FormData(e.target);
     const dados = Object.fromEntries(formData.entries());
-    dados.criado_em = new Date().toISOString();
+    dados.timestamp = new Date().toISOString();
 
     try {
-        // PASSO 1: TROCAR APIKEY POR TOKEN (Evita o erro 401 de senha)
-        const tokenResponse = await fetch('https://iam.cloud.ibm.com', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
-            body: `grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=${APIKEY}`
+        // PASSO A: GERAÇÃO DO TOKEN (O "ESPELHAMENTO" DE SEGURANÇA BANCÁRIA)
+        // Isso troca sua apikey por um Token temporário, eliminando o erro 401 de senha
+        const authRes = await fetch("https://iam.cloud.ibm.com", {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded", "Accept": "application/json" },
+            body: `grant_type=urn:ibm:params:oauth:grant-type:apikey&apikey=${API_KEY}`
         });
-        const tokenData = await tokenResponse.json();
-        const accessToken = tokenData.access_token;
+        
+        const authData = await authRes.json();
+        const accessToken = authData.access_token;
 
-        // PASSO 2: ENVIAR PARA O CLOUDANT USANDO O TOKEN
+        // PASSO B: ENVIO DOS DADOS COM O TOKEN GERADO
         const response = await fetch(`${CLOUDANT_URL}/${DB_NAME}`, {
-            method: 'POST',
+            method: "POST",
             headers: {
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json'
+                "Authorization": `Bearer ${accessToken}`,
+                "Content-Type": "application/json"
             },
             body: JSON.stringify(dados)
         });
 
         if (response.ok) {
-            alert("Sucesso! O Engecema Private recebeu seus dados.");
+            alert("Sucesso! Cadastro Engecema Private realizado com segurança de Token.");
             e.target.reset();
         } else {
-            alert("Erro na gravação. Verifique se o banco 'cliente_engecema' existe.");
+            alert("Erro na gravação. Verifique se o CORS está em 'Allow all domains (*)' no Cloudant.");
         }
     } catch (error) {
-        console.error(error);
-        alert("Falha de conexão. O CORS deve estar em 'Allow all domains (*)'");
+        alert("Falha na comunicação com a IBM Cloud.");
     }
 });
 </script>
