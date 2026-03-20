@@ -5,128 +5,162 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Engecema Engenharia Fomento Mercantil e Tecnologia">
     
-    <!-- FAVICON INTEGRADO -->
+    <!-- FAVICON INTEGRADO (logo.png na raiz) -->
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="shortcut icon" type="image/png" href="logo.png">
 
     <title>Engecema | Fomento Mercantil e Tecnologia</title>
     
     <style>
-        /* DESIGN CORPORATIVO - ESTILO BANCO/IBM CLOUD */
+        /* LAYOUT BANCÁRIO ELOGIADO - PADRÃO BRADESCO/IBM CLOUD */
         :root {
             --brand-red: #cc092f;
             --brand-blue: #004481;
-            --bg-body: #f7f9fc;
+            --bg-gray: #f5f7f9;
         }
 
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background-color: var(--bg-body); color: #222; }
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            margin: 0; 
+            background-color: var(--bg-gray); 
+            color: #333; 
+        }
         
         header { 
             background: #fff; 
-            padding: 15px 8%; 
+            padding: 20px 10%; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
             border-bottom: 6px solid var(--brand-red);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
         }
 
-        .logo-img { height: 50px; }
+        .logo-header { height: 65px; width: auto; }
 
-        .tag-status { 
-            font-size: 0.75em; 
+        .tag-system { 
+            font-size: 0.8em; 
             color: var(--brand-blue); 
-            border: 1.5px solid var(--brand-blue); 
-            padding: 5px 12px; 
-            border-radius: 5px; 
-            font-weight: 900; 
+            font-weight: 800; 
+            border: 2px solid var(--brand-blue); 
+            padding: 6px 12px; 
+            border-radius: 4px;
+            letter-spacing: 1px;
         }
 
-        .hero { 
+        /* TEXTO SUPERIOR PERSONALIZADO ONTEM */
+        .hero-banner { 
             background: #fff; 
-            padding: 70px 20px; 
+            padding: 80px 20px; 
             text-align: center; 
-            border-bottom: 1px solid #e1e4e8;
+            border-bottom: 1px solid #ddd;
         }
 
-        /* TEXTO SUPERIOR CORRIGIDO CONFORME HISTÓRICO */
-        .hero h1 { font-size: 2.8em; color: #111; margin: 0; }
-        .hero p { font-size: 1.3em; color: #444; margin-top: 15px; }
+        .hero-banner h1 { 
+            font-size: 3em; 
+            color: #1a1a1a; 
+            margin: 0; 
+            font-weight: 300;
+        }
 
-        .container-cards { 
-            max-width: 1050px; 
-            margin: -40px auto 60px; 
-            display: flex; 
-            gap: 35px; 
+        .hero-banner h1 b { color: var(--brand-red); font-weight: 800; }
+
+        .hero-banner p { 
+            font-size: 1.4em; 
+            color: #555; 
+            margin-top: 20px; 
+            font-weight: 400;
+        }
+
+        /* CONTAINER DOS CARDS DE ACESSO */
+        .portal-grid { 
+            max-width: 1150px; 
+            margin: -60px auto 80px; 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 40px; 
             padding: 0 20px; 
         }
 
-        .card { 
-            flex: 1; 
-            background: #fff; 
-            padding: 50px 30px; 
-            border-radius: 6px; 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        .card-portal { 
+            background: #ffffff; 
+            padding: 50px; 
+            border-radius: 4px; 
+            box-shadow: 0 20px 45px rgba(0,0,0,0.15);
             text-align: center;
+            border-top: 5px solid var(--brand-blue);
         }
 
-        .btn { 
+        .card-red { border-top-color: var(--brand-red); }
+
+        .card-portal h2 { font-size: 2em; margin-bottom: 20px; color: #222; }
+
+        .btn-portal { 
             display: block; 
             width: 100%; 
-            padding: 18px; 
+            padding: 20px; 
             margin-top: 30px; 
             text-decoration: none; 
-            font-weight: bold; 
+            font-weight: 900; 
             border-radius: 4px; 
+            text-transform: uppercase;
             font-size: 1.1em;
+            transition: 0.3s;
         }
 
         .btn-red { background: var(--brand-red); color: #fff; }
         .btn-blue { background: var(--brand-blue); color: #fff; }
+        .btn-portal:hover { filter: brightness(1.2); transform: translateY(-3px); }
 
+        /* RODAPÉ CORPORATIVO COMPLETO 2026 */
         footer { 
             background: #fff; 
             text-align: center; 
             padding: 60px 20px; 
             border-top: 1px solid #eee;
-            color: #555;
-            font-size: 0.95em;
-            line-height: 1.8;
+            color: #444;
+            font-size: 1em;
+            line-height: 2;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <img src="logo.png" alt="Engecema" class="logo-img">
-        <div class="tag-status">CONECTADO: GITHUB & IBM CLOUD</div>
+        <img src="logo.png" alt="Engecema" class="logo-header">
+        <div class="tag-system">INTERNET BANKING | IBM CLOUD</div>
     </header>
 
-    <div class="hero">
-        <!-- INÍCIO COM FOMENTO MERCANTIL CONFORME SOLICITADO -->
-        <h1>Fomento Mercantil e Tecnologia</h1>
-        <p>Soluções em engenharia financeira e gestão estratégica de ativos.</p>
+    <div class="hero-banner">
+        <!-- TEXTO SUPERIOR EXATO DE ONTEM -->
+        <h1><b>Fomento Mercantil</b> e Tecnologia</h1>
+        <p>A nova era da inteligência financeira aplicada à engenharia de ativos.</p>
     </div>
 
-    <div class="container-cards">
-        <div class="card" style="border-top: 5px solid var(--brand-red);">
-            <h2 style="color: var(--brand-red);">Abertura de Conta</h2>
-            <p>Seja um parceiro estratégico. Inicie sua jornada digital no portal Engecema.</p>
-            <a href="#" class="btn btn-red">ABRIR MINHA CONTA</a>
+    <div class="portal-grid">
+        <!-- PORTAL DO CLIENTE -->
+        <div class="card-portal card-red">
+            <h2>Conta Digital</h2>
+            <p>Acesse o portal de credenciamento e fomento para novos parceiros de tecnologia.</p>
+            <a href="#" class="btn-portal btn-red">SOLICITAR ABERTURA</a>
         </div>
 
-        <div class="card" style="border-top: 5px solid var(--brand-blue);">
-            <h2 style="color: var(--brand-blue);">Painel Administrativo</h2>
-            <p>Controle de fomento, tecnologia e gestão de projetos internos.</p>
-            <a href="admin.html" class="btn btn-blue">ACESSAR ADMIN.HTML</a>
+        <!-- PORTAL ADMINISTRATIVO -->
+        <div class="card-portal">
+            <h2>Governança</h2>
+            <p>Painel restrito para gestão de fomento, auditoria e controle tecnológico.</p>
+            <a href="admin.html" class="btn-portal btn-blue">ACESSAR ADMIN.HTML</a>
         </div>
     </div>
 
     <footer>
-        <p><strong>Engecema Engenharia Fomento e Tecnologia Ltda.</strong><br>
-        CNPJ: [05.368.602/0001-10](https://empresas.serasaexperian.com.br/consulta-gratis/ENGECEMA-ENGENHARIA-FOMENTO-E-TECNOLOGIA-LTDA-ME-05368602000110)<br>
-        Ambiente Seguro via GitHub Enterprise & IBM Cloud Services.<br>
-        © 2026 Todos os Direitos Reservados.</p>
+        <!-- RODAPÉ CORPORATIVO EXATO DE ONTEM -->
+        <p>
+            <strong>Engecema Engenharia Fomento e Tecnologia Ltda.</strong><br>
+            CNPJ 05.368.602/0001-10<br>
+            Integração Segura via GitHub Enterprise & IBM Cloud Services.<br>
+            © 2026 Todos os Direitos Reservados.
+        </p>
     </footer>
 
 </body>
