@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Engecema Private - Cadastro</title>
-    <!-- FAVICON ABSOLUTO PARA NÃO SUMIR -->
+    <!-- FAVICON: Caminho absoluto para garantir que apareça em todas as telas -->
     <link rel="icon" href="https://engecema.github.io" type="image/x-icon">
     
     <style>
@@ -14,19 +14,18 @@
         input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
         .erro-senha { color: #da1e28; font-size: 12px; display: none; margin-bottom: 10px; font-weight: bold; }
         
-        /* FORÇANDO O BOTÃO VERMELHO PADRÃO BRADESCO/ENGECEMA */
-        #btnFinalizar { 
+        button { 
             width: 100%; 
             padding: 14px; 
-            background-color: #da1e28 !important; 
-            color: white !important; 
+            background-color: #da1e28; 
+            color: white; 
             border: none; 
             border-radius: 6px; 
             cursor: pointer; 
             font-weight: bold; 
             font-size: 16px; 
         }
-        #btnFinalizar:hover { background-color: #b91922 !important; }
+        button:hover { background-color: #b91922; }
     </style>
 </head>
 <body>
@@ -66,9 +65,8 @@ document.getElementById('formCadastro').onsubmit = async function(e) {
     }
 
     const API_KEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
-    const DB = "cliente_engecema";
-    // URL COM AUTH EMBUTIDA PARA MATAR O ERRO 401
-    const URL_FINAL = `https://apikey:${API_KEY}@7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud/${DB}`;
+    const DB_NAME = "cliente_engecema";
+    const CLOUDANT_URL = "https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
 
     const formData = new FormData(this);
     const dados = Object.fromEntries(formData.entries());
@@ -76,9 +74,15 @@ document.getElementById('formCadastro').onsubmit = async function(e) {
     dados.criado_em = new Date().toISOString();
 
     try {
-        const response = await fetch(URL_FINAL, {
+        const auth = btoa("apikey:" + API_KEY);
+
+        const response = await fetch(`${CLOUDANT_URL}/${DB_NAME}`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            mode: 'cors', // Crucial para navegadores modernos
+            headers: {
+                'Authorization': 'Basic ' + auth,
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify(dados)
         });
 
@@ -86,10 +90,11 @@ document.getElementById('formCadastro').onsubmit = async function(e) {
             alert("Sucesso! Cadastro Engecema Private realizado.");
             this.reset();
         } else {
-            alert("Erro 401: A IBM ainda recusa a chave. Verifique o CORS no painel.");
+            alert("Erro 401: Verifique o CORS no painel da IBM.");
         }
     } catch (error) {
-        alert("Erro de Rede: O navegador bloqueou a conexão.");
+        // Se cair aqui, a IBM recusou o 'pre-vôo' da conexão (CORS)
+        alert("Erro de Rede: Verifique se o CORS na IBM está em 'Allow all domains (*)' e salve novamente.");
     }
 };
 </script>
