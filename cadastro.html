@@ -4,32 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="description" content="Cadastro Engecema Private Banking">
+    <meta name="description" content="Engecema Private Banking - Sistema de Cadastro Integrado">
     <title>Bradesco | Cadastro Engecema Private</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <style>
-        /* Estilização Completa Padrão Bradesco Private */
-        @font-face {
-            font-family: 'Bradesco Sans';
-            src: local('Arial'); /* Fallback para compatibilidade */
-        }
+        /* ESTILIZAÇÃO COMPLETA PADRÃO BRADESCO PRIVATE */
         :root {
             --bradesco-red: #cc092f;
             --bg-gray: #f4f4f4;
             --input-border: #ddd;
             --text-main: #333;
-            --success: #28a745;
+            --success-green: #28a745;
         }
         * { box-sizing: border-box; }
         body {
             background-color: var(--bg-gray);
-            font-family: "Bradesco Sans", Arial, sans-serif;
+            font-family: "Bradesco Sans", Arial, Helvetica, sans-serif;
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow: hidden;
         }
         .container {
             background: #ffffff;
@@ -40,10 +36,10 @@
             border-radius: 4px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             position: relative;
-            animation: slideUp 0.6s ease-out;
+            animation: fadeInUp 0.6s ease-out;
         }
-        @keyframes slideUp {
-            from { transform: translateY(30px); opacity: 0; }
+        @keyframes fadeInUp {
+            from { transform: translateY(20px); opacity: 0; }
             to { transform: translateY(0); opacity: 1; }
         }
         header { text-align: center; margin-bottom: 40px; }
@@ -57,12 +53,6 @@
             letter-spacing: -0.5px;
         }
         .form-group { margin-bottom: 20px; width: 100%; }
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            color: #666;
-        }
         input {
             width: 100%;
             padding: 15px;
@@ -90,18 +80,16 @@
             text-transform: uppercase;
             font-size: 14px;
             letter-spacing: 1px;
-            transition: background 0.3s, transform 0.2s;
+            transition: 0.3s;
             margin-top: 10px;
         }
         .btn-red:hover { background: #a00725; transform: translateY(-2px); }
-        .btn-red:active { transform: translateY(0); }
 
-        /* Estado de Sucesso */
-        .success-box { display: none; text-align: center; }
-        .success-box h2 { color: var(--success); }
+        /* TELA DE SUCESSO */
+        .success-box { display: none; text-align: center; animation: fadeIn 0.5s ease; }
         .icon-check {
             font-size: 70px;
-            color: var(--success);
+            color: var(--success-green);
             margin-bottom: 30px;
             display: block;
         }
@@ -120,39 +108,37 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-        /* Responsividade */
-        @media (max-width: 480px) {
-            .container { padding: 30px; border-top-width: 6px; }
-            h2 { font-size: 22px; }
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <!-- ETAPA 1: REGISTRO -->
+        <!-- ETAPA 1: FORMULÁRIO DE REGISTRO (5 CAMPOS) -->
         <div id="step-register">
             <header>
                 <img src="logo.png" alt="Bradesco Engecema" class="logo-img">
             </header>
             <h2>Realizar Cadastro</h2>
             
-            <div class="form-group"><input type="text" id="nome" placeholder="Nome Completo"></div>
-            <div class="form-group"><input type="email" id="email" placeholder="E-mail"></div>
-            <div class="form-group"><input type="text" id="cpf" placeholder="CPF"></div>
-            <div class="form-group"><input type="password" id="senha" placeholder="Senha"></div>
-            <div class="form-group"><input type="password" id="confirma" placeholder="Confirmar Senha"></div>
+            <div class="form-group"><input type="text" id="nome" placeholder="Nome Completo" required></div>
+            <div class="form-group"><input type="email" id="email" placeholder="E-mail" required></div>
+            <div class="form-group"><input type="text" id="cpf" placeholder="CPF" required></div>
+            <div class="form-group"><input type="password" id="senha" placeholder="Senha" required></div>
+            <div class="form-group"><input type="password" id="confirma" placeholder="Confirmar Senha" required></div>
 
-            <button class="btn-red" onclick="executarFluxoCadastro()">Finalizar Cadastro</button>
+            <button class="btn-red" onclick="finalizarProcesso()">Finalizar Cadastro</button>
         </div>
 
-        <!-- ETAPA 2: SUCESSO -->
+        <!-- ETAPA 2: REGISTRO CONCLUÍDO COM REDIRECIONAMENTO -->
         <div id="step-success" class="success-box">
             <span class="icon-check">✓</span>
             <h2>Registro Concluído</h2>
             <p class="success-text">
-                Seu perfil Private Engecema foi ativado. Sua grade de produtos e serviços bancários está disponível via Dallas.
+                Seu perfil Private Engecema foi ativado com sucesso. Sua grade de produtos e serviços está disponível via Dallas.
             </p>
+            
+            <!-- CORREÇÃO DE DIRECIONAMENTO: Manda para produtos.html (Interface Banking) -->
             <button class="btn-red" onclick="window.location.href='produtos.html'">Acessar Interface de Produtos</button>
         </div>
 
@@ -161,27 +147,18 @@
 
     <script>
         /**
-         * Lógica de Transição e Validação Técnica
+         * Lógica de Transição e Validação
          */
-        function executarFluxoCadastro() {
-            const campos = ['nome', 'email', 'cpf', 'senha', 'confirma'];
-            const inputs = campos.map(id => document.getElementById(id));
-            const todosPreenchidos = inputs.every(input => input.value.trim() !== "");
+        function finalizarProcesso() {
+            const ids = ['nome', 'email', 'cpf', 'senha', 'confirma'];
+            const todosPreenchidos = ids.every(id => document.getElementById(id).value.trim() !== "");
 
             if (todosPreenchidos) {
-                // Efeito visual de transição
                 document.getElementById('step-register').style.display = 'none';
                 document.getElementById('step-success').style.display = 'block';
-                
-                // Registro de Log para o Continuous Delivery da IBM
-                console.log("Fluxo Engecema: Cadastro finalizado em us-south.");
-                window.scrollTo(0, 0);
+                console.log("Fluxo Engecema: Cadastro finalizado. Redirecionando para produtos.html");
             } else {
                 alert("Por favor, preencha todos os 5 campos obrigatoriamente.");
-                // Destaque visual nos campos vazios
-                inputs.forEach(input => {
-                    if (input.value.trim() === "") input.style.borderColor = "#cc092f";
-                });
             }
         }
     </script>
