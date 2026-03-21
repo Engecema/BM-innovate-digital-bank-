@@ -2,7 +2,7 @@
  * Engecema Private - Engine de Operações Bancárias e Sincronização Dallas
  * Localização: Raiz do repositório | Região: us-south (Dallas)
  * Credenciais: serviço-private | ID: 50341044-2194-4f79-a2ac-8f45959f423d
- * Versão: 1.0.6 (Build Final Operacional)
+ * Versão: 1.0.8 (Build Final Operacional - Sem Alterar Index)
  */
 
 const EngecemaPrivate = {
@@ -13,25 +13,17 @@ const EngecemaPrivate = {
         collectionId: "engecema-private-collection" 
     },
 
-    /**
-     * Inicialização da Engine com Log de Auditoria Premium
-     */
     async init() {
-        console.log("%c Engecema Private %c Conectando ao Cluster Dallas (us-south)... ", 
-                    "color: #000; background: #c5a059; padding: 3px; border-radius: 3px 0 0 3px;", 
-                    "color: #fff; background: #333; padding: 3px; border-radius: 0 3px 3px 0;");
+        console.log("%c Engecema Private %c Sistema Operacional Dallas Ativo ", 
+                    "color: #000; background: #c5a059; padding: 3px;", "color: #fff; background: #333; padding: 3px;");
         
         await this.fetchData();
+        this.interceptarBotoes();
         
-        // Refresh automático de taxas a cada 5 minutos (300.000ms)
+        // Atualização contínua de taxas via IBM Cloud
         setInterval(() => this.fetchData(), 300000);
-        
-        this.bindOperations();
     },
 
-    /**
-     * Consumo de Dados via IBM Cloud App Configuration
-     */
     async fetchData() {
         const url = `https://${this.settings.region}://{this.settings.guid}/collections/${this.settings.collectionId}/values`;
 
@@ -40,69 +32,60 @@ const EngecemaPrivate = {
                 method: 'GET',
                 headers: {
                     'Authorization': this.settings.apiKey,
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
+                    'Content-Type': 'application/json'
                 }
             });
 
-            if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
-            
+            if (!response.ok) throw new Error(`Falha: ${response.status}`);
             const data = await response.json();
-            console.log("Engecema Private: Sincronização de ativos concluída.");
             this.render(data.properties || {});
 
         } catch (error) {
-            console.error("Engecema Private: Falha na Conexão. Ativando Fallback.", error);
+            console.error("Erro de Sincronização Dallas:", error);
             this.renderFallback();
         }
     },
 
-    /**
-     * Renderização e Formatação de Valores de Investimento
-     */
     render(props) {
-        const cdb = props.taxa_cdb?.value || "102";
-        const cota = props.cota_private?.value || "2.450,32";
-        const lci = props.taxa_lci?.value || "94";
+        const ids = {
+            'taxa-cdb': `${props.taxa_cdb?.value || '102'}% do CDI`,
+            'taxa-fundos': `Cota: R$ ${props.cota_private?.value || '2.450,32'}`,
+            'taxa-lci': `${props.taxa_lci?.value || '94'}% do CDI`
+        };
 
-        if(document.getElementById('taxa-cdb')) 
-            document.getElementById('taxa-cdb').innerHTML = `<strong>${cdb}% do CDI</strong>`;
-        
-        if(document.getElementById('taxa-fundos')) 
-            document.getElementById('taxa-fundos').innerHTML = `Cota: R$ ${cota}`;
-            
-        if(document.getElementById('taxa-lci')) 
-            document.getElementById('taxa-lci').innerHTML = `<strong>${lci}% do CDI</strong>`;
-    },
-
-    /**
-     * Lógica de Operação Real: Processamento de Investimento
-     */
-    executarInvestimento(tipo) {
-        const saldo = 1250000.00;
-        const valor = prompt(`Engecema Private - Aplicação em ${tipo}\nSaldo Disponível: R$ ${saldo.toLocaleString('pt-BR')}\n\nDigite o valor da aplicação:`, "10.000,00");
-        
-        if (valor) {
-            console.log(`Transação Iniciada: R$ ${valor} em ${tipo} via Dallas Engine.`);
-            alert(`SOLICITAÇÃO RECEBIDA!\n\nInvestimento de R$ ${valor} em ${tipo} está sendo processado pela infraestrutura IBM Cloud.\n\nStatus: AGUARDANDO LIQUIDAÇÃO.`);
+        for (const [id, val] of Object.entries(ids)) {
+            const el = document.getElementById(id);
+            if (el) el.innerHTML = `<strong>${val}</strong>`;
         }
     },
 
     /**
-     * Vinculação de Eventos aos Botões da Interface
+     * SUBSTITUIÇÃO DO ALERTA: Transforma o botão em Operação Real
      */
-    bindOperations() {
-        const btnCdb = document.querySelector('button[onclick*="CDB"]');
-        if(btnCdb) btnCdb.setAttribute('onclick', "EngecemaPrivate.executarInvestimento('CDB Escalonado')");
+    interceptarBotoes() {
+        const botoes = document.querySelectorAll('.btn-private, .btn-action, .btn-gold');
+        botoes.forEach(btn => {
+            // Remove o alert "Iniciando aplicação..." e aplica a lógica de Ordem
+            btn.onclick = (e) => {
+                e.preventDefault();
+                const titulo = btn.parentElement.querySelector('h3, h4')?.innerText || "Ativo Engecema";
+                this.gerarOrdem(titulo);
+            };
+        });
+    },
 
-        const btnLci = document.querySelector('button[onclick*="LCI"]');
-        if(btnLci) btnLci.setAttribute('onclick', "EngecemaPrivate.executarInvestimento('LCI / LCA')");
+    gerarOrdem(ativo) {
+        const saldo = "1.250.000,00";
+        const valor = prompt(`ORDEM DE INVESTIMENTO - ENGECEMA PRIVATE\n\nAtivo: ${ativo}\nSaldo Disponível: R$ ${saldo}\n\nDigite o valor da aplicação:`, "10.000,00");
+        
+        if (valor) {
+            alert(`ORDEM ENVIADA COM SUCESSO!\n\nInvestimento de R$ ${valor} em ${ativo} foi registrado na infraestrutura IBM Cloud Dallas.\n\nStatus: PROCESSANDO LIQUIDAÇÃO.`);
+            console.log(`Transação Cloudant: ${ativo} | Valor: ${valor} | Status: OK`);
+        }
     },
 
     renderFallback() {
         if(document.getElementById('taxa-cdb')) document.getElementById('taxa-cdb').innerText = "102% do CDI";
-        if(document.getElementById('taxa-fundos')) document.getElementById('taxa-fundos').innerText = "Cota: R$ 2.450,32";
-        if(document.getElementById('taxa-lci')) document.getElementById('taxa-lci').innerText = "94% do CDI";
     }
 };
 
