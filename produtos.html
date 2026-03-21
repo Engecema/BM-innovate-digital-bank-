@@ -3,138 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Engecema Private | Carteira de Investimentos</title>
-    <!-- Identidade Visual e Favicon -->
+    <title>Engecema Private | Internet Banking</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <style>
-        :root {
-            --private-bg: #1a1a1a;
-            --private-gold: #c5a059;
-            --private-text: #ffffff;
-            --private-gray: #333333;
-        }
-        body {
-            font-family: "Bradesco Sans", Arial, sans-serif;
-            background-color: var(--private-bg);
-            color: var(--private-text);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-        }
-        header {
-            border-bottom: 1px solid var(--private-gold);
-            padding: 20px;
-            text-align: center;
-            background-color: #000;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 40px 20px;
-        }
-        h1 { color: var(--private-gold); font-weight: 300; margin-bottom: 10px; }
-        p.subtitle { color: #888; margin-bottom: 40px; }
+        :root { --gold: #c5a059; --bg: #0e0e0e; --card: #1c1c1c; --text: #d1d1d1; }
+        body { background: var(--bg); color: var(--text); font-family: "Bradesco Sans", Arial, sans-serif; margin: 0; padding-bottom: 50px; }
+        header { border-bottom: 1px solid var(--gold); padding: 20px 60px; display: flex; justify-content: space-between; align-items: center; background: #000; position: sticky; top: 0; z-index: 100; }
+        .container { max-width: 1300px; margin: 0 auto; padding: 40px 20px; }
         
-        /* Grid de Ativos Financeiros */
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-        .product-card {
-            background: var(--private-gray);
-            border: 1px solid #444;
-            padding: 30px;
-            border-radius: 4px;
-            transition: all 0.3s ease;
-        }
-        .product-card:hover {
-            border-color: var(--private-gold);
-            transform: translateY(-5px);
-        }
-        .product-tag {
-            color: var(--private-gold);
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            display: block;
-            margin-bottom: 15px;
-        }
-        .data-display {
-            margin: 20px 0;
-            font-size: 22px;
-            color: var(--private-gold);
-            font-weight: bold;
-        }
-        .btn-investir {
-            display: inline-block;
-            padding: 12px 30px;
-            background-color: var(--private-gold);
-            color: #000;
-            text-decoration: none;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 13px;
-            transition: opacity 0.2s;
-        }
-        .btn-investir:hover { opacity: 0.9; }
+        /* Dashboard de Resumo */
+        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-bottom: 60px; }
+        .summary-card { background: var(--card); padding: 30px; border-left: 5px solid var(--gold); border-radius: 4px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .summary-card span { font-size: 11px; color: #777; text-transform: uppercase; letter-spacing: 2px; }
+        .summary-card h2 { margin: 15px 0 0; color: var(--gold); font-weight: 300; font-size: 28px; }
 
-        footer {
-            text-align: center;
-            padding: 40px;
-            font-size: 12px;
-            color: #555;
-            border-top: 1px solid #333;
-            margin-top: 50px;
-        }
+        /* Grade de Serviços e Investimentos */
+        .main-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; }
+        .section-header { grid-column: 1 / -1; border-bottom: 1px solid #333; padding-bottom: 10px; margin-top: 20px; }
+        .section-header h3 { color: var(--gold); text-transform: uppercase; font-size: 14px; letter-spacing: 4px; }
+        
+        .bank-card { background: var(--card); padding: 40px; border: 1px solid #2a2a2a; border-radius: 4px; transition: 0.4s ease; position: relative; overflow: hidden; }
+        .bank-card:hover { border-color: var(--gold); transform: translateY(-5px); }
+        .bank-card h4 { margin: 0 0 15px 0; color: #fff; font-weight: 400; font-size: 20px; }
+        .bank-card p { font-size: 14px; color: #888; line-height: 1.6; margin-bottom: 25px; }
+        
+        .taxa-val { font-size: 26px; color: var(--gold); font-weight: bold; margin: 20px 0; display: block; }
+        .btn-private { display: inline-block; padding: 14px 35px; background: var(--gold); color: #000; text-decoration: none; font-weight: bold; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; border: none; cursor: pointer; transition: 0.3s; }
+        .btn-private:hover { background: #fff; }
+
+        footer { text-align: center; padding: 60px 0; color: #444; font-size: 12px; border-top: 1px solid #1a1a1a; margin-top: 100px; }
     </style>
 </head>
 <body>
 
 <header>
-    <!-- Logo conforme repositório engecema.github.io -->
-    <img src="logo.png" alt="Engecema Private" style="height: 50px;">
+    <img src="logo.png" alt="Engecema Private" style="height: 45px;">
+    <div style="color: var(--gold); font-size: 13px; letter-spacing: 1px;">AMBIENTE SEGURO | <a href="index.html" style="color: #fff; text-decoration: none; margin-left: 20px;">SAIR</a></div>
 </header>
 
 <div class="container">
-    <h1>Produtos Bancários Private</h1>
-    <p class="subtitle">Gestão patrimonial integrada via IBM Cloud Dallas (us-south).</p>
+    <!-- VISÃO GERAL DA CONTA -->
+    <div class="summary-grid">
+        <div class="summary-card"><span>Saldo Disponível</span><h2>R$ 1.250.000,00</h2></div>
+        <div class="summary-card"><span>Total Investido</span><h2>R$ 4.870.320,00</h2></div>
+        <div class="summary-card"><span>Limite de Crédito</span><h2>R$ 500.000,00</h2></div>
+        <div class="summary-card"><span>Cartão Black</span><h2>FINAL 8892</h2></div>
+    </div>
 
-    <div class="product-grid">
-        <!-- CDB -->
-        <div class="product-card">
-            <span class="product-tag">Renda Fixa</span>
-            <h3>CDB Escalonado</h3>
-            <p>Liquidez diária com rentabilidade progressiva.</p>
-            <div id="taxa-cdb" class="data-display">Sincronizando...</div>
-            <a href="cadastro.html" class="btn-investir">Acessar Ativo</a>
+    <div class="main-grid">
+        <!-- SEÇÃO: SERVIÇOS -->
+        <div class="section-header"><h3>Serviços Bancários & Crédito</h3></div>
+        <div class="bank-card">
+            <h4>Extrato & Transações</h4>
+            <p>Gerencie seus fluxos financeiros, realize PIX, TEDs e agendamentos com limites personalizados.</p>
+            <button class="btn-private">Consultar Extrato</button>
+        </div>
+        <div class="bank-card">
+            <h4>Empréstimos</h4>
+            <p>Linhas de crédito estruturadas com garantias em ativos financeiros e carência diferenciada.</p>
+            <button class="btn-private">Simular Empréstimo</button>
+        </div>
+        <div class="bank-card">
+            <h4>Financiamentos</h4>
+            <p>Crédito imobiliário para aquisições de alto padrão e financiamento de veículos premium.</p>
+            <button class="btn-private">Ver Opções</button>
         </div>
 
-        <!-- FUNDOS -->
-        <div class="product-card">
-            <span class="product-tag">Investimentos</span>
-            <h3>Private Selection</h3>
-            <p>Curadoria de fundos multimercados globais.</p>
-            <div id="taxa-fundos" class="data-display">Sincronizando...</div>
-            <a href="cadastro.html" class="btn-investir">Ver Detalhes</a>
+        <!-- SEÇÃO: INVESTIMENTOS DALLAS -->
+        <div class="section-header"><h3>Mercado Financeiro (Dallas Feed)</h3></div>
+        <div class="bank-card">
+            <h4>CDB Escalonado</h4>
+            <p>Rentabilidade progressiva atrelada ao CDI com liquidez para o segmento Private.</p>
+            <span id="taxa-cdb" class="taxa-val">Sincronizando...</span>
+            <button class="btn-private">Aplicar Agora</button>
         </div>
-
-        <!-- LCI/LCA -->
-        <div class="product-card">
-            <span class="product-tag">Isenção de IR</span>
-            <h3>LCI / LCA</h3>
-            <p>Títulos de crédito imobiliário e do agronegócio.</p>
-            <div id="taxa-lci" class="data-display">Sincronizando...</div>
-            <a href="cadastro.html" class="btn-investir">Simular Agora</a>
+        <div class="bank-card">
+            <h4>Private Selection</h4>
+            <p>Fundo exclusivo multimercado com curadoria de ativos globais e gestão ativa.</p>
+            <span id="taxa-fundos" class="taxa-val">Sincronizando...</span>
+            <button class="btn-private">Ver Cota</button>
+        </div>
+        <div class="bank-card">
+            <h4>LCI / LCA</h4>
+            <p>Títulos isentos de IR para pessoa física com as melhores taxas do mercado secundário.</p>
+            <span id="taxa-lci" class="taxa-val">Sincronizando...</span>
+            <button class="btn-private">Investir</button>
         </div>
     </div>
 </div>
 
 <footer>
-    &copy; 2024 Engecema Private. Monitoramento via IBM Cloud Continuous Delivery.
+    &copy; 2024 Engecema Private Banking. Integrado via IBM Cloud Continuous Delivery (us-south).
 </footer>
 
-<!-- Chamada do Script na Raiz do Repositório -->
+<!-- Chamada Única do Motor de Sincronização -->
 <script src="private-engine.js"></script>
 
 </body>
