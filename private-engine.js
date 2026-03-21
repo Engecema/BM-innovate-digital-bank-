@@ -1,7 +1,7 @@
 /**
- * Engecema Private - Engine de Integração Bancária (v1.0.3)
- * Localização: Raiz do repositório | Região: Dallas (us-south)
- * Credenciais: serviço-private
+ * Engecema Private - Engine de Integração Bancária de Alta Performance
+ * Região: Dallas (us-south) | Conexão: IBM App Configuration
+ * Credenciais: serviço-private | ID: 50341044-2194-4f79-a2ac-8f45959f423d
  */
 
 const EngecemaPrivate = {
@@ -13,18 +13,21 @@ const EngecemaPrivate = {
     },
 
     /**
-     * Inicializa a conexão com a IBM Cloud
+     * Inicialização da Engine e Sincronização Global
      */
     async init() {
-        console.log("Engecema Private: Sincronizando com IBM Cloud Dallas...");
+        console.log("%c Engecema Private %c Conectando ao Cluster Dallas (us-south)... ", 
+                    "color: #000; background: #c5a059; padding: 3px; border-radius: 3px 0 0 3px;", 
+                    "color: #fff; background: #333; padding: 3px; border-radius: 0 3px 3px 0;");
+        
         await this.fetchData();
         
-        // Atualização automática a cada 5 minutos
+        // Refresh inteligente a cada 5 minutos para manter as taxas atualizadas
         setInterval(() => this.fetchData(), 300000);
     },
 
     /**
-     * Busca dados reais do App Configuration em Dallas
+     * Consumo de Dados via API REST da IBM Cloud App Configuration
      */
     async fetchData() {
         const url = `https://${this.settings.region}://{this.settings.guid}/collections/${this.settings.collectionId}/values`;
@@ -34,51 +37,70 @@ const EngecemaPrivate = {
                 method: 'GET',
                 headers: {
                     'Authorization': this.settings.apiKey,
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 }
             });
 
-            if (!response.ok) throw new Error(`Status: ${response.status}`);
+            if (!response.ok) {
+                throw new Error(`Erro na rede: ${response.status} - ${response.statusText}`);
+            }
             
             const data = await response.json();
-            console.log("Engecema Private: Dados recebidos com sucesso.");
+            console.log("Engecema Private: Sincronização concluída com sucesso.");
             this.render(data.properties || {});
+
         } catch (error) {
-            console.error("Engecema Private: Erro na conexão. Ativando Fallback.", error);
+            console.error("%c Engecema Private: Falha na Conexão ", "color: white; background: red;", error);
             this.renderFallback();
         }
     },
 
     /**
-     * Renderiza os valores na interface do produtos.html
+     * Renderização Dinâmica e Formatação de Valores Private
      */
     render(props) {
-        // Mapeamento dinâmico baseado nos IDs que você criou na IBM Cloud
-        const taxaCdb = props.taxa_cdb?.value || "102";
-        const cotaPrivate = props.cota_private?.value || "2.450,32";
-        const taxaLci = props.taxa_lci?.value || "94";
+        // Mapeamento de IDs do App Configuration para o HTML
+        const dataMap = {
+            'taxa-cdb': { 
+                val: props.taxa_cdb?.value || "102", 
+                suffix: "% do CDI" 
+            },
+            'taxa-fundos': { 
+                val: props.cota_private?.value || "2.450,32", 
+                prefix: "Cota: R$ " 
+            },
+            'taxa-lci': { 
+                val: props.taxa_lci?.value || "94", 
+                suffix: "% do CDI" 
+            }
+        };
 
-        if(document.getElementById('taxa-cdb')) {
-            document.getElementById('taxa-cdb').innerHTML = `<strong>${taxaCdb}% do CDI</strong>`;
-        }
-        if(document.getElementById('taxa-fundos')) {
-            document.getElementById('taxa-fundos').innerHTML = `Cota: R$ ${cotaPrivate}`;
-        }
-        if(document.getElementById('taxa-lci')) {
-            document.getElementById('taxa-lci').innerHTML = `<strong>${taxaLci}% do CDI</strong>`;
-        }
+        Object.keys(dataMap).forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                const item = dataMap[id];
+                element.innerHTML = `<strong>${item.prefix || ''}${item.val}${item.suffix || ''}</strong>`;
+            }
+        });
     },
 
     /**
-     * Valores de segurança (Offline Mode)
+     * Procedimento de Segurança (Valores Padrão caso Dallas esteja offline)
      */
     renderFallback() {
-        const fallback = { cdb: "102%", cota: "2.450,32", lci: "94%" };
-        if(document.getElementById('taxa-cdb')) document.getElementById('taxa-cdb').innerText = fallback.cdb + " do CDI";
-        if(document.getElementById('taxa-fundos')) document.getElementById('taxa-fundos').innerText = "Cota: R$ " + fallback.cota;
-        if(document.getElementById('taxa-lci')) document.getElementById('taxa-lci').innerText = fallback.lci + " do CDI";
+        const fallbacks = [
+            { id: 'taxa-cdb', text: "102% do CDI" },
+            { id: 'taxa-fundos', text: "Cota: R$ 2.450,32" },
+            { id: 'taxa-lci', text: "94% do CDI" }
+        ];
+
+        fallbacks.forEach(f => {
+            const el = document.getElementById(f.id);
+            if (el) el.innerText = f.text;
+        });
     }
 };
 
-// Dispara a execução ao carregar a página
+// Disparo Único na Carga do DOM
 document.addEventListener('DOMContentLoaded', () => EngecemaPrivate.init());
