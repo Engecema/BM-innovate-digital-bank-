@@ -1,16 +1,14 @@
+<!-- UPDATE: 21/03/2026 - FINAL ENGECEMA PRIVATE INTERFACE -->
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="description" content="Bradesco Private Banking - Interface Engecema 2026">
-    <title>Bradesco Private | Soluções e Investimentos</title>
+    <title>Engecema Private | Soluções e Investimentos</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <style>
-        /* DESIGN SYSTEM BRADESCO PRIVATE 2026 */
         :root {
-            --bradesco-red: #cc092f;
             --private-gold: #c5a059;
             --bg-dark: #0a0a0a;
             --card-gray: #1a1a1a;
@@ -22,12 +20,10 @@
         body {
             background-color: var(--bg-dark);
             color: var(--text-silver);
-            font-family: "Bradesco Sans", Arial, Helvetica, sans-serif;
+            font-family: Arial, Helvetica, sans-serif;
             margin: 0;
             padding-bottom: 100px;
-            overflow-x: hidden;
         }
-        /* CABEÇALHO DE SEGURANÇA */
         header {
             border-bottom: 1px solid var(--private-gold);
             padding: 25px 60px;
@@ -38,21 +34,18 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            box-shadow: 0 5px 25px rgba(0,0,0,0.7);
         }
         .header-logo { height: 48px; width: auto; }
         .session-info { color: var(--private-gold); font-size: 11px; letter-spacing: 2px; text-transform: uppercase; }
-        .session-info span { color: #28a745; margin-right: 8px; font-size: 14px; }
 
         .container { max-width: 1400px; margin: 0 auto; padding: 60px 30px; }
 
-        /* DASHBOARD FINANCEIRO (SALDOS) */
+        /* DASHBOARD PATRIMONIAL */
         .summary-wrapper {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
             margin-bottom: 80px;
-            animation: fadeIn 1.2s ease;
         }
         .summary-card {
             background: var(--card-gray);
@@ -60,13 +53,11 @@
             border-left: 4px solid var(--private-gold);
             border-radius: 4px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            transition: 0.4s;
         }
-        .summary-card:hover { transform: translateY(-5px); border-left-color: var(--white); }
         .summary-card span { font-size: 10px; color: #666; text-transform: uppercase; letter-spacing: 2.5px; display: block; margin-bottom: 15px; }
         .summary-card h2 { margin: 0; color: var(--private-gold); font-weight: 300; font-size: 32px; }
 
-        /* GRID DE PRODUTOS E SERVIÇOS */
+        /* GRID DE PRODUTOS */
         .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 40px; }
         .group-label { grid-column: 1 / -1; border-bottom: 1px solid var(--border-gray); padding-bottom: 15px; margin-top: 40px; }
         .group-label h3 { color: var(--private-gold); text-transform: uppercase; font-size: 13px; letter-spacing: 5px; margin: 0; }
@@ -76,42 +67,34 @@
             padding: 55px;
             border: 1px solid var(--border-gray);
             border-radius: 4px;
-            transition: all 0.5s ease;
             position: relative;
-            display: flex;
-            flex-direction: column;
+            opacity: 0.4;
+            filter: grayscale(1);
+            cursor: not-allowed;
         }
-        .card-item:hover { border-color: var(--private-gold); background: #222; }
         .card-item h4 { margin: 0 0 20px 0; color: var(--white); font-weight: 400; font-size: 24px; }
-        .card-item p { font-size: 15px; color: #888; line-height: 1.8; margin-bottom: 35px; flex-grow: 1; }
-        
-        /* OVERLAY PARA ÍCONES TRAVADOS */
-        .status-locked { opacity: 0.4; filter: grayscale(1); cursor: not-allowed; }
+        .card-item p { font-size: 15px; color: #888; line-height: 1.8; margin-bottom: 35px; }
         .lock-indicator { position: absolute; top: 25px; right: 25px; color: var(--private-gold); font-size: 20px; }
 
-        /* ENGINE DE INVESTIMENTOS (DALLAS REAL-TIME) */
-        .price-display { font-size: 34px; color: var(--private-gold); font-weight: bold; margin: 30px 0; display: block; transition: 0.3s; }
+        /* ENGINE DE INVESTIMENTOS */
+        .price-display { font-size: 34px; color: var(--private-gold); font-weight: bold; margin: 30px 0; display: block; }
         
-        .btn-private {
+        .btn-locked {
             display: inline-block;
             width: 100%;
             padding: 20px;
-            background-color: var(--private-gold);
-            color: #000;
+            background-color: #333;
+            color: #666;
             text-decoration: none;
             font-weight: bold;
             text-transform: uppercase;
             font-size: 12px;
             letter-spacing: 2px;
             border: none;
-            cursor: pointer;
-            transition: 0.4s;
+            cursor: not-allowed;
             text-align: center;
         }
-        .btn-private:hover { background-color: var(--white); }
-        .btn-locked { background-color: #333; color: #666; cursor: not-allowed; }
 
-        /* TECNOLOGIA & ATIVO: VISÃO GERAL DE OPERAÇÕES */
         .tech-overview {
             grid-column: 1 / -1;
             background: linear-gradient(135deg, #1a1a1a 0%, #000 100%);
@@ -135,18 +118,16 @@
             text-transform: uppercase;
             letter-spacing: 3px;
         }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
 <header>
-    <img src="logo.png" alt="Bradesco Private Banking" class="header-logo">
-    <div class="session-info"><span>●</span> SESSÃO SEGURA: us-south (DALLAS)</div>
+    <img src="logo.png" alt="Engecema Private Banking" class="header-logo">
+    <div class="session-info">SESSÃO SEGURA: us-south (DALLAS)</div>
 </header>
 
 <div class="container">
-    <!-- DASHBOARD PATRIMONIAL -->
     <div class="summary-wrapper">
         <div class="summary-card"><span>Saldo em Conta Corrente</span><h2>R$ 1.250.000,00</h2></div>
         <div class="summary-card"><span>Posição em Investimentos</span><h2>R$ 4.870.320,00</h2></div>
@@ -155,67 +136,62 @@
     </div>
 
     <div class="product-grid">
-        <!-- BANKING & TRANSAÇÕES -->
         <div class="group-label"><h3>Serviços Bancários | Extrato & Pix</h3></div>
-        <div class="card-item status-locked">
+        <div class="card-item">
             <span class="lock-indicator">🔒</span>
             <h4>Plataforma PIX</h4>
-            <p>Canal exclusivo de transferências instantâneas para fomento ativo e liquidação de operações estruturadas.</p>
-            <button class="btn-private btn-locked">Acessar Sistema</button>
+            <p>Canal exclusivo de transferências instantâneas para fomento ativo.</p>
+            <button class="btn-locked">Acessar Sistema</button>
         </div>
 
-        <!-- LINHAS DE CRÉDITO -->
         <div class="group-label"><h3>Empréstimos & Crédito Engecema</h3></div>
-        <div class="card-item status-locked">
+        <div class="card-item">
             <span class="lock-indicator">🔒</span>
             <h4>Crédito Pessoa Física</h4>
-            <p>Linhas de crédito pessoal com taxas Private e garantias baseadas em custódia de ativos.</p>
-            <button class="btn-private btn-locked">Simular PF</button>
+            <p>Linhas de crédito pessoal com taxas exclusivas.</p>
+            <button class="btn-locked">Simular PF</button>
         </div>
-        <div class="card-item status-locked">
+        <div class="card-item">
             <span class="lock-indicator">🔒</span>
             <h4>Crédito Pessoa Jurídica</h4>
-            <p>Financiamento de capital de giro e fomento mercantil para empresas e holdings.</p>
-            <button class="btn-private btn-locked">Simular PJ</button>
+            <p>Financiamento de capital de giro e fomento mercantil.</p>
+            <button class="btn-locked">Simular PJ</button>
         </div>
-        <div class="card-item status-locked">
+        <div class="card-item">
             <span class="lock-indicator">🔒</span>
             <h4>Repasse Interbancário</h4>
-            <p>Canal de liquidez para operações entre instituições financeiras credenciadas.</p>
-            <button class="btn-private btn-locked">Canal Reservado</button>
+            <p>Canal de liquidez para operações entre instituições credenciadas.</p>
+            <button class="btn-locked">Canal Reservado</button>
         </div>
 
-        <!-- FINANCIAMENTOS -->
-        <div class="group-label"><h3>Financiamentos de Ativos</h3></div>
-        <div class="card-item status-locked">
+        <div class="group-label"><h3>Financiamento de Ativos</h3></div>
+        <div class="card-item">
             <span class="lock-indicator">🔒</span>
             <h4>Imóveis & Veículos</h4>
-            <p>Linhas de financiamento para aquisição de imóveis de alto padrão e frotas corporativas premium.</p>
-            <button class="btn-private btn-locked">Ver Opções</button>
+            <p>Linhas de financiamento para aquisição de ativos imobiliários e veículos.</p>
+            <button class="btn-locked">Ver Opções</button>
         </div>
 
-        <!-- MERCADO DE CAPITAIS (DALLAS ENGINE) -->
         <div class="group-label"><h3>Investimentos | Mercado Financeiro</h3></div>
         <div class="card-item">
+            <span class="lock-indicator">🔒</span>
             <h4>CDB Escalonado</h4>
-            <p>Rentabilidade progressiva atrelada ao CDI com liquidez imediata para gestão de alta performance.</p>
             <span id="taxa-cdb" class="price-display">Sincronizando...</span>
-            <button class="btn-private">Aplicar Agora</button>
+            <button class="btn-locked">Aplicar Agora</button>
         </div>
         <div class="card-item">
+            <span class="lock-indicator">🔒</span>
             <h4>Private Selection Fund</h4>
-            <p>Fundo exclusivo com exposição a ativos globais e curadoria ativa da equipe Engecema.</p>
             <span id="taxa-fundos" class="price-display">Sincronizando...</span>
-            <button class="btn-private">Ver Cotação</button>
+            <button class="btn-locked">Ver Cotação</button>
         </div>
         <div class="card-item">
+            <span class="lock-indicator">🔒</span>
             <h4>LCI / LCA</h4>
-            <p>Títulos de crédito isentos de Imposto de Renda com taxas competitivas do mercado secundário.</p>
             <span id="taxa-lci" class="price-display">Sincronizando...</span>
-            <button class="btn-private">Simular Ativo</button>
+            <button class="btn-locked">Simular Ativo</button>
         </div>
 
-        <!-- TECNOLOGIA & ATIVO -->
         <div class="tech-overview">
             <div>
                 <h4 style="color: var(--private-gold); margin: 0 0 10px 0; font-weight: 400; font-size: 22px;">Tecnologia & Ativo</h4>
@@ -227,11 +203,9 @@
 </div>
 
 <footer>
-    &copy; 2026 Bradesco Private Banking. Sistema Integrado Engecema via IBM Cloud.
+    &copy; 2026 Engecema Private Banking. Sistema Integrado Engecema via IBM Cloud.
 </footer>
 
-<!-- INTEGRAÇÃO COM MOTOR DE DADOS DALLAS -->
 <script src="private-engine.js"></script>
-
 </body>
 </html>
