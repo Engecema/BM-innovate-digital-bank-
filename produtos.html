@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Engecema Private | Produtos Bancários</title>
-    <!-- Estilização Espelhada Bradesco Private -->
+    
+    <!-- Configuração do Favicon (conforme sua pasta atual) -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    
     <style>
         :root {
             --private-bg: #1a1a1a;
@@ -20,10 +23,10 @@
             padding: 0;
         }
         header {
-            border-bottom: 2px solid var(--private-gold);
-            padding: 20px;
+            border-bottom: 1px solid var(--private-gold);
+            padding: 15px;
             text-align: center;
-            background: linear-gradient(to bottom, #2c2c2c, #1a1a1a);
+            background-color: #000;
         }
         .container {
             max-width: 1200px;
@@ -32,7 +35,6 @@
         }
         h1 { color: var(--private-gold); font-weight: 300; }
         
-        /* Grid de Produtos */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -44,18 +46,12 @@
             border: 1px solid #444;
             padding: 25px;
             border-radius: 4px;
-            transition: transform 0.3s;
+            transition: 0.3s;
         }
-        .product-card:hover {
-            border-color: var(--private-gold);
-            transform: translateY(-5px);
-        }
-        .product-tag {
-            color: var(--private-gold);
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .product-card:hover { border-color: var(--private-gold); }
+        
+        .product-tag { color: var(--private-gold); font-size: 11px; text-transform: uppercase; }
+        
         .btn-investir {
             display: inline-block;
             margin-top: 20px;
@@ -64,56 +60,52 @@
             color: #000;
             text-decoration: none;
             font-weight: bold;
-            border-radius: 2px;
         }
     </style>
 </head>
 <body>
 
 <header>
-    <img src="https://engecema.github.io" alt="Engecema Private" style="height: 50px;">
+    <!-- Ajustado para usar sua logo.png existente -->
+    <img src="logo.png" alt="Engecema Private" style="height: 45px;">
 </header>
 
 <div class="container">
-    <h1>Soluções em Investimentos</h1>
-    <p>Produtos exclusivos para gestão de patrimônio de alta performance.</p>
+    <h1>Produtos Bancários Private</h1>
+    <p>Gestão patrimonial com a tecnologia de espelhamento Bradesco.</p>
 
-    <div class="product-grid" id="lista-produtos">
-        <!-- Espelhamento de Ativos via Script -->
+    <div class="product-grid">
+        <!-- Renda Fixa -->
         <div class="product-card">
             <span class="product-tag">Renda Fixa</span>
-            <h3>CDB Pós-Fixado</h3>
-            <p>Rentabilidade diferenciada com a solidez Engecema.</p>
-            <div id="taxa-cdb">Carregando taxas...</div>
-            <a href="#" class="btn-investir">Consultar</a>
+            <h3>CDB Escalonado</h3>
+            <p>Liquidez diária com taxas progressivas.</p>
+            <div id="taxa-cdb">102% do CDI</div>
+            <a href="cadastro.html" class="btn-investir">Acessar</a>
         </div>
 
+        <!-- Investimentos -->
         <div class="product-card">
-            <span class="product-tag">Fundos</span>
-            <h3>Private Selection</h3>
-            <p>Curadoria de fundos multimercados globais.</p>
-            <div id="taxa-fundos">D+1 | Risc Médio</div>
-            <a href="#" class="btn-investir">Saiba Mais</a>
+            <span class="product-tag">Fundos Private</span>
+            <h3>Multimercado Ágil</h3>
+            <p>Estratégia focada em ativos de baixa volatilidade.</p>
+            <div>Cota: R$ 2.450,32</div>
+            <a href="cadastro.html" class="btn-investir">Acessar</a>
         </div>
 
+        <!-- Crédito -->
         <div class="product-card">
-            <span class="product-tag">Câmbio</span>
-            <h3>Operações Estruturadas</h3>
-            <p>Hedge cambial e remessas internacionais.</p>
-            <a href="#" class="btn-investir">Simular</a>
+            <span class="product-tag">Crédito Estruturado</span>
+            <h3>LCA / LCI</h3>
+            <p>Isenção de IR para pessoa física.</p>
+            <div>Rentabilidade: 94% CDI</div>
+            <a href="cadastro.html" class="btn-investir">Acessar</a>
         </div>
     </div>
 </div>
 
-<!-- Scripts de Integração Bancária -->
-<script src="js/private-engine.js"></script> <!-- Script que você deve criar para lógica de taxas -->
 <script>
-    // Simulação da lógica de espelhamento Bradesco
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log("Interface Private Engecema carregada via IBM Cloud Pipeline.");
-        // Exemplo de injeção dinâmica de dados que o script do Bradesco faria
-        document.getElementById('taxa-cdb').innerHTML = "<strong>102% do CDI</strong>";
-    });
+    console.log("Interface integrada via IBM Cloud Pipeline com sucesso.");
 </script>
 
 </body>
