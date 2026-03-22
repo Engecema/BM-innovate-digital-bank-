@@ -1,14 +1,18 @@
 self.addEventListener('install', (e) => {
+  self.skipWaiting(); // Força a atualização imediata do Service Worker
   e.waitUntil(
-    caches.open('engecema-store').then((cache) => cache.addAll([
+    caches.open('engecema-private-v2').then((cache) => cache.addAll([
       'index.html',
-      'logo.png'
+      'logo.png',
+      'private-engine.js',
+      'produtos.html'
     ]))
   );
 });
 
 self.addEventListener('fetch', (e) => {
+  // Tenta buscar na rede primeiro para garantir que a Aba de Senha apareça
   e.respondWith(
-    caches.match(e.request).then((response) => response || fetch(e.request))
+    fetch(e.request).catch(() => caches.match(e.request))
   );
 });
