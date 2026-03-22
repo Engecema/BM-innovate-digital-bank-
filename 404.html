@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Engecema Private | Identificação Digital</title>
+    <style>
+        /* ESTILIZAÇÃO DE BLOQUEIO TOTAL (PORTEIRO) */
+        :root {
+            --bradesco-red: #cc092f;
+            --private-gold: #c5a059;
+            --bg-dark: #0e0e0e;
+        }
+
+        body, html { 
+            margin: 0; padding: 0; height: 100%; 
+            background: var(--bg-dark); font-family: Arial, sans-serif; 
+            overflow: hidden; 
+        }
+
+        /* ABA DE SENHA LATERAL - FORÇADA À DIREITA */
+        #aba-senha-404 {
+            position: fixed !important;
+            top: 0 !important;
+            right: 0 !important;
+            width: 400px !important;
+            height: 100vh !important;
+            background: #111 !important;
+            z-index: 9999999 !important; /* Acima de qualquer erro do sistema */
+            border-left: 2px solid var(--private-gold) !important;
+            display: flex !important;
+            flex-direction: column !important;
+            padding: 60px 40px !important;
+            box-shadow: -25px 0 70px #000 !important;
+            color: #fff !important;
+            box-sizing: border-box !important;
+        }
+
+        .aba-header img { height: 30px; margin-bottom: 25px; width: fit-content; }
+        .aba-header h2 { color: var(--private-gold); font-size: 16px; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 2px; }
+        .aba-header p { color: #666; font-size: 13px; line-height: 1.6; margin-bottom: 30px; }
+
+        input[type="password"] {
+            width: 100%; padding: 20px; background: #000; border: 1px solid #333;
+            color: var(--private-gold); font-size: 32px; text-align: center; letter-spacing: 15px;
+            margin-bottom: 25px; outline: none; border-radius: 4px; box-sizing: border-box;
+        }
+
+        .btn-acessar {
+            width: 100%; padding: 22px; background: var(--bradesco-red); color: #fff;
+            border: none; font-weight: bold; text-transform: uppercase; cursor: pointer;
+            border-radius: 4px; font-size: 14px;
+        }
+
+        /* CONTEÚDO DO PAINEL (OCULTO ATÉ A SENHA) */
+        #painel-dallas-fomento { display: none; padding: 100px 50px; text-align: center; }
+        .card-saldo { background: #1c1c1c; padding: 50px; border-left: 5px solid var(--private-gold); display: inline-block; }
+    </style>
+</head>
+<body>
+
+<div id="aba-senha-404">
+    <div class="aba-header">
+        <img src="logo.png" alt="Engecema Private">
+        <h2>Senha de Acesso</h2>
+        <p>Validação necessária para o terminal us-south Dallas.<br>Informe sua senha de 4 dígitos para prosseguir.</p>
+    </div>
+
+    <input type="password" id="input-senha-404" maxlength="4" placeholder="••••">
+    
+    <button class="btn-acessar" onclick="validarEEntrar()">Confirmar e Acessar</button>
+    
+    <p id="erro-msg" style="color: var(--bradesco-red); font-size: 11px; margin-top: 25px; display: none; text-align: center;">
+        Acesso não autorizado para este terminal.
+    </p>
+</div>
+
+<!-- PAINEL QUE SURGE APÓS A SENHA NO 404.HTML -->
+<div id="painel-dallas-fomento">
+    <div class="card-saldo">
+        <span style="color: #666; text-transform: uppercase; font-size: 11px; letter-spacing: 3px;">Patrimônio Consolidado</span>
+        <h1 id="saldo-real-ibm" style="color: var(--private-gold); font-size: 50px; font-weight: 300;">R$ 1.250.000,00</h1>
+        <p style="color: #444; font-size: 11px;">Integrado com IBM Cloudant via Webhook</p>
+    </div>
+</div>
+
+<script>
+    function validarEEntrar() {
+        const senha = document.getElementById('input-senha-404').value;
+        
+        // Simulação de validação (qualquer 4 dígitos libera o visual)
+        if(senha.length === 4) {
+            document.getElementById('aba-senha-404').style.display = 'none';
+            document.getElementById('painel-dallas-fomento').style.display = 'block';
+            document.body.style.overflow = 'auto';
+            conectarCloudantIBM(); // Busca os 7 documentos da IBM Cloud
+        } else {
+            document.getElementById('erro-msg').style.display = 'block';
+        }
+    }
+
+    async function conectarCloudantIBM() {
+        const ENDPOINT = 'https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud';
+        try {
+            const res = await fetch(ENDPOINT);
+            const data = await res.json();
+            let total = 0;
+            data.rows.forEach(r => { if(r.doc.valor) total += parseFloat(r.doc.valor); });
+            
+            if(total > 0) {
+                document.getElementById('saldo-real-ibm').innerText = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            }
+        } catch (e) {
+            console.log("Dallas Engine Offline.");
+        }
+    }
+</script>
+
+</body>
+</html>
