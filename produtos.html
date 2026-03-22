@@ -65,7 +65,7 @@
         <h2>Identificação Digital Requerida</h2>
         <input type="password" id="senha-input" placeholder="••••" maxlength="4">
         <button class="btn-validar" onclick="liberarPainel()">Confirmar e Acessar</button>
-        <p id="erro-auth" style="color: #ff3333; font-size: 11px; margin-top: 15px; display: none;">Senha inválida para este terminal.</p>
+        <p id="erro-auth" style="color: #ff3333; font-size: 11px; margin-top: 15px; display: none;">Chave de segurança inválida.</p>
     </div>
 </div>
 
@@ -95,7 +95,7 @@
             document.body.style.overflow = 'auto';
             conectarBancoCloudant(); // Busca dados da IBM Cloud após a senha
         } else {
-            document.getElementById('erro-auth').style.display = 'block';
+            document.getElementById('msg-erro').style.display = 'block';
         }
     }
 
