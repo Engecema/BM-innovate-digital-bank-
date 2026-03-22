@@ -8,121 +8,105 @@
             --bradesco-red: #cc092f;
             --private-gold: #c5a059;
             --bg-dark: #0e0e0e;
-            --card-gray: #1c1c1c;
         }
 
         body, html { margin: 0; padding: 0; height: 100%; background: var(--bg-dark); font-family: Arial, sans-serif; overflow: hidden; }
 
-        /* ABA LATERAL DE SENHA (O QUE ESTAVA FALTAVA NO FLUXO) */
-        #aba-senha-bradesco {
-            position: fixed; top: 0; right: 0; width: 420px; height: 100%;
-            background: #111; z-index: 10000; border-left: 1px solid var(--private-gold);
-            display: flex; flex-direction: column; padding: 60px 40px;
-            box-shadow: -20px 0 60px rgba(0,0,0,0.9);
-            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        /* 1. CORTINA DE SEGURANÇA (BLOQUEIA TUDO) */
+        #cortina-seguranca {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-dark); z-index: 9999; display: flex; justify-content: flex-end;
         }
 
-        .aba-escondida { transform: translateX(100%); }
+        /* 2. ABA DE SENHA LATERAL (ESPELHAMENTO FIEL) */
+        .aba-senha-lateral {
+            width: 400px; height: 100%; background: #111;
+            border-left: 1px solid var(--private-gold);
+            padding: 60px 40px; box-shadow: -20px 0 50px rgba(0,0,0,1);
+            display: flex; flex-direction: column;
+        }
 
-        .aba-header { border-bottom: 1px solid #333; padding-bottom: 25px; margin-bottom: 35px; }
-        .aba-header h2 { color: var(--private-gold); font-size: 16px; text-transform: uppercase; margin: 0; letter-spacing: 2px; }
-        .aba-header p { color: #666; font-size: 12px; margin-top: 10px; }
+        .aba-senha-lateral img { height: 30px; margin-bottom: 30px; width: fit-content; }
+        .aba-senha-lateral h2 { color: var(--private-gold); font-size: 16px; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 2px; }
+        .aba-senha-lateral p { color: #666; font-size: 12px; line-height: 1.6; margin-bottom: 30px; }
 
         input[type="password"] {
-            width: 100%; padding: 20px; background: #000; border: 1px solid #444;
-            color: var(--private-gold); font-size: 28px; text-align: center; letter-spacing: 12px; 
-            margin-bottom: 25px; border-radius: 4px; outline: none;
+            width: 100%; padding: 20px; background: #000; border: 1px solid #333;
+            color: var(--private-gold); font-size: 32px; text-align: center; letter-spacing: 15px;
+            margin-bottom: 25px; outline: none; border-radius: 4px;
         }
 
         .btn-confirmar {
             background: var(--bradesco-red); color: white; border: none;
-            padding: 22px; width: 100%; font-weight: bold; cursor: pointer; 
-            text-transform: uppercase; border-radius: 4px; font-size: 14px;
+            padding: 20px; font-weight: bold; cursor: pointer; text-transform: uppercase;
+            border-radius: 4px; transition: 0.3s;
         }
 
-        /* PAINEL DE GESTÃO (AO FUNDO, BLOQUEADO PELO DESFOQUE) */
-        #painel-fundo { filter: blur(10px); pointer-events: none; transition: 0.5s; }
+        .btn-confirmar:hover { background: #a30725; }
 
-        header {
-            background: #000; border-bottom: 1px solid var(--private-gold);
-            padding: 15px 50px; display: flex; justify-content: space-between;
-            position: fixed; top: 0; width: 100%; z-index: 1000;
-        }
-
+        /* 3. PAINEL DE GESTÃO (INVISÍVEL ATÉ A SENHA) */
+        #painel-producao { display: none; padding: 80px 50px; }
+        
         .card-patrimonio {
-            background: var(--card-gray); padding: 60px; margin: 120px auto; max-width: 1100px;
-            border-left: 6px solid var(--private-gold); box-shadow: 0 15px 45px rgba(0,0,0,0.7);
+            background: #1c1c1c; padding: 60px; border-left: 5px solid var(--private-gold);
+            max-width: 900px; margin: 0 auto;
         }
-
-        .card-patrimonio h1 { color: var(--private-gold); font-size: 56px; margin: 15px 0; font-weight: 300; }
     </style>
 </head>
 <body>
 
-<!-- 1. ABA DE SENHA QUE SURGE À DIREITA IMEDIATAMENTE -->
-<div id="aba-senha-bradesco">
-    <div class="aba-header">
-        <img src="logo.png" alt="Bradesco" style="height: 30px; margin-bottom: 20px;">
-        <h2>Validação de Acesso</h2>
-        <p>Acesse sua conta Private informando a senha de 4 dígitos para liberar o Painel de Gestão.</p>
+<!-- COMPONENTE: ABA DE SENHA INTERCEPTADORA -->
+<div id="cortina-seguranca">
+    <div class="aba-senha-lateral">
+        <img src="logo.png" alt="Bradesco Private">
+        <h2>Senha de Acesso</h2>
+        <p>Olá! Para acessar sua conta Engecema Private, informe sua senha de 4 dígitos para validação de segurança no terminal us-south Dallas.</p>
+        
+        <input type="password" id="campo-senha" maxlength="4" placeholder="••••">
+        <button class="btn-confirmar" onclick="validarFluxo()">Acessar Conta</button>
+        
+        <div id="erro" style="color: var(--bradesco-red); font-size: 11px; margin-top: 20px; display: none; text-align: center;">
+            Senha inválida. Tente novamente ou contate seu gerente.
+        </div>
     </div>
-    
-    <input type="password" id="senha-input" maxlength="4" placeholder="••••">
-    <button class="btn-confirmar" onclick="validarAcesso()">Confirmar Acesso</button>
-    <p id="erro-auth" style="color: #ff3333; font-size: 11px; margin-top: 20px; display: none; text-align: center;">Senha incorreta para o terminal Dallas us-south.</p>
 </div>
 
-<!-- 2. O PAINEL FICA AO FUNDO AGUARDANDO A ABA SER FECHADA -->
-<div id="painel-fundo">
-    <header>
-        <img src="logo.png" alt="Bradesco Private" style="height: 35px;">
-        <div style="color: var(--private-gold); font-size: 11px; font-weight: bold; letter-spacing: 2px;">● CONEXÃO SEGURA: DALLAS ENGINE</div>
-    </header>
-
-    <main class="card-patrimonio">
-        <span style="color: #555; text-transform: uppercase; font-size: 11px; letter-spacing: 3px;">Patrimônio Consolidado sob Gestão</span>
-        <h1 id="saldo-ibm">R$ 1.250.000,00</h1>
-        <p style="color: #333; font-size: 12px;">Sincronizado via IBM Cloudant em tempo real.</p>
-    </main>
+<!-- CONTEÚDO QUE SÓ SURGE APÓS A ABA SER VALIDADA -->
+<div id="painel-producao">
+    <div class="card-patrimonio">
+        <span style="color: #555; text-transform: uppercase; font-size: 11px; letter-spacing: 2px;">Patrimônio Consolidado</span>
+        <h1 id="valor-ibm" style="color: var(--private-gold); font-size: 50px; margin: 15px 0;">R$ 1.250.000,00</h1>
+        <p style="color: #333; font-size: 11px;">Sincronizado com IBM Cloudant via Webhook</p>
+    </div>
 </div>
 
 <script>
-    // FUNÇÃO QUE VALIDA E REVELA O PAINEL
-    function validarAcesso() {
-        const senha = document.getElementById('senha-input').value;
+    function validarFluxo() {
+        const senha = document.getElementById('campo-senha').value;
         
-        // Simulação: Aceita qualquer senha de 4 dígitos para destravar o visual
-        if (senha.length === 4) {
-            // Recolhe a aba para a direita
-            document.getElementById('aba-senha-bradesco').classList.add('aba-escondida');
-            // Remove o desfoque do painel ao fundo
-            document.getElementById('painel-fundo').style.filter = 'none';
-            document.getElementById('painel-fundo').style.pointerEvents = 'auto';
+        // Simulação: se digitar 4 números, a aba "some" e o painel "aparece"
+        if(senha.length === 4) {
+            document.getElementById('cortina-seguranca').style.display = 'none';
+            document.getElementById('painel-producao').style.display = 'block';
             document.body.style.overflow = 'auto';
-            
-            conectarIBM(); // Busca os dados reais do seu Cloudant após a senha
+            conectarIBM(); // Dispara a conexão com Cloudant apenas aqui
         } else {
-            document.getElementById('erro-auth').style.display = 'block';
+            document.getElementById('erro').style.display = 'block';
         }
     }
 
-    // INTEGRAÇÃO COM CLOUDANT 'transacoes'
     async function conectarIBM() {
         const URL = 'https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud';
         try {
             const res = await fetch(URL);
             const data = await res.json();
             const docs = data.rows.map(r => r.doc);
-            
             let total = 0;
             docs.forEach(d => { if(d.valor) total += parseFloat(d.valor); });
-
             if (total > 0) {
-                document.getElementById('saldo-ibm').innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+                document.getElementById('valor-ibm').innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
             }
-        } catch (e) {
-            console.log("Dallas Engine: Utilizando valores em cache de segurança.");
-        }
+        } catch (e) { console.log("Offline Dallas"); }
     }
 </script>
 
