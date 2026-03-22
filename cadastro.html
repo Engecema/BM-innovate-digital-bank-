@@ -2,215 +2,97 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="description" content="Engecema Private Banking - Sistema de Cadastro de Clientes">
-    <meta name="author" content="Engecema Private">
-    <title>Bradesco | Cadastro Engecema Private</title>
-    
-    <!-- Identidade Visual e Favicon -->
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>Engecema Private - Cadastro</title>
+    <!-- FAVICON ABSOLUTO PARA NÃO SUMIR -->
+    <link rel="icon" href="https://engecema.github.io" type="image/x-icon">
     
     <style>
-        /* ESTILIZAÇÃO COMPLETA PADRÃO BRADESCO PRIVATE - 166 LINHAS */
-        @font-face {
-            font-family: 'Bradesco Sans';
-            src: local('Arial');
-        }
-        :root {
-            --bradesco-red: #cc092f;
-            --bg-gray: #f4f4f4;
-            --input-border: #ddd;
-            --text-main: #333;
-            --success-color: #28a745;
-            --gold-accent: #c5a059;
-        }
-        * { 
-            box-sizing: border-box; 
-            -webkit-font-smoothing: antialiased;
-        }
-        body {
-            background-color: var(--bg-gray);
-            font-family: "Bradesco Sans", Arial, sans-serif;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow: hidden;
-        }
-        .container {
-            background: #ffffff;
-            width: 100%;
-            max-width: 480px;
-            padding: 55px;
-            border-top: 8px solid var(--bradesco-red);
-            border-radius: 4px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
-            position: relative;
-            animation: slideIn 0.7s ease-out;
-        }
-        @keyframes slideIn {
-            from { transform: translateY(40px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        header { 
-            text-align: center; 
-            margin-bottom: 45px; 
-        }
-        .logo-img { 
-            height: 52px; 
-            width: auto; 
-        }
-        h2 {
-            color: var(--text-main);
-            text-align: center;
-            font-weight: 300;
-            margin-bottom: 35px;
-            font-size: 27px;
-            letter-spacing: -0.5px;
-        }
-        .form-group { 
-            margin-bottom: 22px; 
-            width: 100%; 
-        }
-        input {
-            width: 100%;
-            padding: 16px;
-            border: 1px solid var(--input-border);
-            border-radius: 4px;
-            font-size: 16px;
-            background: #fafafa;
-            transition: all 0.4s ease;
-        }
-        input:focus {
-            border-color: var(--bradesco-red);
-            background: #fff;
-            outline: none;
-            box-shadow: 0 0 10px rgba(204,9,47,0.18);
-        }
-        .btn-submit {
-            width: 100%;
-            padding: 20px;
-            background: var(--bradesco-red);
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-size: 14px;
-            letter-spacing: 1.2px;
-            transition: 0.3s;
-            margin-top: 12px;
-        }
-        .btn-submit:hover { 
-            background: #a00725; 
-            transform: translateY(-2px); 
-            box-shadow: 0 5px 15px rgba(160,7,37,0.3);
-        }
-
-        /* TELA DE SUCESSO PÓS-CADASTRO */
-        .success-wrapper { 
-            display: none; 
-            text-align: center; 
-            animation: fadeIn 0.6s ease;
-        }
-        .icon-check {
-            font-size: 75px;
-            color: var(--success-color);
-            margin-bottom: 35px;
-            display: block;
-        }
-        .success-msg {
-            color: #666;
-            margin-bottom: 45px;
-            line-height: 1.9;
-            font-size: 16px;
-        }
-        .btn-gold {
-            background-color: var(--gold-accent) !important;
-            color: #000 !important;
-        }
-
-        .footer-tag {
-            text-align: center;
-            margin-top: 45px;
-            font-size: 11px;
-            color: #bbb;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-        }
-        @keyframes fadeIn { 
-            from { opacity: 0; } 
-            to { opacity: 1; } 
-        }
+        body { font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding: 40px; background-color: #f0f2f5; }
+        form { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        h2 { color: #da1e28; text-align: center; margin-bottom: 20px; font-size: 24px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; font-size: 14px; }
+        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
+        .erro-senha { color: #da1e28; font-size: 12px; display: none; margin-bottom: 10px; font-weight: bold; }
         
-        /* 
-           DETALHAMENTO TÉCNICO:
-           Fluxo unificado para evitar redirecionamento administrativo.
-           Campos: Nome, Email, CPF, Senha, Confirmação.
-           Caminho: Root -> produtos.html
-        */
+        /* FORÇANDO O BOTÃO VERMELHO PADRÃO BRADESCO/ENGECEMA */
+        #btnFinalizar { 
+            width: 100%; 
+            padding: 14px; 
+            background-color: #da1e28 !important; 
+            color: white !important; 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            font-size: 16px; 
+        }
+        #btnFinalizar:hover { background-color: #b91922 !important; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <!-- ETAPA 1: COLETA DE DADOS -->
-        <div id="step-register">
-            <header>
-                <img src="logo.png" alt="Engecema Private" class="logo-img">
-            </header>
-            <h2>Realizar Cadastro</h2>
-            
-            <div class="form-group"><input type="text" id="reg_nome" placeholder="Nome Completo" required></div>
-            <div class="form-group"><input type="email" id="reg_email" placeholder="E-mail Institucional" required></div>
-            <div class="form-group"><input type="text" id="reg_cpf" placeholder="CPF do Titular" required></div>
-            <div class="form-group"><input type="password" id="reg_pass" placeholder="Senha de Acesso" required></div>
-            <div class="form-group"><input type="password" id="reg_confirm" placeholder="Confirmar Senha" required></div>
+<form id="formCadastro">
+    <h2>Engecema Private</h2>
+    
+    <label>Nome Completo</label>
+    <input type="text" name="nome" required>
 
-            <button class="btn-submit" onclick="validarFluxo()">Finalizar Cadastro</button>
-        </div>
+    <label>E-mail Corporativo</label>
+    <input type="email" name="email" required>
 
-        <!-- ETAPA 2: REGISTRO CONCLUÍDO (DIRECIONAMENTO DIRETO) -->
-        <div id="step-success" class="success-wrapper">
-            <span class="icon-check">✓</span>
-            <h2>Registro Concluído</h2>
-            <p class="success-msg">
-                Seu perfil Private Engecema foi ativado com sucesso. Sua grade de produtos e serviços está disponível via Dallas (us-south).
-            </p>
-            
-            <!-- CORREÇÃO DE DIRECIONAMENTO: Força a ida para produtos.html -->
-            <button class="btn-submit btn-gold" onclick="window.location.href='produtos.html'">Acessar Interface de Produtos</button>
-        </div>
+    <label>CPF</label>
+    <input type="text" name="cpf" required>
 
-        <div class="footer-tag">Engecema Private Banking | us-south (Dallas)</div>
-    </div>
+    <label>Crie uma Senha</label>
+    <input type="password" id="senha" name="senha" required>
 
-    <script>
-        /**
-         * Lógica Técnica de Transição e Auditoria
-         */
-        function validarFluxo() {
-            const camposIds = ['reg_nome', 'reg_email', 'reg_cpf', 'reg_pass', 'reg_confirm'];
-            const inputs = camposIds.map(id => document.getElementById(id));
-            const isValido = inputs.every(el => el.value.trim() !== "");
+    <label>Confirme a Senha</label>
+    <input type="password" id="confirmar_senha" required>
+    <span id="msgErro" class="erro-senha">As senhas não coincidem!</span>
 
-            if (isValido) {
-                // Transição de estado de interface
-                document.getElementById('step-register').style.display = 'none';
-                document.getElementById('step-success').style.display = 'block';
-                
-                // Log para monitoria IBM Cloud Continuous Delivery
-                console.log("Engecema: Cadastro finalizado. Aguardando navegação para produtos.html.");
-            } else {
-                alert("Por favor, preencha todos os campos do formulário para prosseguir.");
-                inputs.forEach(el => {
-                    if (el.value.trim() === "") el.style.borderColor = "#cc092f";
-                });
-            }
+    <button type="submit" id="btnFinalizar">Finalizar Cadastro</button>
+</form>
+
+<script>
+document.getElementById('formCadastro').onsubmit = async function(e) {
+    e.preventDefault();
+    
+    const senha = document.getElementById('senha').value;
+    const confirma = document.getElementById('confirmar_senha').value;
+    
+    if (senha !== confirma) {
+        document.getElementById('msgErro').style.display = 'block';
+        return;
+    }
+
+    const API_KEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
+    const DB = "cliente_engecema";
+    // URL COM AUTH EMBUTIDA PARA MATAR O ERRO 401
+    const URL_FINAL = `https://apikey:${API_KEY}@7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud/${DB}`;
+
+    const formData = new FormData(this);
+    const dados = Object.fromEntries(formData.entries());
+    delete dados.confirmar_senha;
+    dados.criado_em = new Date().toISOString();
+
+    try {
+        const response = await fetch(URL_FINAL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dados)
+        });
+
+        if (response.ok) {
+            alert("Sucesso! Cadastro Engecema Private realizado.");
+            this.reset();
+        } else {
+            alert("Erro 401: A IBM ainda recusa a chave. Verifique o CORS no painel.");
         }
-    </script>
+    } catch (error) {
+        alert("Erro de Rede: O navegador bloqueou a conexão.");
+    }
+};
+</script>
+
 </body>
 </html>
