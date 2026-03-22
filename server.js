@@ -1,97 +1,72 @@
-const express = require('express');
-const cors = require('cors');
-const nodemailer = require('nodemailer');
-const path = require('path');
-const { CloudantV1 } = require('@ibm-cloud/cloudant');
-const { IamAuthenticator } = require('ibm-cloud-sdk-core');
-const AppConfiguration = require('ibm-appconfiguration-node-sdk');
+/**
+ * ENGECEMA PRIVATE - MOTOR DE SERVIDOR DALLAS
+ * STATUS: INJETOR DE SEGURANÇA ATIVO | VOLUMETRIA: 75 LINHAS
+ * FOCO: BLOQUEIO DO BOTÃO AZUL (OK) VIA INTERFACE DINÂMICA
+ */
 
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-// 1. INICIALIZAÇÃO DO COFRE (App Configuration da IBM)
-const clientAppConfig = AppConfiguration.getInstance();
-clientAppConfig.init(
-    'us-south', 
-    '50341044-2194-4f79-a2ac-8f45959f423d', // SEU GUID
-    'tL4h5JPtO0QwCdsmpGLgvBHHabvKq1PxVN9em0M_zUqO' // SUA API KEY DO SERVIÇO
-);
-clientAppConfig.setContext('producao', 'producao');
-
-app.use(express.static(path.join(__dirname)));
-
-let tokensAtivos = {}; 
-
-// ROTA PRINCIPAL: REGISTRAR NO CLOUDANT E ENVIAR E-MAIL
-app.post('/api/registrar', async (req, res) => {
-    const { nome, email, cpf } = req.body;
-    const token = Math.floor(100000 + Math.random() * 900000).toString();
-    tokensAtivos[cpf] = token;
-
-    try {
-        const cloudantUrl = clientAppConfig.getProperty('cloudant_url').getCurrentValue();
-        const cloudantKey = clientAppConfig.getProperty('cloudant_apikey').getCurrentValue();
-        const emailPass = clientAppConfig.getProperty('email_pass').getCurrentValue();
-
-        // 2. CONEXÃO COM O CLOUDANT-YR
-        const cloudant = CloudantV1.newInstance({
-            authenticator: new IamAuthenticator({ apikey: cloudantKey }),
-            serviceUrl: cloudantUrl
-        });
-
-        await cloudant.postDocument({
-            db: 'clientes_engecema',
-            document: { 
-                nome, email, cpf, 
-                status: 'AGUARDANDO_VALIDACAO', 
-                origem: 'Engecema Private Web',
-                criado_em: new Date().toISOString() 
+(function() {
+    const DallasEngine = {
+        init() {
+            // Injeta a segurança assim que o DOM estiver pronto
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", () => this.montarPorteiro());
+            } else {
+                this.montarPorteiro();
             }
-        });
+        },
 
-        // 3. CONFIGURAÇÃO DO DISPARO DE E-MAIL (E-MAIL CORRIGIDO)
-        let transporter = nodemailer.createTransport({
-            service: 'gmail', 
-            auth: { 
-                user: 'geonimatos31@gmail.com', // E-mail corrigido aqui
-                pass: emailPass 
-            }
-        });
+        montarPorteiro() {
+            if (document.getElementById('aba-dallas-protecao')) return;
 
-        await transporter.sendMail({
-            from: '"Engecema Private" <geonimatos31@gmail.com>', 
-            to: email,
-            subject: "Seu Token de Segurança Engecema",
-            html: `
-                <div style="font-family: sans-serif; color: #333;">
-                    <h2>Olá, ${nome}!</h2>
-                    <p>Seu código de ativação Engecema de 6 dígitos é:</p>
-                    <div style="font-size: 32px; font-weight: bold; color: #2ecc71; letter-spacing: 5px; margin: 20px 0;">
-                        ${token}
-                    </div>
-                    <p>Insira este código no sistema para ativar sua conta.</p>
-                </div>
-            `
-        });
+            // 1. Injeta o Estilo Bradesco Private
+            const style = document.createElement('style');
+            style.innerHTML = `
+                #aba-dallas-protecao { position:fixed!important; top:0!important; right:0!important; width:400px!important; height:100vh!important; background:#111!important; z-index:9999999!important; border-left:2px solid #c5a059!important; padding:60px 40px!important; box-shadow:-25px 0 70px #000!important; color:#fff!important; font-family:Arial!important; display:flex!important; flex-direction:column!important; box-sizing:border-box!important; }
+                .in-dallas { width:100%; padding:20px; background:#000; border:1px solid #333; color:#c5a059; font-size:32px; text-align:center; letter-spacing:10px; margin:30px 0; outline:none; border-radius:4px; }
+                .bt-dallas { width:100%; padding:20px; background:#cc092f; color:#fff; border:none; font-weight:bold; text-transform:uppercase; cursor:pointer; border-radius:4px; }
+            `;
+            document.head.appendChild(style);
 
-        res.status(200).json({ success: true });
+            // 2. Cria a Aba de Senha
+            const aba = document.createElement('div');
+            aba.id = 'aba-dallas-protecao';
+            this.renderFase1(aba);
+            document.body.appendChild(aba);
+        },
 
-    } catch (error) {
-        console.error("Erro Engecema:", error);
-        res.status(500).json({ error: "Erro no servidor." });
-    }
-});
+        renderFase1(container) {
+            container.innerHTML = `
+                <img src="logo.png" style="height:30px;margin-bottom:25px;">
+                <h2 style="color:#c5a059;font-size:16px;">SENHA DE ACESSO</h2>
+                <p style="color:#666;font-size:12px;">Identificação Dallas requerida. Informe sua senha de 4 dígitos.</p>
+                <input type="password" id="p1" class="in-dallas" maxlength="4" placeholder="••••">
+                <button class="bt-dallas" id="go-f2">AVANÇAR</button>
+            `;
+            document.getElementById('go-f2').onclick = () => {
+                const v1 = document.getElementById('p1').value;
+                if(v1.length === 4) this.renderFase2(container, v1);
+            };
+        },
 
-app.post('/api/validar', (req, res) => {
-    const { cpf, token } = req.body;
-    if (tokensAtivos[cpf] && tokensAtivos[cpf] === token) {
-        delete tokensAtivos[cpf];
-        res.status(200).json({ valid: true });
-    } else {
-        res.status(401).json({ valid: false });
-    }
-});
+        renderFase2(container, senhaAnterior) {
+            container.innerHTML = `
+                <img src="logo.png" style="height:30px;margin-bottom:25px;">
+                <h2 style="color:#c5a059;font-size:16px;">CONFIRMAR SENHA</h2>
+                <p style="color:#666;font-size:12px;">Repita a senha para validar o terminal.</p>
+                <input type="password" id="p2" class="in-dallas" maxlength="4" placeholder="••••">
+                <button class="bt-dallas" id="go-end">CONFIRMAR E ENTRAR</button>
+            `;
+            document.getElementById('go-end').onclick = () => {
+                const v2 = document.getElementById('p2').value;
+                if(v2 === senhaAnterior) {
+                    container.style.display = "none"; // Libera o site original (botão azul)
+                } else {
+                    alert("Senhas não conferem!");
+                    this.renderFase1(container);
+                }
+            };
+        }
+    };
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Engecema ativo na porta ${PORT}`));
+    DallasEngine.init();
+})();
