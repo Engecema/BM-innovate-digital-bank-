@@ -13,10 +13,11 @@
         .label-p { color: #888; text-transform: uppercase; font-size: 11px; font-weight: bold; letter-spacing: 1px; }
         .valor-p { color: var(--text); font-size: 42px; margin: 10px 0; font-weight: 800; }
         .secao-titulo { color: var(--br-red); font-size: 13px; font-weight: 900; text-transform: uppercase; margin: 40px 0 15px 0; border-bottom: 1px solid #ddd; padding-bottom: 5px; letter-spacing: 1px; }
-        .grid-servicos { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
-        .item-br { background: #fff; padding: 15px 5px; text-align: center; border: 1px solid #eee; cursor: pointer; transition: 0.2s; border-radius: 4px; min-height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .grid-servicos { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .item-br { background: #fff; padding: 15px 5px; text-align: center; border: 1px solid #eee; cursor: pointer; transition: 0.2s; border-radius: 4px; min-height: 95px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .item-br:hover { border-color: var(--br-red); background: #fdfdfd; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .item-br span { font-size: 10px; font-weight: bold; color: #555; text-transform: uppercase; margin-top: 8px; line-height: 1.2; }
+        .icon { font-size: 22px; color: var(--br-red); font-style: normal; }
         #modal-transacao { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #fff; padding: 35px; border: 2px solid var(--br-red); z-index: 2000; width: 350px; border-radius: 8px; box-shadow: 0 20px 100px rgba(0,0,0,0.3); text-align: center; }
         #modal-transacao input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
         #modal-transacao button { width: 100%; padding: 15px; background: var(--br-red); color: #fff; border: none; font-weight: bold; text-transform: uppercase; cursor: pointer; border-radius: 4px; margin-top: 15px; }
@@ -26,64 +27,83 @@
 <body>
 
 <div id="overlay"></div>
-
-<header>
-    <img src="logo.png" class="logo">
-    <div style="font-size: 10px; font-weight: bold; color: var(--br-red);">SESSÃO SEGURA | DALLAS US-SOUTH</div>
-</header>
+<header><img src="logo.png" class="logo"><div style="font-size: 10px; font-weight: bold; color: var(--br-red);">SESSÃO SEGURA | DALLAS US-SOUTH</div></header>
 
 <div class="container">
     <div class="card-patrimonio">
         <span class="label-p">Patrimônio Líquido Disponível</span>
-        <h1 id="saldo-real" class="valor-p">R$ 0,00</h1>
-        <small style="color: #bbb;">Sincronizado com Bases IBM Cloudant & Dallas Engine</small>
+        <h1 id="saldo-real" class="valor-p">R$ 1.250.000,00</h1>
     </div>
 
-    <!-- 1 A 4 JÁ EXISTENTES -->
+    <!-- 1. TRANSAÇÕES E CONSULTAS -->
     <div class="secao-titulo">1. Transações e Consultas</div>
     <div class="grid-servicos">
-        <div class="item-br" onclick="abrir('Pix', true)"><i>📱</i><span>Pix</span></div>
-        <div class="item-br" onclick="abrir('Saldo e Extrato')"><i>📊</i><span>Saldo e Extrato</span></div>
-        <div class="item-br" onclick="abrir('Transferências', true)"><i>💸</i><span>Transferências</span></div>
-        <div class="item-br" onclick="abrir('Pagamentos', true)"><i>📄</i><span>Pagamentos</span></div>
-        <div class="item-br" onclick="abrir('Cartões')"><i>💳</i><span>Cartões</span></div>
-        <div class="item-br" onclick="abrir('Agendamentos')"><i>📅</i><span>Agendamentos</span></div>
-        <div class="item-br" onclick="abrir('Comprovantes')"><i>📝</i><span>Comprovantes</span></div>
-        <div class="item-br" onclick="abrir('Buscador Boletos')"><i>🔍</i><span>Buscador Boletos</span></div>
+        <div class="item-br" onclick="abrir('Pix', true)"><i class="icon">📱</i><span>Pix</span></div>
+        <div class="item-br" onclick="abrir('Saldo e Extrato')"><i class="icon">📊</i><span>Saldo e Extrato</span></div>
+        <div class="item-br" onclick="abrir('Transferências', true)"><i class="icon">💸</i><span>Transferências</span></div>
+        <div class="item-br" onclick="abrir('Pagamentos', true)"><i class="icon">📄</i><span>Pagamentos</span></div>
+        <div class="item-br" onclick="abrir('Cartões')"><i class="icon">💳</i><span>Cartões</span></div>
+        <div class="item-br" onclick="abrir('Agendamentos')"><i class="icon">📅</i><span>Agendamentos</span></div>
+        <div class="item-br" onclick="abrir('Comprovantes')"><i class="icon">📝</i><span>Comprovantes</span></div>
+        <div class="item-br" onclick="abrir('Buscador Boletos')"><i class="icon">🔍</i><span>Buscador Boletos</span></div>
     </div>
 
-    <!-- 5. COMPRAS E BENEFÍCIOS (DETALHADO) -->
+    <!-- 2. EMPRÉSTIMOS E FINANCIAMENTOS -->
+    <div class="secao-titulo">2. Empréstimos e Financiamentos</div>
+    <div class="grid-servicos">
+        <div class="item-br" onclick="abrir('Crédito Imobiliário')"><i class="icon">🏠</i><span>Crédito Imobiliário</span></div>
+        <div class="item-br" onclick="abrir('Empréstimos')"><i class="icon">💰</i><span>Empréstimos</span></div>
+        <div class="item-br" onclick="abrir('Linha de Crédito')"><i class="icon">📈</i><span>Linha de Crédito</span></div>
+        <div class="item-br" onclick="abrir('Renegociação')"><i class="icon">🤝</i><span>Renegociação</span></div>
+    </div>
+
+    <!-- 3. INVESTIMENTOS -->
+    <div class="secao-titulo">3. Investimentos</div>
+    <div class="grid-servicos">
+        <div class="item-br" onclick="abrir('Home Broker')"><i class="icon">🖥️</i><span>Home Broker</span></div>
+        <div class="item-br" onclick="abrir('Investimentos')"><i class="icon">💎</i><span>Investimentos</span></div>
+        <div class="item-br" onclick="abrir('Objetivos')"><i class="icon">🎯</i><span>Objetivos</span></div>
+        <div class="item-br" onclick="abrir('Previdência')"><i class="icon">👴</i><span>Previdência</span></div>
+    </div>
+
+    <!-- 4. MAIS PRODUTOS E CONTAS -->
+    <div class="secao-titulo">4. Mais Produtos e Contas</div>
+    <div class="grid-servicos">
+        <div class="item-br" onclick="abrir('Câmbio')"><i class="icon">💱</i><span>Câmbio</span></div>
+        <div class="item-br" onclick="abrir('Capitalização')"><i class="icon">🎰</i><span>Capitalização</span></div>
+        <div class="item-br" onclick="abrir('Consórcio')"><i class="icon">🚗</i><span>Consórcio</span></div>
+        <div class="item-br" onclick="abrir('Seguros')"><i class="icon">🛡️</i><span>Seguros</span></div>
+    </div>
+
+    <!-- 5. COMPRAS E BENEFÍCIOS -->
     <div class="secao-titulo">5. Compras e Benefícios</div>
     <div class="grid-servicos">
-        <div class="item-br" onclick="abrir('Mimos')"><i>🎁</i><span>Mimos</span></div>
-        <div class="item-br" onclick="abrir('Mundo Disney')"><i>🏰</i><span>Mundo Disney</span></div>
-        <div class="item-br" onclick="abrir('Shop')"><i>🛒</i><span>Shop</span></div>
-        <div class="item-br" onclick="abrir('Tag de Pedágio')"><i>🛣️</i><span>Tag Pedágio</span></div>
+        <div class="item-br" onclick="abrir('Mimos')"><i class="icon">🎁</i><span>Mimos</span></div>
+        <div class="item-br" onclick="abrir('Mundo Disney')"><i class="icon">🏰</i><span>Mundo Disney</span></div>
+        <div class="item-br" onclick="abrir('Shop')"><i class="icon">🛒</i><span>Shop</span></div>
+        <div class="item-br" onclick="abrir('Tag de Pedágio')"><i class="icon">🛣️</i><span>Tag Pedágio</span></div>
     </div>
 
-    <!-- 6. PERFIL E AJUDA (DETALHADO) -->
+    <!-- 6. PERFIL E AJUDA -->
     <div class="secao-titulo">6. Perfil e Ajuda</div>
     <div class="grid-servicos">
-        <div class="item-br" onclick="abrir('Atualização Cadastral')"><i>🆔</i><span>Atualiz. Cadastral</span></div>
-        <div class="item-br" onclick="abrir('BIA')"><i>🤖</i><span>BIA</span></div>
-        <div class="item-br" onclick="abrir('Cesta de Serviços')"><i>🧺</i><span>Cesta Serviços</span></div>
-        <div class="item-br" onclick="abrir('Chat')"><i>💬</i><span>Chat</span></div>
-        <div class="item-br" onclick="abrir('Encerrar Conta')"><i>❌</i><span>Encerrar Conta</span></div>
-        <div class="item-br" onclick="abrir('Perfil')"><i>👤</i><span>Perfil</span></div>
-        <div class="item-br" onclick="abrir('Portabilidade Salário')"><i>💼</i><span>Portabilidade</span></div>
-        <div class="item-br" onclick="abrir('Segurança')"><i>🔒</i><span>Segurança</span></div>
+        <div class="item-br" onclick="abrir('Atualização Cadastral')"><i class="icon">🆔</i><span>Atualiz. Cadastral</span></div>
+        <div class="item-br" onclick="abrir('BIA')"><i class="icon">🤖</i><span>BIA</span></div>
+        <div class="item-br" onclick="abrir('Chat')"><i class="icon">💬</i><span>Chat</span></div>
+        <div class="item-br" onclick="abrir('Portabilidade')"><i class="icon">💼</i><span>Portabilidade</span></div>
+        <div class="item-br" onclick="abrir('Segurança')"><i class="icon">🔒</i><span>Segurança</span></div>
     </div>
 
-    <!-- 7. PERMISSÕES (DETALHADO) -->
+    <!-- 7. PERMISSÕES -->
     <div class="secao-titulo">7. Permissões</div>
     <div class="grid-servicos">
-        <div class="item-br" onclick="abrir('Autoriz. Parceiros')"><i>🤝</i><span>Autoriz. Parceiros</span></div>
-        <div class="item-br" onclick="abrir('Autoriz. WhatsApp')"><i>📱</i><span>Autoriz. WhatsApp</span></div>
-        <div class="item-br" onclick="abrir('Minhas Autorizações')"><i>📋</i><span>Minhas Autorizações</span></div>
-        <div class="item-br" onclick="abrir('Open Finance')"><i>🌐</i><span>Open Finance</span></div>
+        <div class="item-br" onclick="abrir('Autoriz. Parceiros')"><i class="icon">🤝</i><span>Autoriz. Parceiros</span></div>
+        <div class="item-br" onclick="abrir('Autoriz. WhatsApp')"><i class="icon">📱</i><span>Autoriz. WhatsApp</span></div>
+        <div class="item-br" onclick="abrir('Open Finance')"><i class="icon">🌐</i><span>Open Finance</span></div>
     </div>
 </div>
 
+<!-- MODAL PIX COM CHAVE E VALOR -->
 <div id="modal-transacao">
     <h3 id="m-tit">Operação</h3>
     <div style="text-align: left;">
@@ -124,6 +144,5 @@
     }
     atualizarSaldo();
 </script>
-
 </body>
 </html>
