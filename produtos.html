@@ -4,31 +4,62 @@
     <meta charset="UTF-8">
     <title>Engecema Private | Terminal Dallas</title>
     <style>
-        :root { --red: #cc092f; --gold: #c5a059; --dark: #0b0b0b; }
-        body { background: var(--dark); color: #fff; font-family: Arial; margin: 0; }
-        header { background: #000; padding: 15px 40px; border-bottom: 1px solid var(--gold); display: flex; justify-content: space-between; }
-        .container { padding: 30px 40px; max-width: 1000px; margin: 0 auto; }
-        .card-saldo { background: #161616; padding: 30px; border-left: 5px solid var(--gold); margin-bottom: 30px; }
-        .menu-servicos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
-        .item { background: #161616; padding: 30px; text-align: center; border: 1px solid #222; cursor: pointer; color: var(--gold); font-weight: bold; text-transform: uppercase; }
-        .item:hover { border-color: #fff; background: #222; }
+        :root { --red: #cc092f; --gray: #f4f7f9; --dark-text: #333; }
+        body { background: var(--gray); color: var(--dark-text); font-family: 'Segoe UI', Arial, sans-serif; margin: 0; }
+        
+        header { background: #fff; padding: 15px 40px; border-bottom: 5px solid var(--red); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .logo { height: 35px; }
+        
+        .container { padding: 40px; max-width: 1100px; margin: 0 auto; }
+        .card-saldo { background: #fff; padding: 40px; border-left: 8px solid var(--red); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .label { color: #888; text-transform: uppercase; font-size: 11px; letter-spacing: 2px; font-weight: bold; }
+        .valor { color: var(--dark-text); font-size: 52px; margin: 10px 0; font-weight: 800; }
 
-        /* JANELA DE TRANSAÇÃO (MODAL) */
-        #janela { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111; padding: 40px; border: 1px solid var(--gold); z-index: 1000; width: 320px; text-align: center; box-shadow: 0 0 100px #000; }
-        #janela input { width: 100%; padding: 15px; margin: 20px 0; background: #000; border: 1px solid #333; color: var(--gold); box-sizing: border-box; font-size: 20px; text-align: center; }
-        #janela button { width: 100%; padding: 15px; background: var(--red); color: white; border: none; cursor: pointer; font-weight: bold; }
+        .menu-servicos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .item { background: #fff; padding: 35px; text-align: center; border: 1px solid #ddd; cursor: pointer; color: var(--red); font-weight: 900; text-transform: uppercase; transition: 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.02); }
+        .item:hover { border-color: var(--red); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+
+        /* JANELA DE TRANSAÇÃO (PADRÃO BRANCO E VERMELHO) */
+        #janela { 
+            display: none; position: fixed; top: 50%; left: 50%; 
+            transform: translate(-50%, -50%); background: #fff; 
+            padding: 50px; border: 2px solid var(--red); z-index: 1000; 
+            width: 380px; text-align: center; box-shadow: 0 20px 100px rgba(0,0,0,0.3); 
+            border-radius: 8px;
+        }
+        #janela h3 { color: var(--red); margin: 0 0 10px 0; font-size: 22px; font-weight: 800; }
+        #janela p { color: #666; font-size: 13px; margin-bottom: 25px; }
+        #janela input { 
+            width: 100%; padding: 18px; margin-bottom: 25px; 
+            background: #f9f9f9; border: 1px solid #ddd; color: #333; 
+            box-sizing: border-box; font-size: 20px; text-align: center; border-radius: 4px;
+        }
+        #janela button { 
+            width: 100%; padding: 18px; background: var(--red); 
+            color: white; border: none; cursor: pointer; 
+            font-weight: 900; text-transform: uppercase; border-radius: 4px; transition: 0.3s;
+        }
+        #janela button:hover { background: #a50725; }
+        #btn-cancelar { color: #999; margin-top: 20px; cursor: pointer; font-size: 12px; text-decoration: underline; }
+
+        /* OVERLAY ESCURO DE FUNDO */
+        #overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999; }
     </style>
 </head>
 <body>
+
+    <div id="overlay"></div>
+
     <header>
-        <img src="logo.png" style="height:25px;">
-        <span style="color:var(--gold)">DALLAS us-south</span>
+        <img src="logo.png" class="logo">
+        <span style="color:var(--red); font-weight: bold; font-size: 12px;">DALLAS TERMINAL US-SOUTH</span>
     </header>
 
     <div class="container">
         <div class="card-saldo">
-            <small style="color:#666">SALDO DISPONÍVEL</small>
-            <h1 id="valor-ibm" style="color:var(--gold); font-size:42px;">R$ 0,00</h1>
+            <span class="label">Patrimônio Consolidado</span>
+            <h1 id="valor-ibm" class="valor">R$ 0,00</h1>
+            <small style="color:#bbb">Sincronização IBM Cloudant Ativa</small>
         </div>
 
         <div class="menu-servicos">
@@ -36,29 +67,35 @@
             <div class="item" onclick="abrir('TRANSFERIR')">Transferir</div>
             <div class="item" onclick="abrir('EXTRATO')">Extrato</div>
             <div class="item" onclick="abrir('INVESTIR')">Investir</div>
-            <div class="item" onclick="abrir('CONTAS')">Contas</div>
+            <div class="item" onclick="abrir('FINANCIAR')">Financiar</div>
             <div class="item" onclick="abrir('CARTÕES')">Cartões</div>
         </div>
     </div>
 
-    <!-- JANELA QUE ABRE AO CLICAR -->
+    <!-- JANELA DE TRANSAÇÃO -->
     <div id="janela">
-        <h3 id="titulo" style="color:var(--gold); margin:0;">OPERAÇÃO</h3>
-        <input type="text" id="campo" placeholder="Valor R$">
-        <button onclick="confirmar()">CONFIRMAR NO TERMINAL</button>
-        <p onclick="fechar()" style="color:#444; margin-top:15px; cursor:pointer; font-size:12px;">CANCELAR</p>
+        <h3 id="titulo">OPERAÇÃO</h3>
+        <p>Terminal de Autoatendimento Engecema Private</p>
+        <input type="text" id="campo" placeholder="Digite o valor">
+        <button onclick="confirmar()">Confirmar Transação</button>
+        <div id="btn-cancelar" onclick="fechar()">Cancelar e voltar</div>
     </div>
 
     <script>
         function abrir(tipo) {
             document.getElementById('janela').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
             document.getElementById('titulo').innerText = tipo;
             document.getElementById('campo').value = "";
             document.getElementById('campo').placeholder = (tipo === 'PIX') ? "Chave PIX" : "Valor R$";
         }
-        function fechar() { document.getElementById('janela').style.display = 'none'; }
+        function fechar() { 
+            document.getElementById('janela').style.display = 'none'; 
+            document.getElementById('overlay').style.display = 'none';
+        }
         function confirmar() {
-            alert("Solicitação enviada ao Servidor Dallas. Processando...");
+            const operacao = document.getElementById('titulo').innerText;
+            alert("SOLICITAÇÃO ENVIADA!\\nA operação de " + operacao + " foi encaminhada para processamento no servidor Dallas us-south.");
             fechar();
         }
         async function buscarSaldo() {
