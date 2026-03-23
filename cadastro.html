@@ -1,74 +1,21 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Engecema Private - Cadastro</title>
-    <!-- FAVICON ABSOLUTO PARA NÃO SUMIR -->
-    <link rel="icon" href="https://engecema.github.io" type="image/x-icon">
-    
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; padding: 40px; background-color: #f0f2f5; }
-        form { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
-        h2 { color: #da1e28; text-align: center; margin-bottom: 20px; font-size: 24px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; font-size: 14px; }
-        input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 6px; box-sizing: border-box; font-size: 16px; }
-        .erro-senha { color: #da1e28; font-size: 12px; display: none; margin-bottom: 10px; font-weight: bold; }
-        
-        /* FORÇANDO O BOTÃO VERMELHO PADRÃO BRADESCO/ENGECEMA */
-        #btnFinalizar { 
-            width: 100%; 
-            padding: 14px; 
-            background-color: #da1e28 !important; 
-            color: white !important; 
-            border: none; 
-            border-radius: 6px; 
-            cursor: pointer; 
-            font-weight: bold; 
-            font-size: 16px; 
-        }
-        #btnFinalizar:hover { background-color: #b91922 !important; }
-    </style>
-</head>
-<body>
-
-<form id="formCadastro">
-    <h2>Engecema Private</h2>
-    
-    <label>Nome Completo</label>
-    <input type="text" name="nome" required>
-
-    <label>E-mail Corporativo</label>
-    <input type="email" name="email" required>
-
-    <label>CPF</label>
-    <input type="text" name="cpf" required>
-
-    <label>Crie uma Senha</label>
-    <input type="password" id="senha" name="senha" required>
-
-    <label>Confirme a Senha</label>
-    <input type="password" id="confirmar_senha" required>
-    <span id="msgErro" class="erro-senha">As senhas não coincidem!</span>
-
-    <button type="submit" id="btnFinalizar">Finalizar Cadastro</button>
-</form>
-
 <script>
 document.getElementById('formCadastro').onsubmit = async function(e) {
     e.preventDefault();
+    const btn = document.getElementById('btnFinalizar');
+    btn.innerText = "Processando...";
     
     const senha = document.getElementById('senha').value;
     const confirma = document.getElementById('confirmar_senha').value;
     
     if (senha !== confirma) {
         document.getElementById('msgErro').style.display = 'block';
+        btn.innerText = "Finalizar Cadastro";
         return;
     }
 
     const API_KEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
-    const DB = "cliente_engecema";
-    // URL COM AUTH EMBUTIDA PARA MATAR O ERRO 401
-    const URL_FINAL = `https://apikey:${API_KEY}@7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud/${DB}`;
+    // URL limpa sem a chave exposta no link (evita bloqueio do navegador)
+    const URL_DB = `https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud`;
 
     const formData = new FormData(this);
     const dados = Object.fromEntries(formData.entries());
@@ -76,23 +23,25 @@ document.getElementById('formCadastro').onsubmit = async function(e) {
     dados.criado_em = new Date().toISOString();
 
     try {
-        const response = await fetch(URL_FINAL, {
+        const response = await fetch(URL_DB, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': 'Basic ' + btoa("apikey:" + API_KEY)
+            },
             body: JSON.stringify(dados)
         });
 
         if (response.ok) {
-            alert("Sucesso! Cadastro Engecema Private realizado.");
-            this.reset();
+            alert("Cadastro Engecema Private Realizado com Sucesso!");
+            window.location.href = "index.html";
         } else {
-            alert("Erro 401: A IBM ainda recusa a chave. Verifique o CORS no painel.");
+            alert("Erro na IBM Cloud. Verifique as permissões de escrita do banco.");
         }
     } catch (error) {
-        alert("Erro de Rede: O navegador bloqueou a conexão.");
+        alert("Erro de Segurança: Use uma aba anônima ou verifique o CORS no painel IBM.");
+    } finally {
+        btn.innerText = "Finalizar Cadastro";
     }
 };
 </script>
-
-</body>
-</html>
