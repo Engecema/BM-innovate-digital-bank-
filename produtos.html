@@ -27,7 +27,8 @@
 <body>
 
 <div id="overlay"></div>
-<header><img src="logo.png" class="logo"><div style="font-size: 10px; font-weight: bold; color: var(--br-red);">SESSÃO SEGURA | DALLAS US-SOUTH</div></header>
+<!-- ATUALIZAÇÃO DA REGIÃO NO HEADER -->
+<header><img src="logo.png" class="logo"><div style="font-size: 10px; font-weight: bold; color: var(--br-red);">SESSÃO SEGURA | SÃO PAULO BR-SAO</div></header>
 
 <div class="container">
     <div class="card-patrimonio">
@@ -35,7 +36,7 @@
         <h1 id="saldo-real" class="valor-p">R$ 1.250.000,00</h1>
     </div>
 
-    <!-- 1. TRANSAÇÕES E CONSULTAS -->
+    <!-- 1. TRANSAÇÕES E CONSULTAS (AGORA COM OS 15 ÍCONES) -->
     <div class="secao-titulo">1. Transações e Consultas</div>
     <div class="grid-servicos">
         <div class="item-br" onclick="abrir('Pix', true)"><i class="icon">📱</i><span>Pix</span></div>
@@ -46,6 +47,13 @@
         <div class="item-br" onclick="abrir('Agendamentos')"><i class="icon">📅</i><span>Agendamentos</span></div>
         <div class="item-br" onclick="abrir('Comprovantes')"><i class="icon">📝</i><span>Comprovantes</span></div>
         <div class="item-br" onclick="abrir('Buscador Boletos')"><i class="icon">🔍</i><span>Buscador Boletos</span></div>
+        <div class="item-br" onclick="abrir('Débito Automático')"><i class="icon">🔄</i><span>Débito Automático</span></div>
+        <div class="item-br" onclick="abrir('Débito de Veículo')"><i class="icon">🚗</i><span>Débito Veículo</span></div>
+        <div class="item-br" onclick="abrir('Imposto de Renda')"><i class="icon">🏛️</i><span>Imposto de Renda</span></div>
+        <div class="item-br" onclick="abrir('Meus Bancos')"><i class="icon">🏦</i><span>Meus Bancos</span></div>
+        <div class="item-br" onclick="abrir('Recargas')"><i class="icon">⚡</i><span>Recargas</span></div>
+        <div class="item-br" onclick="abrir('Saque')"><i class="icon">🏧</i><span>Saque</span></div>
+        <div class="item-br" onclick="abrir('Vender pelo Celular')"><i class="icon">📲</i><span>Vender Celular</span></div>
     </div>
 
     <!-- 2. EMPRÉSTIMOS E FINANCIAMENTOS -->
@@ -54,7 +62,7 @@
         <div class="item-br" onclick="abrir('Crédito Imobiliário')"><i class="icon">🏠</i><span>Crédito Imobiliário</span></div>
         <div class="item-br" onclick="abrir('Empréstimos')"><i class="icon">💰</i><span>Empréstimos</span></div>
         <div class="item-br" onclick="abrir('Linha de Crédito')"><i class="icon">📈</i><span>Linha de Crédito</span></div>
-        <div class="item-br" onclick="abrir('Renegociação')"><i class="icon">🤝</i><span>Renegociação</span></div>
+        <div class="item-br" onclick="abrir('Renegociação de Dívidas')"><i class="icon">🤝</i><span>Renegociação</span></div>
     </div>
 
     <!-- 3. INVESTIMENTOS -->
@@ -66,12 +74,15 @@
         <div class="item-br" onclick="abrir('Previdência')"><i class="icon">👴</i><span>Previdência</span></div>
     </div>
 
-    <!-- 4. MAIS PRODUTOS E CONTAS -->
+    <!-- 4. MAIS PRODUTOS E CONTAS (OS 7 ÍCONES) -->
     <div class="secao-titulo">4. Mais Produtos e Contas</div>
     <div class="grid-servicos">
         <div class="item-br" onclick="abrir('Câmbio')"><i class="icon">💱</i><span>Câmbio</span></div>
         <div class="item-br" onclick="abrir('Capitalização')"><i class="icon">🎰</i><span>Capitalização</span></div>
+        <div class="item-br" onclick="abrir('Cheques')"><i class="icon">📜</i><span>Cheques</span></div>
         <div class="item-br" onclick="abrir('Consórcio')"><i class="icon">🚗</i><span>Consórcio</span></div>
+        <div class="item-br" onclick="abrir('Conta Internacional')"><i class="icon">🌍</i><span>Conta Internacional</span></div>
+        <div class="item-br" onclick="abrir('Conta NextJoy')"><i class="icon">🎮</i><span>NextJoy</span></div>
         <div class="item-br" onclick="abrir('Seguros')"><i class="icon">🛡️</i><span>Seguros</span></div>
     </div>
 
@@ -84,14 +95,18 @@
         <div class="item-br" onclick="abrir('Tag de Pedágio')"><i class="icon">🛣️</i><span>Tag Pedágio</span></div>
     </div>
 
-    <!-- 6. PERFIL E AJUDA -->
+    <!-- 6. PERFIL E AJUDA (OS 9 ÍCONES) -->
     <div class="secao-titulo">6. Perfil e Ajuda</div>
     <div class="grid-servicos">
         <div class="item-br" onclick="abrir('Atualização Cadastral')"><i class="icon">🆔</i><span>Atualiz. Cadastral</span></div>
         <div class="item-br" onclick="abrir('BIA')"><i class="icon">🤖</i><span>BIA</span></div>
+        <div class="item-br" onclick="abrir('Cesta de Serviços')"><i class="icon">🧺</i><span>Cesta Serviços</span></div>
         <div class="item-br" onclick="abrir('Chat')"><i class="icon">💬</i><span>Chat</span></div>
-        <div class="item-br" onclick="abrir('Portabilidade')"><i class="icon">💼</i><span>Portabilidade</span></div>
+        <div class="item-br" onclick="window.location.href='index.html'"><i class="icon">❌</i><span>Encerrar Conta</span></div>
+        <div class="item-br" onclick="abrir('Perfil')"><i class="icon">👤</i><span>Perfil</span></div>
+        <div class="item-br" onclick="abrir('Portabilidade de Salário')"><i class="icon">💼</i><span>Portabilidade</span></div>
         <div class="item-br" onclick="abrir('Segurança')"><i class="icon">🔒</i><span>Segurança</span></div>
+        <div class="item-br" onclick="abrir('Ajuda')"><i class="icon">❓</i><span>Ajuda</span></div>
     </div>
 
     <!-- 7. PERMISSÕES -->
@@ -99,11 +114,11 @@
     <div class="grid-servicos">
         <div class="item-br" onclick="abrir('Autoriz. Parceiros')"><i class="icon">🤝</i><span>Autoriz. Parceiros</span></div>
         <div class="item-br" onclick="abrir('Autoriz. WhatsApp')"><i class="icon">📱</i><span>Autoriz. WhatsApp</span></div>
+        <div class="item-br" onclick="abrir('Minhas Autorizações')"><i class="icon">📋</i><span>Minhas Autorizações</span></div>
         <div class="item-br" onclick="abrir('Open Finance')"><i class="icon">🌐</i><span>Open Finance</span></div>
     </div>
 </div>
 
-<!-- MODAL PIX COM CHAVE E VALOR -->
 <div id="modal-transacao">
     <h3 id="m-tit">Operação</h3>
     <div style="text-align: left;">
@@ -130,7 +145,7 @@
         document.getElementById('overlay').style.display = 'none';
     }
     function finalizar() {
-        alert("OPERAÇÃO CONFIRMADA COM SUCESSO!\nSolicitação enviada ao Terminal Dallas via IBM Cloudant.");
+        alert("OPERAÇÃO CONFIRMADA COM SUCESSO!\nSolicitação enviada ao Terminal de São Paulo br-sao via IBM Cloudant.");
         fechar();
     }
     async function atualizarSaldo() {
