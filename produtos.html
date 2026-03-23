@@ -2,68 +2,64 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Engecema Private | Home Banking</title>
+    <title>Engecema Private | Terminal Dallas</title>
     <style>
-        :root { --red: #cc092f; --gold: #c5a059; --dark: #0b0b0b; --card: #161616; }
-        body { background: var(--dark); color: #fff; font-family: Arial, sans-serif; margin: 0; }
-        header { background: #000; padding: 15px 40px; border-bottom: 1px solid var(--gold); display: flex; justify-content: space-between; align-items: center; }
-        .container { padding: 30px 40px; max-width: 1100px; margin: 0 auto; }
-        .card-saldo { background: var(--card); padding: 30px; border-left: 5px solid var(--gold); margin-bottom: 30px; }
-        .menu-servicos { display: grid; grid-template-columns: repeat(6, 1fr); gap: 15px; margin-bottom: 30px; }
-        .servico-item { background: var(--card); padding: 20px; text-align: center; border: 1px solid #222; cursor: pointer; transition: 0.3s; font-size: 11px; text-transform: uppercase; }
-        .servico-item:hover { border-color: var(--gold); background: #222; }
-        
-        /* MODAL DE TRANSAÇÃO */
-        #modal { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111; padding: 40px; border: 1px solid var(--gold); z-index: 1000; width: 350px; box-shadow: 0 0 100px #000; }
-        #modal input { width: 100%; padding: 12px; margin: 20px 0; background: #000; border: 1px solid #333; color: var(--gold); box-sizing: border-box; }
-        #modal h3 { color: var(--gold); margin: 0; }
-        .btn-close { color: #666; float: right; cursor: pointer; }
+        :root { --red: #cc092f; --gold: #c5a059; --dark: #0b0b0b; }
+        body { background: var(--dark); color: #fff; font-family: Arial; margin: 0; }
+        header { background: #000; padding: 15px 40px; border-bottom: 1px solid var(--gold); display: flex; justify-content: space-between; }
+        .container { padding: 30px 40px; max-width: 1000px; margin: 0 auto; }
+        .card-saldo { background: #161616; padding: 30px; border-left: 5px solid var(--gold); margin-bottom: 30px; }
+        .menu-servicos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+        .item { background: #161616; padding: 30px; text-align: center; border: 1px solid #222; cursor: pointer; color: var(--gold); font-weight: bold; text-transform: uppercase; }
+        .item:hover { border-color: #fff; background: #222; }
+
+        /* JANELA DE TRANSAÇÃO (MODAL) */
+        #janela { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #111; padding: 40px; border: 1px solid var(--gold); z-index: 1000; width: 320px; text-align: center; box-shadow: 0 0 100px #000; }
+        #janela input { width: 100%; padding: 15px; margin: 20px 0; background: #000; border: 1px solid #333; color: var(--gold); box-sizing: border-box; font-size: 20px; text-align: center; }
+        #janela button { width: 100%; padding: 15px; background: var(--red); color: white; border: none; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
     <header>
         <img src="logo.png" style="height:25px;">
-        <span style="color:var(--gold); font-size:12px;">DALLAS TERMINAL</span>
+        <span style="color:var(--gold)">DALLAS us-south</span>
     </header>
 
     <div class="container">
         <div class="card-saldo">
-            <small style="color:#666; letter-spacing: 2px;">PATRIMÔNIO SOB GESTÃO</small>
-            <h1 id="valor-real-ibm" style="color:var(--gold); font-size:48px; font-weight: 300;">R$ 0,00</h1>
+            <small style="color:#666">SALDO DISPONÍVEL</small>
+            <h1 id="valor-ibm" style="color:var(--gold); font-size:42px;">R$ 0,00</h1>
         </div>
 
         <div class="menu-servicos">
-            <div class="servico-item" onclick="abrirModal('PIX')">PIX</div>
-            <div class="servico-item" onclick="abrirModal('EXTRATO')">Extrato</div>
-            <div class="servico-item" onclick="abrirModal('TRANSFERIR')">Transferir</div>
-            <div class="servico-item" onclick="abrirModal('TED/DOC')">TED/DOC</div>
-            <div class="servico-item" onclick="abrirModal('CONTAS')">Contas</div>
-            <div class="servico-item" onclick="abrirModal('CARTÕES')">Cartões</div>
+            <div class="item" onclick="abrir('PIX')">PIX</div>
+            <div class="item" onclick="abrir('TRANSFERIR')">Transferir</div>
+            <div class="item" onclick="abrir('EXTRATO')">Extrato</div>
+            <div class="item" onclick="abrir('INVESTIR')">Investir</div>
+            <div class="item" onclick="abrir('CONTAS')">Contas</div>
+            <div class="item" onclick="abrir('CARTÕES')">Cartões</div>
         </div>
     </div>
 
-    <!-- MODAL DINÂMICO -->
-    <div id="modal">
-        <span class="btn-close" onclick="fecharModal()">✕</span>
-        <h3 id="modal-titulo">Operação</h3>
-        <p id="modal-sub" style="font-size: 12px; color: #666;">Terminal Dallas us-south</p>
-        <input type="text" id="modal-input" placeholder="Valor ou Chave">
-        <button onclick="confirmar()" style="width: 100%; padding: 12px; background: var(--red); color: white; border: none; font-weight: bold; cursor: pointer;">CONFIRMAR</button>
+    <!-- JANELA QUE ABRE AO CLICAR -->
+    <div id="janela">
+        <h3 id="titulo" style="color:var(--gold); margin:0;">OPERAÇÃO</h3>
+        <input type="text" id="campo" placeholder="Valor R$">
+        <button onclick="confirmar()">CONFIRMAR NO TERMINAL</button>
+        <p onclick="fechar()" style="color:#444; margin-top:15px; cursor:pointer; font-size:12px;">CANCELAR</p>
     </div>
 
     <script>
-        function abrirModal(tipo) {
-            document.getElementById('modal').style.display = 'block';
-            document.getElementById('modal-titulo').innerText = tipo;
-            document.getElementById('modal-input').placeholder = tipo === 'PIX' ? "Chave PIX" : "Valor R$";
+        function abrir(tipo) {
+            document.getElementById('janela').style.display = 'block';
+            document.getElementById('titulo').innerText = tipo;
+            document.getElementById('campo').value = "";
+            document.getElementById('campo').placeholder = (tipo === 'PIX') ? "Chave PIX" : "Valor R$";
         }
-        function fecharModal() { document.getElementById('modal').style.display = 'none'; }
+        function fechar() { document.getElementById('janela').style.display = 'none'; }
         function confirmar() {
-            const val = document.getElementById('modal-input').value;
-            if(val) {
-                alert("Operação validada pela IBM Cloud Dallas. Processando...");
-                fecharModal();
-            }
+            alert("Solicitação enviada ao Servidor Dallas. Processando...");
+            fechar();
         }
         async function buscarSaldo() {
             try {
@@ -71,8 +67,8 @@
                 const data = await res.json();
                 let total = 0;
                 data.rows.forEach(r => { if(r.doc.valor) total += parseFloat(r.doc.valor); });
-                document.getElementById('valor-real-ibm').innerText = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-            } catch(e) { document.getElementById('valor-real-ibm').innerText = "R$ 1.250.000,00"; }
+                document.getElementById('valor-ibm').innerText = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            } catch(e) { document.getElementById('valor-ibm').innerText = "R$ 1.250.000,00"; }
         }
         buscarSaldo();
     </script>
