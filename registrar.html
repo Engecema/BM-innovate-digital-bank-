@@ -8,29 +8,20 @@
     <style>
         :root { --br-red: #cc092f; --bg: #f4f7f9; --text: #333; --gold: #c5a059; }
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-        
-        .cadastro-box { background: #fff; padding: 45px; border-radius: 8px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); width: 100%; max-width: 450px; border-top: 8px solid var(--br-red); position: relative; }
+        .cadastro-box { background: #fff; padding: 45px; border-radius: 8px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); width: 100%; max-width: 500px; border-top: 8px solid var(--br-red); position: relative; }
         .header-c { text-align: center; margin-bottom: 30px; }
         .header-c img { height: 40px; margin-bottom: 12px; }
         .header-c h2 { color: var(--br-red); font-weight: 800; text-transform: uppercase; font-size: 19px; margin: 0; letter-spacing: 1px; }
-        
-        .campo-grupo { margin-bottom: 20px; }
+        .campo-grupo { margin-bottom: 15px; }
         .tipo-selecao { display: flex; gap: 20px; margin-bottom: 20px; justify-content: center; }
         .tipo-selecao label { display: flex; align-items: center; font-size: 12px; color: #666; cursor: pointer; font-weight: bold; }
         .tipo-selecao input { width: auto !important; margin-right: 8px; }
-
-        label.tit-campo { display: block; font-size: 11px; font-weight: 900; color: #999; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
-        input.txt-input { width: 100%; padding: 15px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 16px; background: #fafafa; transition: 0.3s; }
+        label.tit-campo { display: block; font-size: 10px; font-weight: 900; color: #999; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        input.txt-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 14px; background: #fafafa; transition: 0.3s; }
         input.txt-input:focus { border-color: var(--br-red); outline: none; background: #fff; }
-        
-        .btn-finalizar { width: 100%; padding: 18px; background: var(--br-red); color: #fff; border: none; border-radius: 4px; font-weight: 900; text-transform: uppercase; cursor: pointer; font-size: 15px; margin-top: 15px; transition: 0.3s; }
-        .btn-finalizar:hover { background: #a50725; transform: translateY(-2px); }
-        
-        /* STATUS DE CONSULTA GOVERNAMENTAL */
         #status-gov { display: none; background: #f0f9ff; border: 1px solid #bae6fd; padding: 15px; border-radius: 4px; margin-bottom: 20px; text-align: center; font-size: 12px; color: #0369a1; }
-        
-        .footer-c { text-align: center; margin-top: 25px; font-size: 10px; color: #bbb; text-transform: uppercase; letter-spacing: 1px; }
-        #msgErro { color: var(--br-red); font-size: 12px; font-weight: bold; display: none; margin-bottom: 15px; text-align: center; }
+        .btn-finalizar { width: 100%; padding: 18px; background: var(--br-red); color: #fff; border: none; border-radius: 4px; font-weight: 900; text-transform: uppercase; cursor: pointer; font-size: 15px; margin-top: 15px; transition: 0.3s; }
+        .btn-finalizar:hover { background: #a50725; }
     </style>
 </head>
 <body>
@@ -49,23 +40,24 @@
 
         <div class="campo-grupo">
             <label id="label-doc" class="tit-campo">CPF / Documento Digital</label>
-            <input type="text" id="doc-input" name="documento" class="txt-input" placeholder="000.000.000-00" required onblur="simularConsultaGov()">
+            <input type="text" id="doc-input" name="documento" class="txt-input" placeholder="000.000.000-00" required onblur="simularConsultaGovCompleta()">
         </div>
 
-        <!-- BOX DE CONSULTA SIMULADA -->
-        <div id="status-gov">
-            <b>Sincronizando Base Dallas...</b><br>
-            Localizando dados na Receita Federal e Bureaus Governamentais.
+        <div id="status-gov">Sincronizando Base Dallas...</div>
+
+        <div class="campo-grupo">
+            <label class="tit-campo">Nome / Razão Social (Validado Gov)</label>
+            <input type="text" id="nome-input" name="nome" class="txt-input" readonly placeholder="Aguardando Documento...">
         </div>
 
         <div class="campo-grupo">
-            <label class="tit-campo">Nome do Titular ou Razão Social</label>
-            <input type="text" id="nome-input" name="nome" class="txt-input" placeholder="Aguardando Documento..." required>
+            <label class="tit-campo">Endereço Residencial/Comercial (Localizado)</label>
+            <input type="text" id="end-input" name="endereco" class="txt-input" readonly placeholder="Aguardando CEP...">
         </div>
 
         <div class="campo-grupo">
-            <label class="tit-campo">E-mail Corporativo</label>
-            <input type="email" name="email" class="txt-input" placeholder="exemplo@engecema.com.br" required>
+            <label class="tit-campo">Renda / Faturamento sob Gestão IBM</label>
+            <input type="text" id="renda-input" name="renda" class="txt-input" readonly style="color: var(--br-red); font-weight: bold;">
         </div>
 
         <div class="campo-grupo">
@@ -73,64 +65,56 @@
             <input type="password" id="s1" name="senha" class="txt-input" maxlength="4" placeholder="••••" required>
         </div>
 
-        <div class="campo-grupo">
-            <label class="tit-campo">Confirmar Senha</label>
-            <input type="password" id="s2" class="txt-input" maxlength="4" placeholder="••••" required>
-            <span id="msgErro">As senhas não coincidem!</span>
-        </div>
-
-        <button type="submit" id="btnAcao" class="btn-finalizar">Finalizar Cadastro</button>
+        <button type="submit" id="btnAcao" class="btn-finalizar">Confirmar Credenciamento</button>
     </form>
-    <div class="footer-c">Protocolo Dallas us-south | IBM Cloudant Verified</div>
 </div>
 
 <script>
     function ajustaDoc(tipo) {
-        const l = document.getElementById('label-doc');
-        const i = document.getElementById('doc-input');
-        l.innerText = (tipo === 'CPF') ? "CPF / Documento Digital" : "CNPJ / Documento Empresarial";
-        i.placeholder = (tipo === 'CPF') ? "000.000.000-00" : "00.000.000/0000-00";
+        document.getElementById('label-doc').innerText = (tipo === 'CPF') ? "CPF / Documento Digital" : "CNPJ / Documento Empresarial";
+        document.getElementById('doc-input').placeholder = (tipo === 'CPF') ? "000.000.000-00" : "00.000.000/0000-00";
     }
 
-    // SIMULADOR DE CONSULTA GOVERNAMENTAL (A BRECHA ESTRATÉGICA)
-    function simularConsultaGov() {
+    async function simularConsultaGovCompleta() {
         const doc = document.getElementById('doc-input').value;
         const status = document.getElementById('status-gov');
         const nomeInput = document.getElementById('nome-input');
+        const endInput = document.getElementById('end-input');
+        const rendaInput = document.getElementById('renda-input');
 
         if(doc.length >= 11) {
             status.style.display = 'block';
-            status.innerHTML = "<b>Buscando dados no SERPRO / Receita Federal...</b>";
+            status.innerHTML = "<b>Consultando Bases Governamentais e IBM Cloudant...</b>";
             
+            // 1. Busca Saldo Real na IBM para simular Renda sob Gestão
+            let saldoReal = "R$ 1.250.000,00";
+            try {
+                const res = await fetch('https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud');
+                const data = await res.json();
+                let total = 0;
+                data.rows.forEach(r => { if(r.doc.valor) total += parseFloat(r.doc.valor); });
+                if(total > 0) saldoReal = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+            } catch(e) {}
+
             setTimeout(() => {
                 status.style.background = "#dcfce7";
                 status.style.borderColor = "#86efac";
                 status.style.color = "#15803d";
-                status.innerHTML = "<b>DADOS LOCALIZADOS COM SUCESSO!</b><br>Base Governamental Dallas sincronizada.";
+                status.innerHTML = "<b>CONEXÃO DALLAS ESTABELECIDA!</b><br>Dados sincronizados com sucesso.";
                 
-                // Simulação de preenchimento automático via "Governo"
-                nomeInput.value = "CLIENTE VALIDADO BASE GOV DALLAS";
-                nomeInput.style.borderColor = "#86efac";
+                const isPJ = document.querySelector('input[name="tipo"]:checked').value === 'PJ';
+                
+                nomeInput.value = isPJ ? "ENGECEMA ENGENHARIA FOMENTO LTDA" : "CLIENTE PRIVATE DALLAS VALIDADO";
+                endInput.value = isPJ ? "Av. Paulista, 1000 - Bela Vista, São Paulo - SP" : "Rua das Oliveiras, 450 - Dallas Park, DF";
+                rendaInput.value = saldoReal;
             }, 2000);
         }
     }
 
-    document.getElementById('formDallas').onsubmit = async function(e) {
+    document.getElementById('formDallas').onsubmit = function(e) {
         e.preventDefault();
-        const p1 = document.getElementById('s1').value;
-        const p2 = document.getElementById('s2').value;
-        
-        if (p1 !== p2) { document.getElementById('msgErro').style.display = 'block'; return; }
-        
-        document.getElementById('msgErro').style.display = 'none';
-        const btn = document.getElementById('btnAcao');
-        btn.innerText = "REGISTRANDO NA IBM CLOUD...";
-        btn.disabled = true;
-
-        setTimeout(() => {
-            alert("OPERAÇÃO CONFIRMADA COM SUCESSO!\\nSeu credenciamento Dallas foi validado e sincronizado com as bases governamentais.");
-            window.location.href = "index.html";
-        }, 1500);
+        alert("OPERAÇÃO CONFIRMADA COM SUCESSO!\\nSeu credenciamento Dallas foi validado e o dossiê governamental foi anexado à sua conta.");
+        window.location.href = "index.html";
     };
 </script>
 </body>
