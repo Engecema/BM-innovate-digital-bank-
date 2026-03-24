@@ -1,5 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Engecema | Master Control SP</title>
+    <style>
+        :root { --br-red: #cc092f; --bg: #f4f7f9; --text: #333; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: var(--bg); color: var(--text); }
+        #login-gestao { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        .box-login { background: #fff; padding: 40px; border-radius: 8px; border-top: 6px solid var(--br-red); box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 320px; text-align: center; }
+        .box-login input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        .btn-login { width: 100%; padding: 12px; background: var(--br-red); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        #painel-real { display: none; }
+        header { background: #fff; padding: 15px 40px; border-bottom: 5px solid var(--br-red); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .logo { height: 35px; }
+        .btn-sair-top { background: #eee; color: #666; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; text-decoration: none; font-size: 11px; }
+        .container { padding: 40px; max-width: 1200px; margin: 0 auto; }
+        .card { background: #fff; padding: 30px; border-left: 8px solid var(--br-red); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .box-tabela { background: #fff; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-radius: 4px; margin-bottom: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th { text-align: left; font-size: 10px; color: #999; padding: 12px; border-bottom: 2px solid #f4f7f9; text-transform: uppercase; }
+        td { padding: 12px; font-size: 13px; border-bottom: 1px solid #eee; }
+        .form-cred { display: flex; gap: 10px; margin-top: 15px; padding: 15px; background: #fafafa; border-radius: 4px; }
+        .form-cred input { padding: 8px; border: 1px solid #ddd; border-radius: 4px; flex: 1; font-size: 12px; }
+        .btn-del { color: var(--br-red); border: 1px solid var(--br-red); padding: 4px 8px; border-radius: 3px; cursor: pointer; background: transparent; font-size: 10px; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div id="login-gestao">
+    <div class="box-login">
+        <img src="logo.png" style="height: 35px; margin-bottom: 20px;">
+        <h3 style="color:var(--br-red);">MASTER CONTROL GESTÃO</h3>
+        <input type="text" id="user" placeholder="Usuário">
+        <input type="password" id="pass" placeholder="Senha">
+        <button class="btn-login" onclick="validarAcesso()">Entrar no Sistema</button>
+    </div>
+</div>
+
+<div id="painel-real">
+    <header>
+        <img src="logo.png" class="logo">
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <div style="text-align: right; font-size: 10px; font-weight: bold; color: var(--br-red);">SÃO PAULO | IBM CLOUDANT</div>
+            <a href="#" onclick="sair()" class="btn-sair-top">SAIR</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <span style="color:#888; font-size:11px; font-weight:bold;">VOLUME TOTAL (MASTER)</span>
+            <h1 id="total-custodia" style="font-size:42px; margin:10px 0; font-weight:800;">R$ 0,00</h1>
+            <button onclick="sincronizarTudo()" style="background:var(--br-red); color:#fff; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; font-weight:bold;">Sincronizar Banco</button>
+        </div>
+
+        <div class="box-tabela">
+            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">1. Auditoria Master SP</h2>
+            <table>
+                <thead><tr><th>Data</th><th>ID</th><th>Status</th><th>Valor</th></tr></thead>
+                <tbody id="corpo-tabela"><tr><td colspan="4" style="text-align:center; padding:20px; color:#ccc;">Carregando dados...</td></tr></tbody>
+            </table>
+        </div>
+
+        <div class="box-tabela">
+            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">2. Gestão de Equipe</h2>
+            <div class="form-cred">
+                <input type="text" id="new-user" placeholder="Nome">
+                <input type="text" id="new-id" placeholder="Login">
+                <input type="password" id="new-pass" placeholder="Senha">
+                <button onclick="cadastrarColaborador()" style="background:#15803d; color:#fff; border:none; padding:10px; border-radius:4px; font-weight:bold; cursor:pointer;">CADASTRAR</button>
+            </div>
+            <table>
+                <thead><tr><th>Colaborador</th><th>ID</th><th>Sincronia</th><th>Ação</th></tr></thead>
+                <tbody id="corpo-colab"><tr><td colspan="4" style="text-align:center; padding:20px; color:#ccc;">Carregando equipe...</td></tr></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
 <script>
-    // CONFIGURAÇÃO TÉCNICA CORRIGIDA
     const API_KEY = "spU8hW5qypYJxNTKiv--OAndWnVsnC_f-ZjEmiK8I6wY"; 
     const HOST_IBM = "7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
     const BANCO_MASTER = "master_engecema_sp";
@@ -24,31 +102,19 @@
 
     function sair() { sessionStorage.removeItem('sessao-ativa'); window.location.reload(); }
 
-    window.onload = function() {
-        if(sessionStorage.getItem('sessao-ativa') === 'sim') { exibirPainel(); }
-    };
-
     async function sincronizarTudo() {
         await fetchIBM(BANCO_MASTER, 'corpo-tabela', true);
         await fetchIBM(BANCO_EQUIPE, 'corpo-colab', false);
     }
 
     async function fetchIBM(banco, elementId, isMaster) {
-        // URL limpa sem credenciais expostas no link
         const urlLimpa = `https://${HOST_IBM}/${banco}/_all_docs?include_docs=true`;
-        
-        // Autenticação enviada via Header (padrão aceito pelos navegadores)
         const headers = new Headers();
         headers.set('Authorization', 'Basic ' + btoa("apikey:" + API_KEY));
 
         try {
-            const res = await fetch(urlLimpa, { 
-                method: 'GET',
-                headers: headers,
-                mode: 'cors'
-            });
-
-            if (!res.ok) throw new Error("Erro na Resposta IBM: " + res.status);
+            const res = await fetch(urlLimpa, { method: 'GET', headers: headers, mode: 'cors' });
+            if (!res.ok) throw new Error("Erro na IBM");
 
             const data = await res.json();
             const tbody = document.getElementById(elementId);
@@ -58,24 +124,17 @@
             data.rows.forEach(r => {
                 const d = r.doc;
                 if (d._id.startsWith('_design/')) return;
-
                 if (isMaster) {
-                    if(d.valor) {
-                        let v = String(d.valor).replace(/[R$\s.]/g, '').replace(',', '.');
-                        total += parseFloat(v) || 0;
-                    }
-                    tbody.innerHTML += `<tr><td>${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td><td>${d._id.substring(0,8)}</td><td>Conectado</td><td>${d.valor || '---'}</td></tr>`;
+                    if(d.valor) total += parseFloat(String(d.valor).replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+                    tbody.innerHTML += `<tr><td>${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td><td>${d._id.substring(0,8)}</td><td>OK</td><td>${d.valor || '---'}</td></tr>`;
                 } else {
                     tbody.innerHTML += `<tr><td>${d.nome}</td><td>${d.login}</td><td>Ativo</td><td><button class="btn-del" onclick="deletarDoc('${d._id}','${d._rev}','${banco}')">REMOVER</button></td></tr>`;
                 }
             });
 
             if (isMaster) document.getElementById('total-custodia').innerText = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-
         } catch(e) {
-            console.error("Erro de rede:", e);
-            document.getElementById(elementId).innerHTML = `<tr><td colspan="4" style="color:red;">Erro Sincronia: Verifique o CORS no Cloudant.</td></tr>`;
-            if(isMaster) document.getElementById('total-custodia').innerText = "R$ 1.250.000,00";
+            document.getElementById(elementId).innerHTML = `<tr><td colspan="4" style="color:red;">Erro: Verifique o CORS no Cloudant.</td></tr>`;
         }
     }
 
@@ -84,33 +143,30 @@
         const login = document.getElementById('new-id').value;
         const pass = document.getElementById('new-pass').value;
         if(!nome || !login || !pass) return alert("Preencha tudo");
-
         const novo = { nome, login, senha: btoa(pass), criado_em: new Date().toISOString() };
-        const urlPost = `https://${HOST_IBM}/${BANCO_EQUIPE}`;
         const headers = new Headers();
         headers.set('Authorization', 'Basic ' + btoa("apikey:" + API_KEY));
         headers.set('Content-Type', 'application/json');
 
         try {
-            const res = await fetch(urlPost, {
-                method: 'POST',
-                headers: headers,
-                body: JSON.stringify(novo),
-                mode: 'cors'
-            });
-            if(res.ok) { alert("Cadastrado com sucesso!"); sincronizarTudo(); }
-        } catch(e) { alert("Erro ao gravar na IBM."); }
+            const res = await fetch(`https://${HOST_IBM}/${BANCO_EQUIPE}`, { method: 'POST', headers, body: JSON.stringify(novo), mode: 'cors' });
+            if(res.ok) { alert("Cadastrado!"); sincronizarTudo(); }
+        } catch(e) { alert("Erro ao salvar."); }
     }
 
     async function deletarDoc(id, rev, banco) {
-        if(!confirm("Remover este registro?")) return;
-        const urlDelete = `https://${HOST_IBM}/${banco}/${id}?rev=${rev}`;
+        if(!confirm("Remover registro?")) return;
         const headers = new Headers();
         headers.set('Authorization', 'Basic ' + btoa("apikey:" + API_KEY));
-
         try {
-            await fetch(urlDelete, { method: 'DELETE', headers: headers, mode: 'cors' });
+            await fetch(`https://${HOST_IBM}/${banco}/${id}?rev=${rev}`, { method: 'DELETE', headers, mode: 'cors' });
             sincronizarTudo();
         } catch(e) { alert("Erro ao deletar."); }
     }
+
+    window.onload = function() {
+        if(sessionStorage.getItem('sessao-ativa') === 'sim') { exibirPainel(); }
+    };
 </script>
+</body>
+</html>
