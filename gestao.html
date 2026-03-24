@@ -113,16 +113,13 @@
     }
 
     async function fetchIBM(banco, elementId, isMaster) {
-        // TÉCNICA: AUTH DIRETA NA URL PARA EVITAR BLOQUEIO DE CORS HEADERS
+        // TÉCNICA FINAL: AUTH NA URL E ZERO HEADERS PARA EVITAR O PREFLIGHT DO CORS
         const urlSegura = `https://apikey:${API_KEY}@${HOST_IBM}/${banco}/_all_docs?include_docs=true`;
 
         try {
-            const res = await fetch(urlSegura, { 
-                method: 'GET',
-                mode: 'cors' 
-            });
+            const res = await fetch(urlSegura);
 
-            if (!res.ok) throw new Error("Erro na IBM Cloud");
+            if (!res.ok) throw new Error("Erro na Resposta IBM");
 
             const data = await res.json();
             const tbody = document.getElementById(elementId);
@@ -134,7 +131,10 @@
                 if (d._id.startsWith('_design/')) return;
 
                 if (isMaster) {
-                    if(d.valor) total += parseFloat(String(d.valor).replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
+                    if(d.valor) {
+                        let v = String(d.valor).replace(/[R$\s.]/g, '').replace(',', '.');
+                        total += parseFloat(v) || 0;
+                    }
                     tbody.innerHTML += `<tr><td>${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td><td>${d._id.substring(0,8)}</td><td>Conectado</td><td>${d.valor || '---'}</td></tr>`;
                 } else {
                     tbody.innerHTML += `<tr><td>${d.nome}</td><td>${d.login}</td><td>Ativo</td><td><button class="btn-del" onclick="deletarDoc('${d._id}','${d._rev}','${banco}')">REMOVER</button></td></tr>`;
@@ -144,6 +144,7 @@
             if (isMaster) document.getElementById('total-custodia').innerText = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
 
         } catch(e) {
+            console.error("Erro de rede:", e);
             document.getElementById(elementId).innerHTML = `<tr><td colspan="4" style="color:red;">Erro Sincronia: Verifique a API Key e o CORS.</td></tr>`;
             if(isMaster) document.getElementById('total-custodia').innerText = "R$ 1.250.000,00";
         }
@@ -156,15 +157,13 @@
         if(!nome || !login || !pass) return alert("Preencha todos os campos");
 
         const novo = { nome, login, senha: btoa(pass), criado_em: new Date().toISOString() };
-        // URL para gravação (POST) com auth embutida
         const urlPost = `https://apikey:${API_KEY}@${HOST_IBM}/${BANCO_EQUIPE}`;
 
         try {
             const res = await fetch(urlPost, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(novo),
-                mode: 'cors'
+                body: JSON.stringify(novo)
             });
             if(res.ok) { alert("Cadastrado com sucesso!"); sincronizarTudo(); }
         } catch(e) { alert("Erro ao gravar na IBM."); }
@@ -174,7 +173,7 @@
         if(!confirm("Remover este registro permanentemente?")) return;
         const urlDelete = `https://apikey:${API_KEY}@${HOST_IBM}/${banco}/${id}?rev=${rev}`;
         try {
-            await fetch(urlDelete, { method: 'DELETE', mode: 'cors' });
+            await fetch(urlDelete, { method: 'DELETE' });
             sincronizarTudo();
         } catch(e) { alert("Erro ao deletar."); }
     }
