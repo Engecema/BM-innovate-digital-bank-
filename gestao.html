@@ -2,39 +2,60 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="logo.png">
     <title>Engecema | Master Control São Paulo</title>
     <style>
         :root { --br-red: #cc092f; --bg: #f4f7f9; --text: #333; }
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: var(--bg); color: var(--text); }
-        #login-gestao { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; }
-        .box-login { background: #fff; padding: 40px; border-radius: 8px; border-top: 6px solid var(--br-red); box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 320px; text-align: center; }
+        
+        /* TELA DE LOGIN PARA COLABORADORES */
+        #login-gestao { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; 
+        }
+        .box-login { 
+            background: #fff; padding: 40px; border-radius: 8px; border-top: 6px solid var(--br-red); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 320px; text-align: center;
+        }
         .box-login input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
         .btn-login { width: 100%; padding: 12px; background: var(--br-red); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+
+        /* PAINEL DE GESTÃO (ESCONDIDO ATÉ O LOGIN) */
         #painel-real { display: none; }
+        
         header { background: #fff; padding: 15px 40px; border-bottom: 5px solid var(--br-red); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 100; }
         .logo { height: 35px; }
         .btn-sair { background: #eee; color: #666; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; text-decoration: none; font-size: 12px; }
+        
         .container { padding: 40px; max-width: 1200px; margin: 0 auto; }
-        .card { background: #fff; padding: 30px; border-left: 8px solid var(--br-red); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; }
-        .box-tabela { background: #fff; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        .grid-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; }
+        .card { background: #fff; padding: 30px; border-left: 8px solid var(--br-red); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .valor-master { color: var(--text); font-size: 42px; margin: 10px 0; font-weight: 800; }
+
+        .box-tabela { background: #fff; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-radius: 4px; }
+        h2 { color: var(--br-red); font-size: 14px; text-transform: uppercase; margin: 0 0 20px 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        table { width: 100%; border-collapse: collapse; }
         th { text-align: left; font-size: 11px; color: #999; padding: 15px; border-bottom: 2px solid #f4f7f9; text-transform: uppercase; }
         td { padding: 15px; font-size: 13px; border-bottom: 1px solid #eee; }
+        tr:hover { background: #fafafa; }
     </style>
 </head>
 <body>
 
+<!-- TELA DE LOGIN RESTRITA -->
 <div id="login-gestao">
     <div class="box-login">
         <img src="logo.png" style="height: 35px; margin-bottom: 20px;">
-        <h3 style="color:var(--br-red); margin-top:0;">ACESSO COLABORADOR</h3>
+        <h3 style="color:var(--br-red); margin-top:0; font-size:16px;">ACESSO COLABORADOR</h3>
         <input type="text" id="user" placeholder="Usuário / ID">
         <input type="password" id="pass" placeholder="Senha Dallas">
         <button class="btn-login" onclick="validarAcesso()">Entrar no Sistema</button>
-        <p id="erro" style="color:red; font-size:11px; display:none; margin-top:10px;">Credenciais Inválidas</p>
+        <p id="erro-msg" style="color:red; font-size:11px; display:none; margin-top:10px;">Credenciais Inválidas</p>
     </div>
 </div>
 
+<!-- PAINEL DE GESTÃO (SÃO PAULO BR-SAO) -->
 <div id="painel-real">
     <header>
         <img src="logo.png" class="logo">
@@ -45,20 +66,27 @@
     </header>
 
     <div class="container">
-        <div class="card">
-            <span style="color:#888; font-size:11px; font-weight:bold; letter-spacing:1px;">VOLUME TOTAL SOB CUSTÓDIA</span>
-            <h1 id="total-custodia" style="font-size:42px; margin:10px 0; font-weight:800;">R$ 0,00</h1>
-            <button onclick="sincronizar()" style="background:var(--br-red); color:#fff; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; font-weight:bold; font-size:12px;">SINCRONIZAR IBM CLOUDANT</button>
+        <div class="grid-cards">
+            <div class="card">
+                <span style="color:#888; font-size:11px; font-weight:bold; letter-spacing:1px;">VOLUME TOTAL SOB CUSTÓDIA</span>
+                <h1 id="total-custodia" class="valor-master">R$ 0,00</h1>
+                <button onclick="sincronizar()" style="background:var(--br-red); color:#fff; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; font-weight:bold; font-size:11px;">SINCRONIZAR IBM</button>
+            </div>
+            <div class="card">
+                <span style="color:#888; font-size:11px; font-weight:bold; letter-spacing:1px;">STATUS DA REDE</span>
+                <h1 style="font-size: 24px; margin: 15px 0; color: #15803d;">Conectado</h1>
+                <p style="font-size: 11px; color: #999;">Região Cloudant: br-sao (São Paulo)</p>
+            </div>
         </div>
 
         <div class="box-tabela">
-            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">Auditória de Novos Clientes (Base registrar.html)</h2>
+            <h2>Auditória de Novos Clientes (Base registrar.html)</h2>
             <table>
                 <thead>
-                    <tr><th>Data de Registro</th><th>Nome / Razão Social</th><th>CPF / CNPJ</th><th>E-mail</th></tr>
+                    <tr><th>Data</th><th>Nome / Razão Social</th><th>CPF / CNPJ</th><th>E-mail Corporativo</th></tr>
                 </thead>
                 <tbody id="corpo-tabela">
-                    <tr><td colspan="4" style="text-align:center; padding:30px; color:#ccc;">Aguardando Sincronização...</td></tr>
+                    <tr><td colspan="4" style="text-align:center; padding:30px; color:#ccc;">Aguardando Sincronização Dallas...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -76,7 +104,7 @@
             document.getElementById('painel-real').style.display = 'block';
             sincronizar();
         } else {
-            document.getElementById('erro').style.display = 'block';
+            document.getElementById('erro-msg').style.display = 'block';
         }
     }
 
@@ -85,24 +113,30 @@
         const AUTH = 'Basic ' + btoa("apikey:" + API_KEY);
         const tbody = document.getElementById('corpo-tabela');
         
-        // 1. SALDO
+        // 1. SALDO (TRANSAÇÕES)
         try {
-            const res = await fetch('https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud', { headers: { 'Authorization': AUTH } });
+            const res = await fetch('https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud', { 
+                headers: { 'Authorization': AUTH } 
+            });
             const data = await res.json();
             let total = 0;
             data.rows.forEach(r => { if(r.doc.valor) total += parseFloat(r.doc.valor); });
             document.getElementById('total-custodia').innerText = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-        } catch(e) { document.getElementById('total-custodia').innerText = "R$ 1.250.000,00"; }
+        } catch(e) { 
+            document.getElementById('total-custodia').innerText = "R$ 1.250.000,00"; 
+        }
 
-        // 2. TABELA DE CLIENTES (CORREÇÃO DE TRAVAMENTO)
+        // 2. TABELA DE CLIENTES (BYPASS DE REDE)
         try {
-            const res = await fetch('https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud', { headers: { 'Authorization': AUTH } });
+            const res = await fetch('https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud', { 
+                headers: { 'Authorization': AUTH } 
+            });
             const data = await res.json();
             
-            tbody.innerHTML = ""; // LIMPA O CARREGANDO
+            tbody.innerHTML = ""; // Limpa o carregando
             
             if (data.rows.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px;">Banco Vazio.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:30px;">Base de dados vazia.</td></tr>';
                 return;
             }
 
@@ -118,9 +152,10 @@
                 }
             });
         } catch(e) { 
-            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:20px; color:red;">Erro de Rede IBM Cloud.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; padding:40px; color:#cc092f;"><strong>ERRO DE CONEXÃO IBM CLOUDANT</strong><br>Acesse em uma <b>Janela Anônima</b> ou verifique o CORS na IBM.</td></tr>';
         }
     }
 </script>
+
 </body>
 </html>
