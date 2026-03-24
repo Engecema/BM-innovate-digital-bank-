@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Engecema | Master Control São Paulo</title>
+    <style>
+        :root { --red: #cc092f; --gold: #c5a059; --dark: #0a0a0a; }
+        body { background: var(--dark); color: #fff; font-family: 'Consolas', monospace; margin: 0; padding: 20px; }
+        header { border-bottom: 2px solid var(--red); padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; }
+        
+        .grid-master { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .card-monitor { background: #111; border: 1px solid #333; padding: 20px; border-radius: 4px; }
+        h2 { color: var(--gold); font-size: 14px; text-transform: uppercase; margin-top: 0; }
+        
+        /* TABELA DE CLIENTES CADASTRADOS */
+        table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
+        th { text-align: left; color: #666; border-bottom: 1px solid #333; padding: 10px; }
+        td { padding: 10px; border-bottom: 1px solid #222; }
+        
+        .status-on { color: #00ff00; }
+        .btn-update { background: var(--red); color: white; border: none; padding: 10px 20px; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div><strong>ENGECEMA DIGITAL ASSETS</strong> | REGIONAL SÃO PAULO br-sao</div>
+    <div class="status-on">● IBM CLOUDANT CONNECTED</div>
+</header>
+
+<div class="grid-master">
+    <!-- MONITOR DE SALDO TOTAL NO BANCO -->
+    <div class="card-monitor">
+        <h2>Volume Total sob Custódia (7 Docs)</h2>
+        <h1 id="total-custodia" style="font-size: 48px; margin: 10px 0;">R$ 0,00</h1>
+        <button class="btn-update" onclick="carregarDadosMestres()">Sincronizar Nodes</button>
+    </div>
+
+    <!-- MONITOR DE NOVOS CADASTROS -->
+    <div class="card-monitor">
+        <h2>Últimos Credenciamentos (Base registrar.html)</h2>
+        <table id="tabela-clientes">
+            <thead>
+                <tr>
+                    <th>DATA</th>
+                    <th>NOME/RAZÃO SOCIAL</th>
+                    <th>DOCUMENTO</th>
+                </tr>
+            </thead>
+            <tbody id="lista-clientes">
+                <!-- Dados virão da IBM Cloudant -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    async function carregarDadosMestres() {
+        // 1. Puxa Saldo de Transações
+        try {
+            const res = await fetch('https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud');
+            const data = await res.json();
+            let total = 0;
+            data.rows.forEach(r => { if(r.doc.valor) total += parseFloat(r.doc.valor); });
+            document.getElementById('total-custodia').innerText = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+        } catch(e) { console.error("Erro Transações"); }
+
+        // 2. Puxa Clientes do banco 'cliente_engecema'
+        try {
+            const res = await fetch('https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud');
+            const data = await res.json();
+            const lista = document.getElementById('lista-clientes');
+            lista.innerHTML = "";
+            data.rows.forEach(r => {
+                const doc = r.doc;
+                if(doc.nome) {
+                    lista.innerHTML += `<tr><td>${new Date(doc.criado_em).toLocaleDateString()}</td><td>${doc.nome}</td><td>${doc.documento}</td></tr>`;
+                }
+            });
+        } catch(e) { console.error("Erro Clientes"); }
+    }
+    carregarDadosMestres();
+</script>
+</body>
+</html>
