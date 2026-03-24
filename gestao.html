@@ -20,6 +20,9 @@
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th { text-align: left; font-size: 10px; color: #999; padding: 12px; border-bottom: 2px solid #f4f7f9; text-transform: uppercase; }
         td { padding: 12px; font-size: 13px; border-bottom: 1px solid #eee; }
+        .form-cred { display: flex; gap: 10px; margin-top: 15px; padding: 15px; background: #fafafa; border-radius: 4px; }
+        .form-cred input { padding: 8px; border: 1px solid #ddd; border-radius: 4px; flex: 1; font-size: 12px; }
+        .btn-del { color: var(--br-red); border: 1px solid var(--br-red); padding: 4px 8px; border-radius: 3px; cursor: pointer; background: transparent; font-size: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -44,39 +47,57 @@
     </header>
 
     <div class="container">
+        <!-- CARD DE SALDO -->
         <div class="card">
             <span style="color:#888; font-size:11px; font-weight:bold;">VOLUME TOTAL SOB CUSTÓDIA (MASTER)</span>
             <h1 id="total-custodia" style="font-size:42px; margin:10px 0; font-weight:800;">R$ 0,00</h1>
-            <button onclick="sincronizar()" style="background:var(--br-red); color:#fff; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; font-weight:bold;">Sincronizar Banco Master</button>
+            <button onclick="sincronizarTudo()" style="background:var(--br-red); color:#fff; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; font-weight:bold;">Sincronizar Tudo</button>
         </div>
 
+        <!-- 1. AUDITORIA MASTER -->
         <div class="box-tabela">
-            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">Auditória de Registros SP</h2>
+            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">1. Auditoria de Registros SP</h2>
             <table>
                 <thead><tr><th>Data</th><th>Identificador</th><th>Status</th><th>Valor (R$)</th></tr></thead>
                 <tbody id="corpo-tabela"><tr><td colspan="4" style="text-align:center; padding:20px; color:#ccc;">Aguardando Sincronização...</td></tr></tbody>
+            </table>
+        </div>
+
+        <!-- 2. GESTÃO DE EQUIPE (RESTAURADA) -->
+        <div class="box-tabela">
+            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">2. Gestão de Equipe (Colaboradores)</h2>
+            <div class="form-cred">
+                <input type="text" id="new-user" placeholder="Nome">
+                <input type="text" id="new-id" placeholder="Login/ID">
+                <input type="password" id="new-pass" placeholder="Senha">
+                <button onclick="cadastrarColaborador()" style="background:#15803d; color:#fff; border:none; padding:10px; border-radius:4px; font-weight:bold; cursor:pointer;">CADASTRAR</button>
+            </div>
+            <table>
+                <thead><tr><th>Colaborador</th><th>ID Acesso</th><th>Status</th><th>Ação</th></tr></thead>
+                <tbody id="corpo-colab"><tr><td colspan="4" style="text-align:center; padding:20px; color:#ccc;">Carregando equipe...</td></tr></tbody>
             </table>
         </div>
     </div>
 </div>
 
 <script>
-    // CONFIGURAÇÕES TÉCNICAS DIRECIONADAS AO NOVO BANCO
-    const API_KEY = "INSIRA_AQUI_A_NOVA_API_KEY_COM_PERMISSAO_MANAGER"; 
+    // CONFIGURAÇÕES TÉCNICAS
+    const API_KEY = "SUA_NOVA_API_KEY_AQUI"; 
     const CLOUDANT_URL = "https://appdomain.cloud";
-    const BANCO_DADOS = "master_engecema_sp"; // BANCO QUE VOCÊ ACABOU DE CRIAR
-    
+    const BANCO_MASTER = "master_engecema_sp"; 
+    const BANCO_COLAB = "colaboradores_engecema"; 
+
     const AUTH = 'Basic ' + btoa("apikey:" + API_KEY);
-    const colaboradores_locais = { "admin": "dallas2026", "gestor": "engecema2026" };
+    const credenciais_fixas = { "admin": "dallas2026", "gestor": "engecema2026" };
 
     function validarAcesso() {
         const u = document.getElementById('user').value;
         const p = document.getElementById('pass').value;
-        if (colaboradores_locais[u] === p) {
+        if (credenciais_fixas[u] === p) {
             sessionStorage.setItem('sessao-dallas', 'ativa');
             document.getElementById('login-gestao').style.display = 'none';
             document.getElementById('painel-real').style.display = 'block';
-            sincronizar();
+            sincronizarTudo();
         } else { alert("Acesso Negado"); }
     }
 
@@ -86,18 +107,19 @@
         if(sessionStorage.getItem('sessao-dallas') === 'ativa') {
             document.getElementById('login-gestao').style.display = 'none';
             document.getElementById('painel-real').style.display = 'block';
-            sincronizar();
+            sincronizarTudo();
         }
     };
 
-    async function sincronizar() {
+    async function sincronizarTudo() {
+        await sincronizarMaster();
+        await listarEquipe();
+    }
+
+    async function sincronizarMaster() {
         const headers = { 'Authorization': AUTH, 'Accept': 'application/json' };
         try {
-            // Chamada ao novo banco master_engecema_sp
-            const res = await fetch(`${CLOUDANT_URL}/${BANCO_DADOS}/_all_docs?include_docs=true`, { headers });
-            
-            if (!res.ok) throw new Error("Erro de conexão com o Banco Master");
-
+            const res = await fetch(`${CLOUDANT_URL}/${BANCO_MASTER}/_all_docs?include_docs=true`, { headers });
             const data = await res.json();
             const tbody = document.getElementById('corpo-tabela');
             tbody.innerHTML = "";
@@ -106,28 +128,53 @@
             data.rows.forEach(r => {
                 const d = r.doc;
                 if (d._id.startsWith('_design/')) return;
-                
-                // Soma saldo se houver campo 'valor'
                 if(d.valor) {
                     let v = String(d.valor).replace(/[R$\s.]/g, '').replace(',', '.');
                     total += parseFloat(v) || 0;
                 }
-
-                // Lista dados do Master
-                tbody.innerHTML += `<tr>
-                    <td>${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td>
-                    <td>${d.nome || d._id}</td>
-                    <td>Sincronizado</td>
-                    <td>${d.valor || '---'}</td>
-                </tr>`;
+                tbody.innerHTML += `<tr><td>${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td><td>${d.nome || d._id}</td><td>Ativo</td><td>${d.valor || '---'}</td></tr>`;
             });
-
             document.getElementById('total-custodia').innerText = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-        } catch(e) { 
-            console.error(e);
-            document.getElementById('corpo-tabela').innerHTML = `<tr><td colspan='4' style='color:red;'>Erro: Verifique o CORS para master_engecema_sp</td></tr>`;
-            document.getElementById('total-custodia').innerText = "R$ 1.250.000,00"; 
-        }
+        } catch(e) { console.error(e); }
+    }
+
+    async function listarEquipe() {
+        const headers = { 'Authorization': AUTH, 'Accept': 'application/json' };
+        try {
+            const res = await fetch(`${CLOUDANT_URL}/${BANCO_COLAB}/_all_docs?include_docs=true`, { headers });
+            const data = await res.json();
+            const tbody = document.getElementById('corpo-colab');
+            tbody.innerHTML = "";
+            data.rows.forEach(r => {
+                const d = r.doc;
+                if (d._id.startsWith('_design/')) return;
+                tbody.innerHTML += `<tr><td>${d.nome}</td><td>${d.login}</td><td>Sincronizado</td><td><button class="btn-del" onclick="deletarDoc('${d._id}','${d._rev}')">REMOVER</button></td></tr>`;
+            });
+        } catch(e) { console.error(e); }
+    }
+
+    async function cadastrarColaborador() {
+        const nome = document.getElementById('new-user').value;
+        const login = document.getElementById('new-id').value;
+        const pass = document.getElementById('new-pass').value;
+        if(!nome || !login || !pass) return alert("Preencha tudo");
+        const novo = { nome, login, senha: btoa(pass), criado_em: new Date().toISOString() };
+        try {
+            const res = await fetch(`${CLOUDANT_URL}/${BANCO_COLAB}`, {
+                method: 'POST',
+                headers: { 'Authorization': AUTH, 'Content-Type': 'application/json' },
+                body: JSON.stringify(novo)
+            });
+            if(res.ok) { alert("Cadastrado!"); sincronizarTudo(); }
+        } catch(e) { alert("Erro ao cadastrar."); }
+    }
+
+    async function deletarDoc(id, rev) {
+        if(!confirm("Remover colaborador?")) return;
+        try {
+            await fetch(`${CLOUDANT_URL}/${BANCO_COLAB}/${id}?rev=${rev}`, { method: 'DELETE', headers: { 'Authorization': AUTH } });
+            sincronizarTudo();
+        } catch(e) { alert("Erro ao deletar."); }
     }
 </script>
 </body>
