@@ -1,42 +1,64 @@
 /**
  * ENGECEMA PRIVATE - ENGINE DALLAS
- * UNIFICAÇÃO VISUAL + CONEXÃO IBM CLOUDANT (DATA ENGINE)
+ * UNIFICAÇÃO VISUAL + DATA ENGINE (GITHUB PAGES COMPATIBLE)
  */
 
 const ENGINE_CONFIG = {
-    key: "spU8hW5qypYJxNTKiv--OAndWnVsnC_f-ZjEmiK8I6wY",
+    // Insira sua API Key com permissão MANAGER aqui
+    key: "spU8hW5qypYJxNTKiv--OAndWnVsnC_f-ZjEmiK8I6wY", 
     host: "7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud"
 };
 
-// --- NÚCLEO DE DADOS (NOVO) ---
+// --- NÚCLEO DE DADOS (DATA ENGINE) ---
 const EngecemaData = {
     getHeaders: () => {
-        const h = new Headers();
-        h.set('Authorization', 'Basic ' + btoa("apikey:" + ENGINE_CONFIG.key));
-        h.set('Content-Type', 'application/json');
-        return h;
+        return {
+            'Authorization': 'Basic ' + btoa("apikey:" + ENGINE_CONFIG.key),
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        };
     },
+
     async buscar(banco) {
         const url = `https://${ENGINE_CONFIG.host}/${banco}/_all_docs?include_docs=true`;
-        // O segredo do CORS está no 'mode: cors' e nos Headers corretos
-        const res = await fetch(url, { method: 'GET', headers: this.getHeaders(), mode: 'cors' });
-        return await res.json();
+        try {
+            const res = await fetch(url, { 
+                method: 'GET', 
+                headers: this.getHeaders(), 
+                mode: 'cors' 
+            });
+            return await res.json();
+        } catch (e) {
+            console.error("Erro ao buscar dados:", e);
+            throw e;
+        }
     },
+
     async gravar(banco, doc) {
         const url = `https://${ENGINE_CONFIG.host}/${banco}`;
-        const res = await fetch(url, { method: 'POST', headers: this.getHeaders(), body: JSON.stringify(doc), mode: 'cors' });
-        return res.ok;
+        try {
+            const res = await fetch(url, { 
+                method: 'POST', 
+                headers: this.getHeaders(), 
+                body: JSON.stringify(doc),
+                mode: 'cors'
+            });
+            return res.ok;
+        } catch (e) {
+            console.error("Erro técnico de rede na gravação:", e);
+            return false;
+        }
     }
 };
 
-// --- NÚCLEO VISUAL (SEU CÓDIGO ORIGINAL COM AJUSTES) ---
+// --- NÚCLEO VISUAL (BOTÃO VERMELHO E SENHA) ---
 (function() {
     const integrarSeguranca = () => {
         const loginBar = document.querySelector('.login-bar');
         const btnOk = document.querySelector('.btn-ok');
 
         if (loginBar && btnOk && !document.getElementById('senha-priv')) {
-            // Estilização do Botão Vermelho Engecema
+            // Estilização Unificada (Botão Vermelho)
             btnOk.style.cssText = "background: #cc092f !important; color: #fff !important; border: none !important; padding: 8px 20px !important; border-radius: 4px !important; cursor: pointer !important; font-weight: bold !important; transition: 0.3s !important;";
             
             loginBar.removeAttribute('onsubmit');
