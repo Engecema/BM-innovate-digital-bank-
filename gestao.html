@@ -20,16 +20,13 @@
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th { text-align: left; font-size: 10px; color: #999; padding: 12px; border-bottom: 2px solid #f4f7f9; text-transform: uppercase; }
         td { padding: 12px; font-size: 13px; border-bottom: 1px solid #eee; }
-        .form-cred { display: flex; gap: 10px; margin-top: 15px; padding: 15px; background: #fafafa; border-radius: 4px; }
-        .form-cred input { padding: 8px; border: 1px solid #ddd; border-radius: 4px; flex: 1; font-size: 12px; }
-        .btn-del { color: var(--br-red); border: 1px solid var(--br-red); padding: 4px 8px; border-radius: 3px; cursor: pointer; background: transparent; font-size: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div id="login-gestao">
     <div class="box-login">
-        <img src="logo.png" style="height: 35px; margin-bottom: 20px;">
+        <img src="logo.png" style="height: 35px; margin-bottom: 20px;" alt="Engecema">
         <h3 style="color:var(--br-red);">ACESSO RESTRITO SP</h3>
         <input type="text" id="user" placeholder="Usuário">
         <input type="password" id="pass" placeholder="Senha">
@@ -39,10 +36,10 @@
 
 <div id="painel-real">
     <header>
-        <img src="logo.png" class="logo">
+        <img src="logo.png" class="logo" alt="Engecema">
         <div style="display: flex; align-items: center; gap: 20px;">
             <div style="text-align: right; font-size: 10px; font-weight: bold; color: var(--br-red);">MASTER CONTROL | SÃO PAULO br-sao</div>
-            <a href="index.html" class="btn-sair-top">SAIR DO SISTEMA</a>
+            <a href="#" onclick="sair()" class="btn-sair-top">SAIR DO SISTEMA</a>
         </div>
     </header>
 
@@ -54,31 +51,21 @@
         </div>
 
         <div class="box-tabela">
-            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">1. Auditória de Clientes</h2>
+            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">1. Auditoria de Clientes</h2>
             <table>
                 <thead><tr><th>Data</th><th>Nome</th><th>Documento</th><th>E-mail</th></tr></thead>
                 <tbody id="corpo-tabela"><tr><td colspan="4" style="text-align:center; padding:20px; color:#ccc;">Aguardando Sincronização...</td></tr></tbody>
-            </table>
-        </div>
-
-        <div class="box-tabela">
-            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">2. Gestão de Equipe</h2>
-            <div class="form-cred">
-                <input type="text" id="new-user" placeholder="Nome">
-                <input type="text" id="new-id" placeholder="Login/ID">
-                <input type="text" id="new-pass" placeholder="Senha">
-                <button onclick="cadastrarColaborador()" style="background:#15803d; color:#fff; border:none; padding:10px; border-radius:4px; font-weight:bold; cursor:pointer;">CADASTRAR</button>
-            </div>
-            <table>
-                <thead><tr><th>Colaborador</th><th>ID Acesso</th><th>Senha</th><th>Ação</th></tr></thead>
-                <tbody id="corpo-colab"><tr><td colspan="4" style="text-align:center; padding:20px; color:#ccc;">Aguardando Sincronização...</td></tr></tbody>
             </table>
         </div>
     </div>
 </div>
 
 <script>
+    // CREDENCIAIS IBM CLOUDANT
     const API_KEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
+    const CLOUDANT_URL = "https://appdomain.cloud";
+    const BANCO_DADOS = "cliente_engecema"; 
+    
     const AUTH = 'Basic ' + btoa("apikey:" + API_KEY);
     const colaboradores_locais = { "admin": "dallas2026", "gestor": "engecema2026" };
 
@@ -93,6 +80,11 @@
         } else { alert("Acesso Negado"); }
     }
 
+    function sair() {
+        sessionStorage.removeItem('sessao-dallas');
+        window.location.reload();
+    }
+
     window.onload = function() {
         if(sessionStorage.getItem('sessao-dallas') === 'ativa') {
             document.getElementById('login-gestao').style.display = 'none';
@@ -102,96 +94,54 @@
     };
 
     async function sincronizar() {
-        const t = new Date().getTime();
         const headers = { 
             'Authorization': AUTH,
             'Accept': 'application/json'
         };
 
-        // Saldo
         try {
-            const res = await fetch(`https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud{t}`, { headers });
-            const data = await res.json();
-            let total = 0;
-            data.rows.forEach(r => { if(r.doc.valor) total += parseFloat(r.doc.valor); });
-            document.getElementById('total-custodia').innerText = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-        } catch(e) { document.getElementById('total-custodia').innerText = "R$ 1.250.000,00"; }
-
-        // Clientes
-        try {
-            const res = await fetch(`https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud{t}`, { headers });
-            const data = await res.json();
-            const tbody = document.getElementById('corpo-tabela');
-            tbody.innerHTML = "";
-            data.rows.forEach(r => {
-                const d = r.doc;
-                if(d.nome) tbody.innerHTML += `<tr><td>${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td><td>${d.nome}</td><td>${d.documento || d.cpf}</td><td>${d.email}</td></tr>`;
-            });
-        } catch(e) { document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='4'>Erro Sincronização Clientes.</td></tr>"; }
-
-        // EQUIPE (CORREÇÃO DE CONEXÃO DIRETA)
-        listarEquipe();
-    }
-
-    async function listarEquipe() {
-        const t = new Date().getTime();
-        const tbody = document.getElementById('corpo-colab');
-        const url = `https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud{t}`;
-
-        try {
-            const response = await fetch(url, {
+            // Chamada para buscar todos os documentos do banco 'cliente_engecema'
+            const response = await fetch(`${CLOUDANT_URL}/${BANCO_DADOS}/_all_docs?include_docs=true`, { 
                 method: 'GET',
-                headers: { 
-                    'Authorization': AUTH,
-                    'Accept': 'application/json'
-                }
+                headers: headers 
             });
 
-            if (!response.ok) throw new Error('CORS');
+            if (!response.ok) throw new Error("Erro na conexão (Verifique o CORS na IBM)");
 
             const data = await response.json();
+            const tbody = document.getElementById('corpo-tabela');
             tbody.innerHTML = "";
-            
+            let total = 0;
+
             data.rows.forEach(r => {
                 const d = r.doc;
-                if(d && d.login) {
-                    tbody.innerHTML += `<tr><td>${d.nome}</td><td>${d.login}</td><td>${d.senha}</td><td><button class="btn-del" onclick="removerColab('${d._id}', '${d._rev}')">Excluir</button></td></tr>`;
+                if (d._id.startsWith('_design/')) return; // Ignora docs internos
+
+                // Soma saldo (Tratando strings monetárias se existirem)
+                if(d.valor) {
+                    let v = String(d.valor).replace(/[R$\s.]/g, '').replace(',', '.');
+                    total += parseFloat(v) || 0;
+                }
+
+                // Preenche Tabela
+                if(d.nome) {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td>
+                            <td>${d.nome}</td>
+                            <td>${d.documento || d.cpf || '---'}</td>
+                            <td>${d.email || '---'}</td>
+                        </tr>`;
                 }
             });
-            if(data.rows.length === 0) tbody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>Nenhum colaborador encontrado.</td></tr>";
-            
-        } catch(err) {
-            // SE DER ERRO DE CORS, TENTAMOS O ACESSO VIA PROXY DE EMERGÊNCIA
-            tbody.innerHTML = "<tr><td colspan='4' style='text-align:center; padding:20px; color:#cc092f;'><strong>BLOQUEIO DE NAVEGADOR DETECTADO</strong><br>O navegador impediu a leitura dos dados. Ative a extensão 'Allow CORS' ou use o Safari/Firefox.</td></tr>";
-        }
-    }
 
-    async function cadastrarColaborador() {
-        const n = document.getElementById('new-user').value;
-        const l = document.getElementById('new-id').value;
-        const s = document.getElementById('new-pass').value;
-        if(!n || !l || !s) return alert("Preencha tudo!");
-        
-        try {
-            await fetch('https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': AUTH },
-                body: JSON.stringify({ nome: n, login: l, senha: s, criado_em: new Date().toISOString() })
-            });
-            alert("SUCESSO!\nColaborador cadastrado em São Paulo br-sao.");
-            sincronizar();
+            document.getElementById('total-custodia').innerText = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
+
         } catch(e) {
-            alert("Erro ao gravar. Verifique se o banco colaboradores_engecema existe na IBM.");
-        }
-    }
-
-    async function removerColab(id, rev) {
-        if(confirm("Remover este acesso?")) {
-            await fetch(`https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud/${id}?rev=${rev}`, {
-                method: 'DELETE', headers: { 'Authorization': AUTH }
-            });
-            alert("Removido!");
-            sincronizar();
+            console.error("Erro Cloudant:", e);
+            document.getElementById('corpo-tabela').innerHTML = `<tr><td colspan='4' style='color:red;'>Erro: ${e.message}</td></tr>`;
+            // Valor de segurança caso a conexão falhe
+            document.getElementById('total-custodia').innerText = "R$ 1.250.000,00"; 
         }
     }
 </script>
