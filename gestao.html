@@ -2,8 +2,6 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="logo.png">
     <title>Engecema | Master Control SP</title>
     <style>
         :root { --br-red: #cc092f; --bg: #f4f7f9; --text: #333; }
@@ -56,7 +54,7 @@
         </div>
 
         <div class="box-tabela">
-            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">1. Auditória de Clientes (Base registrar.html)</h2>
+            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">1. Auditória de Clientes</h2>
             <table>
                 <thead><tr><th>Data</th><th>Nome</th><th>Documento</th><th>E-mail</th></tr></thead>
                 <tbody id="corpo-tabela"><tr><td colspan="4" style="text-align:center; padding:20px; color:#ccc;">Buscando Clientes...</td></tr></tbody>
@@ -64,7 +62,7 @@
         </div>
 
         <div class="box-tabela">
-            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">2. Gestão de Equipe (Base colaboradores_engecema)</h2>
+            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">2. Gestão de Equipe</h2>
             <div class="form-cred">
                 <input type="text" id="new-user" placeholder="Nome">
                 <input type="text" id="new-id" placeholder="Login/ID">
@@ -88,27 +86,36 @@
         const u = document.getElementById('user').value;
         const p = document.getElementById('pass').value;
         if (colaboradores_locais[u] === p) {
+            sessionStorage.setItem('sessao-dallas', 'ativa');
             document.getElementById('login-gestao').style.display = 'none';
             document.getElementById('painel-real').style.display = 'block';
             sincronizar();
         } else { alert("Acesso Negado"); }
     }
 
+    // Mantém logado ao dar F5
+    window.onload = function() {
+        if(sessionStorage.getItem('sessao-dallas') === 'ativa') {
+            document.getElementById('login-gestao').style.display = 'none';
+            document.getElementById('painel-real').style.display = 'block';
+            sincronizar();
+        }
+    };
+
     async function sincronizar() {
-        const timestamp = new Date().getTime(); // Gera um número único para furar o cache
-        
-        // 1. Saldo
+        const t = new Date().getTime();
+        // Saldo
         try {
-            const res = await fetch(`https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud\${timestamp}`, { headers: { 'Authorization': AUTH } });
+            const res = await fetch(`https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud\${t}`, { headers: { 'Authorization': AUTH } });
             const data = await res.json();
             let total = 0;
             data.rows.forEach(r => { if(r.doc.valor) total += parseFloat(r.doc.valor); });
             document.getElementById('total-custodia').innerText = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
         } catch(e) { document.getElementById('total-custodia').innerText = "R$ 1.250.000,00"; }
 
-        // 2. Clientes
+        // Clientes
         try {
-            const res = await fetch(`https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud\${timestamp}`, { headers: { 'Authorization': AUTH } });
+            const res = await fetch(`https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud\${t}`, { headers: { 'Authorization': AUTH } });
             const data = await res.json();
             const tbody = document.getElementById('corpo-tabela');
             tbody.innerHTML = "";
@@ -116,58 +123,52 @@
                 const d = r.doc;
                 if(d.nome) tbody.innerHTML += `<tr><td>\${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td><td>\${d.nome}</td><td>\${d.documento || d.cpf}</td><td>\${d.email}</td></tr>`;
             });
-        } catch(e) { document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='4' style='text-align:center;'>Erro de rede: Tente Ctrl+F5.</td></tr>"; }
+        } catch(e) { document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='4'>Tentando reconectar...</td></tr>"; }
 
         listarEquipe();
     }
 
     async function listarEquipe() {
-        const timestamp = new Date().getTime();
+        const t = new Date().getTime();
         const tbody = document.getElementById('corpo-colab');
         try {
-            const res = await fetch(`https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud\${timestamp}`, { headers: { 'Authorization': AUTH } });
+            // Forçamos o fetch a ignorar o bloqueio de cache do navegador
+            const res = await fetch(`https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud\${t}`, { 
+                headers: { 'Authorization': AUTH, 'Cache-Control': 'no-cache' } 
+            });
             const data = await res.json();
             tbody.innerHTML = "";
-            
-            if (data.rows.length === 0) {
-                tbody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>Base vazia.</td></tr>";
-                return;
-            }
-
             data.rows.forEach(r => {
                 const d = r.doc;
                 if(d && d.login) {
                     tbody.innerHTML += `<tr><td>\${d.nome}</td><td>\${d.login}</td><td>\${d.senha}</td><td><button class="btn-del" onclick="removerColab('\${d._id}', '\${d._rev}')">Excluir</button></td></tr>`;
                 }
             });
+            if(data.rows.length === 0) tbody.innerHTML = "<tr><td colspan='4' style='text-align:center;'>Nenhum colaborador encontrado.</td></tr>";
         } catch(e) { 
-            tbody.innerHTML = "<tr><td colspan='4' style='text-align:center; padding:20px; color:#cc092f;'><strong>CORS BLOQUEADO PELO NAVEGADOR</strong><br>Use uma Janela Anônima ou limpe o histórico.</td></tr>"; 
+            tbody.innerHTML = "<tr><td colspan='4' style='text-align:center; padding:20px; color:#cc092f;'><strong>CORS BLOQUEADO</strong><br>O navegador barrou a leitura. Tente usar uma Aba Anônima ou recarregar (F5).</td></tr>"; 
         }
     }
 
     async function cadastrarColaborador() {
-        const nome = document.getElementById('new-user').value;
-        const login = document.getElementById('new-id').value;
-        const senha = document.getElementById('new-pass').value;
-        if(!nome || !login || !senha) return alert("Preencha tudo!");
-        const payload = { nome, login, senha, criado_em: new Date().toISOString() };
-        
-        try {
-            await fetch('https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud', {
-                method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': AUTH }, body: JSON.stringify(payload)
-            });
-            alert("Colaborador Cadastrado!");
-            listarEquipe();
-        } catch(e) { alert("Erro ao gravar. Tente novamente."); }
+        const n = document.getElementById('new-user').value;
+        const l = document.getElementById('new-id').value;
+        const s = document.getElementById('new-pass').value;
+        if(!n || !l || !s) return alert("Preencha tudo!");
+        await fetch('https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud', {
+            method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': AUTH }, body: JSON.stringify({ nome: n, login: l, senha: s, criado_em: new Date().toISOString() })
+        });
+        alert("Colaborador Cadastrado!");
+        sincronizar();
     }
 
     async function removerColab(id, rev) {
-        if(confirm("Deseja remover este acesso?")) {
+        if(confirm("Remover este acesso?")) {
             await fetch(`https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud/\${id}?rev=\${rev}`, {
                 method: 'DELETE', headers: { 'Authorization': AUTH }
             });
-            alert("Acesso Removido!");
-            listarEquipe();
+            alert("Removido!");
+            sincronizar();
         }
     }
 </script>
