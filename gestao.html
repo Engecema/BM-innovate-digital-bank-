@@ -6,17 +6,23 @@
     <style>
         :root { --br-red: #cc092f; --bg: #f4f7f9; --text: #333; }
         body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: var(--bg); color: var(--text); }
+        
+        /* LOGIN ESTILIZADO */
         #login-gestao { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 9999; display: flex; align-items: center; justify-content: center; }
         .box-login { background: #fff; padding: 40px; border-radius: 8px; border-top: 6px solid var(--br-red); box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 320px; text-align: center; }
         .box-login input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
         .btn-login { width: 100%; padding: 12px; background: var(--br-red); color: #fff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        
+        /* PAINEL DE GESTÃO */
         #painel-real { display: none; }
         header { background: #fff; padding: 15px 40px; border-bottom: 5px solid var(--br-red); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .logo { height: 35px; }
         .btn-sair-top { background: #eee; color: #666; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; text-decoration: none; font-size: 11px; }
+        
         .container { padding: 40px; max-width: 1200px; margin: 0 auto; }
         .card { background: #fff; padding: 30px; border-left: 8px solid var(--br-red); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; }
         .box-tabela { background: #fff; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-radius: 4px; margin-bottom: 30px; }
+        
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th { text-align: left; font-size: 10px; color: #999; padding: 12px; border-bottom: 2px solid #f4f7f9; text-transform: uppercase; }
         td { padding: 12px; font-size: 13px; border-bottom: 1px solid #eee; }
@@ -24,19 +30,21 @@
 </head>
 <body>
 
+<!-- TELA DE LOGIN (SÓ APARECE SE NÃO ESTIVER LOGADO) -->
 <div id="login-gestao">
     <div class="box-login">
-        <img src="logo.png" style="height: 35px; margin-bottom: 20px;" alt="Engecema">
-        <h3 style="color:var(--br-red);">ACESSO RESTRITO SP</h3>
-        <input type="text" id="user" placeholder="Usuário">
+        <img src="logo.png" style="height: 35px; margin-bottom: 20px;" alt="Logo">
+        <h3 style="color:var(--br-red);">ACESSO RESTRITO GESTÃO</h3>
+        <input type="text" id="user" placeholder="Usuário Gestor">
         <input type="password" id="pass" placeholder="Senha">
-        <button class="btn-login" onclick="validarAcesso()">Entrar</button>
+        <button class="btn-login" onclick="validarAcesso()">Acessar Painel</button>
     </div>
 </div>
 
+<!-- PAINEL DE GESTÃO REAL (ESCONDIDO ATÉ O LOGIN) -->
 <div id="painel-real">
     <header>
-        <img src="logo.png" class="logo" alt="Engecema">
+        <img src="logo.png" class="logo">
         <div style="display: flex; align-items: center; gap: 20px;">
             <div style="text-align: right; font-size: 10px; font-weight: bold; color: var(--br-red);">MASTER CONTROL | SÃO PAULO br-sao</div>
             <a href="#" onclick="sair()" class="btn-sair-top">SAIR DO SISTEMA</a>
@@ -47,66 +55,62 @@
         <div class="card">
             <span style="color:#888; font-size:11px; font-weight:bold;">VOLUME TOTAL SOB CUSTÓDIA</span>
             <h1 id="total-custodia" style="font-size:42px; margin:10px 0; font-weight:800;">R$ 0,00</h1>
-            <button onclick="sincronizar()" style="background:var(--br-red); color:#fff; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; font-weight:bold;">Sincronizar IBM</button>
+            <button onclick="sincronizar()" style="background:var(--br-red); color:#fff; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; font-weight:bold;">Sincronizar IBM Cloudant</button>
         </div>
 
         <div class="box-tabela">
-            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">1. Auditoria de Clientes</h2>
+            <h2 style="color:var(--br-red); font-size:14px; text-transform:uppercase; margin:0;">1. Auditoria de Clientes (Banco: cliente_engecema)</h2>
             <table>
                 <thead><tr><th>Data</th><th>Nome</th><th>Documento</th><th>E-mail</th></tr></thead>
-                <tbody id="corpo-tabela"><tr><td colspan="4" style="text-align:center; padding:20px; color:#ccc;">Aguardando Sincronização...</td></tr></tbody>
+                <tbody id="corpo-tabela">
+                    <tr><td colspan="4" style="text-align:center; padding:20px; color:#ccc;">Clique em sincronizar para carregar dados...</td></tr>
+                </tbody>
             </table>
         </div>
     </div>
 </div>
 
 <script>
-    // CREDENCIAIS IBM CLOUDANT
+    // CONFIGURAÇÕES TÉCNICAS IBM
     const API_KEY = "G4mi3uBOjSMFifAA1Bhj6O7rEbZ5FBNyeJG7YH9fxg_n";
     const CLOUDANT_URL = "https://appdomain.cloud";
     const BANCO_DADOS = "cliente_engecema"; 
-    
     const AUTH = 'Basic ' + btoa("apikey:" + API_KEY);
-    const colaboradores_locais = { "admin": "dallas2026", "gestor": "engecema2026" };
+
+    // CREDENCIAIS DE GESTÃO
+    const credenciais = { "admin": "dallas2026", "gestor": "engecema2026" };
 
     function validarAcesso() {
         const u = document.getElementById('user').value;
         const p = document.getElementById('pass').value;
-        if (colaboradores_locais[u] === p) {
-            sessionStorage.setItem('sessao-dallas', 'ativa');
-            document.getElementById('login-gestao').style.display = 'none';
-            document.getElementById('painel-real').style.display = 'block';
-            sincronizar();
-        } else { alert("Acesso Negado"); }
+        if (credenciais[u] === p) {
+            sessionStorage.setItem('sessao_ativa', 'true');
+            exibirPainel();
+        } else { alert("Acesso Negado: Usuário ou Senha incorretos."); }
+    }
+
+    function exibirPainel() {
+        document.getElementById('login-gestao').style.display = 'none';
+        document.getElementById('painel-real').style.display = 'block';
+        sincronizar();
     }
 
     function sair() {
-        sessionStorage.removeItem('sessao-dallas');
+        sessionStorage.removeItem('sessao_ativa');
         window.location.reload();
     }
 
     window.onload = function() {
-        if(sessionStorage.getItem('sessao-dallas') === 'ativa') {
-            document.getElementById('login-gestao').style.display = 'none';
-            document.getElementById('painel-real').style.display = 'block';
-            sincronizar();
+        if(sessionStorage.getItem('sessao_ativa') === 'true') {
+            exibirPainel();
         }
     };
 
     async function sincronizar() {
-        const headers = { 
-            'Authorization': AUTH,
-            'Accept': 'application/json'
-        };
-
+        const headers = { 'Authorization': AUTH, 'Accept': 'application/json' };
         try {
-            // Chamada para buscar todos os documentos do banco 'cliente_engecema'
-            const response = await fetch(`${CLOUDANT_URL}/${BANCO_DADOS}/_all_docs?include_docs=true`, { 
-                method: 'GET',
-                headers: headers 
-            });
-
-            if (!response.ok) throw new Error("Erro na conexão (Verifique o CORS na IBM)");
+            const response = await fetch(`${CLOUDANT_URL}/${BANCO_DADOS}/_all_docs?include_docs=true`, { headers });
+            if (!response.ok) throw new Error("Erro de CORS ou Autenticação");
 
             const data = await response.json();
             const tbody = document.getElementById('corpo-tabela');
@@ -115,32 +119,29 @@
 
             data.rows.forEach(r => {
                 const d = r.doc;
-                if (d._id.startsWith('_design/')) return; // Ignora docs internos
-
-                // Soma saldo (Tratando strings monetárias se existirem)
+                if (d._id.startsWith('_design/')) return;
+                
+                // Soma saldo
                 if(d.valor) {
                     let v = String(d.valor).replace(/[R$\s.]/g, '').replace(',', '.');
                     total += parseFloat(v) || 0;
                 }
 
-                // Preenche Tabela
+                // Lista Clientes
                 if(d.nome) {
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td>
-                            <td>${d.nome}</td>
-                            <td>${d.documento || d.cpf || '---'}</td>
-                            <td>${d.email || '---'}</td>
-                        </tr>`;
+                    tbody.innerHTML += `<tr>
+                        <td>${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td>
+                        <td>${d.nome}</td>
+                        <td>${d.documento || d.cpf || '---'}</td>
+                        <td>${d.email || '---'}</td>
+                    </tr>`;
                 }
             });
 
             document.getElementById('total-custodia').innerText = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-
         } catch(e) {
-            console.error("Erro Cloudant:", e);
-            document.getElementById('corpo-tabela').innerHTML = `<tr><td colspan='4' style='color:red;'>Erro: ${e.message}</td></tr>`;
-            // Valor de segurança caso a conexão falhe
+            console.error(e);
+            document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='4' style='color:red;'>Erro ao conectar com IBM Cloud. Verifique o CORS.</td></tr>";
             document.getElementById('total-custodia').innerText = "R$ 1.250.000,00"; 
         }
     }
