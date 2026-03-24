@@ -85,11 +85,17 @@
         return h;
     }
 
+    // LISTAR COLABORADORES (SINCRONIA)
     async function carregarEquipe() {
         const url = `https://${HOST_IBM}/${BANCO}/_all_docs?include_docs=true`;
         try {
-            const res = await fetch(url, { method: 'GET', headers: getAuthHeaders() });
-            if (!res.ok) throw new Error("Erro IBM");
+            const res = await fetch(url, { 
+                method: 'GET',
+                headers: getAuthHeaders(),
+                mode: 'cors'
+            });
+
+            if (!res.ok) throw new Error("Erro na Resposta IBM");
 
             const data = await res.json();
             const tbody = document.getElementById('corpo-tabela');
@@ -113,15 +119,18 @@
                     </tr>`;
             });
         } catch(e) { 
-            document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='5' style='color:orange; text-align:center;'>Erro de Rede: Verifique se a extensão Allow CORS está ATIVA (Laranja) e aperte F5.</td></tr>";
+            console.error("Erro ao carregar lista:", e);
+            document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='5' style='color:orange; text-align:center;'>Erro de Rede: Verifique a Extensão CORS e o botão SAVE na IBM.</td></tr>";
         }
     }
 
+    // CADASTRAR NOVO COLABORADOR (DESTRAVADO)
     async function cadastrarColaborador() {
         const nome = document.getElementById('nome').value;
         const cargo = document.getElementById('cargo').value;
         const depto = document.getElementById('depto').value;
-        if(!nome || !cargo) return alert("Preencha Nome e Cargo.");
+
+        if(!nome || !cargo) return alert("Por favor, preencha Nome e Cargo.");
 
         const novoDoc = { nome, cargo, depto, criado_em: new Date().toISOString() };
         const h = getAuthHeaders();
@@ -131,28 +140,38 @@
             const res = await fetch(`https://${HOST_IBM}/${BANCO}`, {
                 method: 'POST',
                 headers: h,
-                body: JSON.stringify(novoDoc)
+                body: JSON.stringify(novoDoc),
+                mode: 'cors'
             });
+
             if(res.ok) {
                 alert("Colaborador cadastrado com sucesso!");
                 document.getElementById('nome').value = "";
                 document.getElementById('cargo').value = "";
                 carregarEquipe();
+            } else {
+                alert("IBM recusou o acesso (Erro " + res.status + ").");
             }
-        } catch(e) { alert("Falha na comunicação. Verifique a extensão Allow CORS."); }
+        } catch(e) { 
+            console.error("Erro ao salvar:", e);
+            alert("Botão Destravado: Falha técnica na rede. Verifique a Extensão Allow CORS."); 
+        }
     }
 
+    // REMOVER COLABORADOR
     async function deletar(id, rev) {
-        if(!confirm("Remover este colaborador?")) return;
+        if(!confirm("Deseja remover este colaborador?")) return;
         try {
-            await fetch(`https://${HOST_IBM}/${BANCO}/${id}?rev=${rev}`, { 
-                method: 'DELETE', 
-                headers: getAuthHeaders() 
+            await fetch(`https://${HOST_IBM}/${BANCO}/${id}?rev=${rev}`, {
+                method: 'DELETE',
+                headers: getAuthHeaders(),
+                mode: 'cors'
             });
             carregarEquipe();
         } catch(e) { alert("Erro ao deletar."); }
     }
 
+    // Inicialização ao abrir a página
     window.onload = carregarEquipe;
 </script>
 </body>
