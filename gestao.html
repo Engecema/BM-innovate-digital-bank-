@@ -10,18 +10,16 @@
         .logo { font-weight: 900; color: var(--brad-red); font-size: 20px; }
         .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
         .card { background: #fff; padding: 25px; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 25px; border-top: 3px solid #ccc; }
-        h2 { font-size: 15px; color: var(--brad-red); text-transform: uppercase; margin-top: 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        h2 { font-size: 15px; color: var(--brad-red); text-transform: uppercase; margin: 0 0 10px 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
         .grid-form { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: end; }
         .field { display: flex; flex-direction: column; gap: 5px; }
         .field label { font-size: 11px; font-weight: bold; color: #888; text-transform: uppercase; }
         .field input, .field select { padding: 10px; border: 1px solid var(--border); border-radius: 3px; font-size: 13px; }
-        .btn-add { background: var(--brad-red); color: #fff; border: none; padding: 11px 25px; border-radius: 3px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        .btn-add:hover { background: #a50725; }
+        .btn-add { background: var(--brad-red); color: #fff; border: none; padding: 11px 25px; border-radius: 3px; cursor: pointer; font-weight: bold; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th { text-align: left; padding: 12px; font-size: 11px; color: #999; text-transform: uppercase; border-bottom: 2px solid #f5f5f5; }
         td { padding: 12px; border-bottom: 1px solid #f1f1f1; font-size: 13px; }
         .btn-del { color: var(--brad-red); border: 1px solid var(--brad-red); background: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 10px; font-weight: bold; }
-        .proxy-alert { background: #fff3cd; color: #856404; padding: 10px; border-radius: 4px; font-size: 12px; margin-bottom: 20px; text-align: center; display: none; }
     </style>
 </head>
 <body>
@@ -32,12 +30,6 @@
 </header>
 
 <div class="container">
-    <!-- ALERTA DO PROXY -->
-    <div id="aviso-proxy" class="proxy-alert">
-        Atenção: Se os dados não carregarem, <a href="https://herokuapp.com" target="_blank">clique aqui e ative o acesso temporário</a>.
-    </div>
-
-    <!-- FORMULÁRIO DE CADASTRO -->
     <div class="card">
         <h2>Inclusão de Colaborador</h2>
         <div class="grid-form">
@@ -47,7 +39,7 @@
             </div>
             <div class="field">
                 <label>Cargo / Função</label>
-                <input type="text" id="cargo" placeholder="Ex: Engenheiro Civil">
+                <input type="text" id="cargo" placeholder="Ex: Engenheiro">
             </div>
             <div class="field">
                 <label>Departamento</label>
@@ -61,7 +53,6 @@
         </div>
     </div>
 
-    <!-- LISTAGEM DE EQUIPE -->
     <div class="card">
         <h2>Quadro Geral de Equipe</h2>
         <table>
@@ -75,37 +66,25 @@
                 </tr>
             </thead>
             <tbody id="corpo-tabela">
-                <tr><td colspan="5" style="text-align:center; padding:20px; color:#ccc;">Sincronizando com IBM Cloudant...</td></tr>
+                <tr><td colspan="5" style="text-align:center; padding:20px; color:#ccc;">Sincronizando...</td></tr>
             </tbody>
         </table>
     </div>
 </div>
 
 <script>
-    // CONFIGURAÇÕES IBM CLOUDANT
+    // CONFIGURAÇÕES DIRETAS (USA EXTENSÃO "ALLOW CORS")
     const API_KEY = "spU8hW5qypYJxNTKiv--OAndWnVsnC_f-ZjEmiK8I6wY"; 
     const HOST_IBM = "7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud";
     const BANCO = "colaboradores_engecema";
-    
-    // PROXY PARA PULAR O BLOQUEIO DE CORS
-    const PROXY = "https://herokuapp.com";
-
-    function getHeaders() {
-        const headers = new Headers();
-        headers.set('Authorization', 'Basic ' + btoa("apikey:" + API_KEY));
-        return headers;
-    }
 
     // 1. CARREGAR LISTA
     async function carregarEquipe() {
-        const urlFinal = PROXY + `https://${HOST_IBM}/${BANCO}/_all_docs?include_docs=true`;
+        // Autenticação embutida na URL
+        const urlSegura = `https://apikey:${API_KEY}@${HOST_IBM}/${BANCO}/_all_docs?include_docs=true`;
         
         try {
-            const res = await fetch(urlFinal, { headers: getHeaders() });
-            if (res.status === 403) {
-                document.getElementById('aviso-proxy').style.display = 'block';
-                throw new Error("Proxy desativado");
-            }
+            const res = await fetch(urlSegura);
             if (!res.ok) throw new Error("Erro na IBM");
 
             const data = await res.json();
@@ -124,10 +103,10 @@
                         <td><button class="btn-del" onclick="deletar('${d._id}','${d._rev}')">REMOVER</button></td>
                     </tr>`;
             });
-            document.getElementById('aviso-proxy').style.display = 'none';
+            if(data.rows.length === 0) tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>Nenhum registro.</td></tr>";
         } catch(e) { 
             console.error(e);
-            document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='5' style='color:orange; text-align:center;'>Erro de Rede. Verifique o acesso ao Proxy.</td></tr>";
+            document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='5' style='color:orange; text-align:center;'>Erro de Rede. Verifique se a extensão Allow CORS está LIGADA.</td></tr>";
         }
     }
 
@@ -139,32 +118,30 @@
         if(!nome || !cargo) return alert("Preencha Nome e Cargo.");
 
         const novo = { nome, cargo, depto, criado_em: new Date().toISOString() };
-        const urlPost = PROXY + `https://${HOST_IBM}/${BANCO}`;
-        const headers = getHeaders();
-        headers.set('Content-Type', 'application/json');
+        const urlPost = `https://apikey:${API_KEY}@${HOST_IBM}/${BANCO}`;
 
         try {
             const res = await fetch(urlPost, {
                 method: 'POST',
-                headers: headers,
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(novo)
             });
             if(res.ok) {
-                alert("Colaborador cadastrado com sucesso!");
+                alert("Colaborador cadastrado!");
                 document.getElementById('nome').value = "";
                 document.getElementById('cargo').value = "";
                 carregarEquipe();
             }
-        } catch(e) { alert("Falha na gravação. Ative o Proxy primeiro."); }
+        } catch(e) { alert("Falha na gravação. Ative a extensão Allow CORS."); }
     }
 
     // 3. REMOVER
     async function deletar(id, rev) {
-        if(!confirm("Deseja remover este colaborador?")) return;
-        const urlDelete = PROXY + `https://${HOST_IBM}/${BANCO}/${id}?rev=${rev}`;
+        if(!confirm("Remover este colaborador?")) return;
+        const urlDelete = `https://apikey:${API_KEY}@${HOST_IBM}/${BANCO}/${id}?rev=${rev}`;
         try {
-            await fetch(urlDelete, { method: 'DELETE', headers: getHeaders() });
-            carregarEquipe();
+            const res = await fetch(urlDelete, { method: 'DELETE' });
+            if(res.ok) carregarEquipe();
         } catch(e) { alert("Erro ao deletar."); }
     }
 
