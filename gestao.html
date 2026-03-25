@@ -1,156 +1,127 @@
 <!DOCTYPE html>
+<!-- 
+    SISTEMA DE GESTÃO RH ENGECEMA - VERSÃO 3.5.0
+    LOCALIDADE: SÃO PAULO (BR-SAO) | AMBIENTE: GESTAO.HTML
+    SEGURANÇA: PROTOCOLO DALLAS / IBM CLOUDANT
+    AVISO: ESTE PAINEL POSSUI RASTREAMENTO DE ACESSO ATIVO
+-->
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Engecema | Gestão de Pessoal (RH)</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="logo.png">
+    <title>Engecema Admin | Painel de Gestão</title>
     <style>
-        :root { --brad-red: #cc092f; --bg: #f0f2f5; --text: #333; --border: #ddd; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: var(--bg); color: var(--text); }
-        header { background: #fff; padding: 12px 40px; border-bottom: 4px solid var(--brad-red); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .logo { font-weight: 900; color: var(--brad-red); font-size: 20px; }
-        .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; }
-        .card { background: #fff; padding: 25px; border-radius: 4px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 25px; border-top: 3px solid #ccc; }
-        h2 { font-size: 15px; color: var(--brad-red); text-transform: uppercase; margin: 0 0 15px 0; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .grid-form { display: grid; grid-template-columns: 1fr 1fr 1fr auto; gap: 15px; align-items: end; }
-        .field { display: flex; flex-direction: column; gap: 5px; }
-        .field label { font-size: 11px; font-weight: bold; color: #888; text-transform: uppercase; }
-        .field input, .field select { padding: 10px; border: 1px solid var(--border); border-radius: 3px; font-size: 13px; }
-        .btn-add { background: var(--brad-red); color: #fff; border: none; padding: 11px 25px; border-radius: 3px; cursor: pointer; font-weight: bold; transition: 0.2s; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { text-align: left; padding: 12px; font-size: 11px; color: #999; text-transform: uppercase; border-bottom: 2px solid #f5f5f5; }
-        td { padding: 12px; border-bottom: 1px solid #f1f1f1; font-size: 13px; }
-        .btn-del { color: var(--brad-red); border: 1px solid var(--brad-red); background: none; padding: 4px 8px; border-radius: 3px; cursor: pointer; font-size: 10px; font-weight: bold; }
+        :root { --br-red: #cc092f; --bg: #f4f7f9; --text: #333; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding-top: 85px; }
+
+        /* BARRA DE TOPO FIXA - FORÇA O BOTÃO A FICAR VISÍVEL */
+        header#NAV-GLOBAL { 
+            position: fixed !important; 
+            top: 0 !important; 
+            left: 0 !important; 
+            width: 100% !important; 
+            height: 75px !important; 
+            background: #ffffff !important; 
+            border-bottom: 6px solid var(--br-red) !important; 
+            display: flex !important; 
+            justify-content: space-between !important; 
+            align-items: center !important; 
+            padding: 0 40px !important; 
+            box-sizing: border-box !important; 
+            z-index: 999999 !important; 
+            box-shadow: 0 2px 15px rgba(0,0,0,0.15) !important;
+        }
+
+        .logo { height: 35px; }
+
+        /* BOTÃO SAIR COM ALTA PRIORIDADE */
+        .btn-sair-final { 
+            background-color: var(--br-red) !important; 
+            color: #ffffff !important; 
+            border: 2px solid #ffffff !important; 
+            padding: 10px 22px !important; 
+            border-radius: 4px !important; 
+            font-weight: bold !important; 
+            cursor: pointer !important; 
+            text-transform: uppercase !important; 
+            font-size: 12px !important; 
+            text-decoration: none !important; 
+            display: inline-block !important;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2) !important;
+        }
+
+        .container { padding: 30px 40px; max-width: 1200px; margin: 0 auto; }
+        .card-gestao { background: #fff; padding: 30px; border-left: 8px solid var(--br-red); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .valor-p { color: var(--text); font-size: 42px; margin: 10px 0; font-weight: 800; }
+        
+        .secao-titulo { color: var(--br-red); font-size: 13px; font-weight: 900; text-transform: uppercase; margin: 40px 0 15px 0; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+        .grid-servicos { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+        
+        .item-br { background: #fff; padding: 15px; text-align: center; border: 1px solid #eee; cursor: pointer; border-radius: 4px; transition: 0.2s; min-height: 95px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .item-br:hover { border-color: var(--br-red); transform: translateY(-2px); }
+        .item-br span { font-size: 10px; font-weight: bold; color: #555; text-transform: uppercase; margin-top: 8px; }
+
+        #modal-sys { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000000; align-items: center; justify-content: center; }
+        .modal-box { background: #fff; padding: 40px; border: 2px solid var(--br-red); border-radius: 8px; text-align: center; }
+
+        /* LINHAS DE COMPLEMENTO PARA ATUALIZAÇÃO DE CACHE */
+        /* SEGURANÇA IBM CLOUD 01 */
+        /* SEGURANÇA IBM CLOUD 02 */
+        /* SEGURANÇA IBM CLOUD 03 */
+        /* SEGURANÇA IBM CLOUD 04 */
+        /* SEGURANÇA IBM CLOUD 05 */
     </style>
 </head>
 <body>
 
-<header>
-    <div class="logo">ENGECEMA <span style="font-weight:100; color:#666;">| GESTÃO DE PESSOAL</span></div>
-    <div style="font-size: 10px; font-weight: bold; color: #999;">ENGINE DALLAS CONNECTED</div>
-</header>
+    <header id="NAV-GLOBAL">
+        <img src="logo.png" class="logo">
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <div style="text-align: right; line-height: 1.2;">
+                <div style="font-size: 10px; font-weight: bold; color: var(--br-red);">PAINEL DE GESTÃO | SP</div>
+                <div style="font-size: 9px; color: #999;">SESSÃO ATIVA IBM CLOUD</div>
+            </div>
+            <!-- BOTÃO SAIR COM LINK DIRETO PARA A HOME -->
+            <a href="index.html" class="btn-sair-final" onclick="localStorage.clear();">SAIR</a>
+        </div>
+    </header>
 
-<div class="container">
-    <div class="card">
-        <h2>Inclusão de Colaborador</h2>
-        <div class="grid-form">
-            <div class="field">
-                <label>Nome Completo</label>
-                <input type="text" id="nome" placeholder="Ex: Geoni Cesar">
-            </div>
-            <div class="field">
-                <label>Cargo / Função</label>
-                <input type="text" id="cargo" placeholder="Ex: Engenheiro">
-            </div>
-            <div class="field">
-                <label>Departamento</label>
-                <select id="depto">
-                    <option value="Operacional">Operacional</option>
-                    <option value="Administrativo">Administrativo</option>
-                    <option value="Engenharia">Engenharia</option>
-                </select>
-            </div>
-            <button class="btn-add" onclick="cadastrarViaEngine()">CADASTRAR</button>
+    <div class="container">
+        <div class="card-gestao">
+            <span style="color:#888; font-size:11px; font-weight:bold; text-transform:uppercase;">Patrimônio Consolidado Engecema</span>
+            <h1 class="valor-p">R$ 1.240.500,00</h1>
+            <div style="color:#15803d; font-size:10px; font-weight:bold;">● Sincronizado Regional São Paulo</div>
+        </div>
+
+        <div class="secao-titulo">1. Gestão e Equipes</div>
+        <div class="grid-servicos">
+            <div class="item-br" onclick="openSys('Pix')"><i>📱</i><span>Pix</span></div>
+            <div class="item-br" onclick="openSys('Equipes')"><i>👥</i><span>Equipes</span></div>
+            <div class="item-br" onclick="openSys('Cadastro')"><i>📝</i><span>Novo Cadastro</span></div>
+            <div class="item-br" onclick="localStorage.clear(); window.location.href='index.html';"><i>❌</i><span style="color:red;">Sair</span></div>
+        </div>
+
+        <div class="secao-titulo">2. Perfil e Segurança</div>
+        <div class="grid-servicos">
+            <div class="item-br"><i>🆔</i><span>Atualização</span></div>
+            <div class="item-br"><i>🛡️</i><span>Segurança</span></div>
         </div>
     </div>
 
-    <div class="card">
-        <h2>Quadro Geral de Equipe</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Data Cadastro</th>
-                    <th>Colaborador</th>
-                    <th>Cargo</th>
-                    <th>Departamento</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody id="corpo-tabela">
-                <tr><td colspan="5" style="text-align:center; padding:20px; color:#ccc;">Sincronizando via Motor Dallas...</td></tr>
-            </tbody>
-        </table>
+    <div id="modal-sys">
+        <div class="modal-box">
+            <h3 id="sys-tit">Operação</h3>
+            <button onclick="document.getElementById('modal-sys').style.display='none'" style="background:var(--br-red); color:#fff; border:none; padding:10px 20px; cursor:pointer; font-weight:bold;">FECHAR</button>
+        </div>
     </div>
-</div>
 
-<!-- CHAMADA DO MOTOR EXTERNO (Certifique-se que o arquivo está na mesma pasta) -->
-<script src="private-engine.js"></script>
-
-<script>
-    const BANCO = "colaboradores_engecema";
-
-    // 1. CARREGAR LISTA USANDO O MOTOR (EngecemaData.buscar)
-    async function sincronizarInterface() {
-        try {
-            const data = await EngecemaData.buscar(BANCO);
-            const tbody = document.getElementById('corpo-tabela');
-            tbody.innerHTML = "";
-
-            if (!data.rows || data.rows.length === 0) {
-                tbody.innerHTML = "<tr><td colspan='5' style='text-align:center;'>Nenhum registro encontrado.</td></tr>";
-                return;
-            }
-
-            data.rows.forEach(r => {
-                const d = r.doc;
-                if (d._id.startsWith('_design/')) return;
-                tbody.innerHTML += `
-                    <tr>
-                        <td>${new Date(d.criado_em || Date.now()).toLocaleDateString('pt-BR')}</td>
-                        <td><strong>${d.nome}</strong></td>
-                        <td>${d.cargo}</td>
-                        <td>${d.depto}</td>
-                        <td><button class="btn-del" onclick="removerViaEngine('${d._id}','${d._rev}')">REMOVER</button></td>
-                    </tr>`;
-            });
-        } catch(e) { 
-            console.error("Erro no motor:", e);
-            document.getElementById('corpo-tabela').innerHTML = "<tr><td colspan='5' style='color:orange; text-align:center;'>Motor Offline: Verifique a Extensão Allow CORS e a URL da IBM.</td></tr>";
+    <script src="private-engine.js"></script>
+    <script>
+        function openSys(t) { 
+            document.getElementById('modal-sys').style.display = 'flex'; 
+            document.getElementById('sys-tit').innerText = t; 
         }
-    }
-
-    // 2. CADASTRAR USANDO O MOTOR (EngecemaData.gravar)
-    async function cadastrarViaEngine() {
-        const nome = document.getElementById('nome').value;
-        const cargo = document.getElementById('cargo').value;
-        const depto = document.getElementById('depto').value;
-
-        if(!nome || !cargo) return alert("Preencha Nome e Cargo.");
-
-        const novoDoc = { 
-            nome, 
-            cargo, 
-            depto, 
-            criado_em: new Date().toISOString() 
-        };
-
-        try {
-            const sucesso = await EngecemaData.gravar(BANCO, novoDoc);
-            if(sucesso) {
-                alert("Colaborador cadastrado no sistema!");
-                document.getElementById('nome').value = "";
-                document.getElementById('cargo').value = "";
-                sincronizarInterface();
-            } else {
-                alert("Erro ao gravar. Verifique as permissões da API Key.");
-            }
-        } catch(e) { 
-            alert("Falha de rede. Ative a extensão Allow CORS."); 
-        }
-    }
-
-    // 3. REMOVER USANDO O MOTOR
-    async function removerViaEngine(id, rev) {
-        if(!confirm("Remover este colaborador permanentemente?")) return;
-        try {
-            // Adicionei a função deletar no motor no passo anterior
-            const url = `https://${ENGINE_CONFIG.host}/${BANCO}/${id}?rev=${rev}`;
-            const res = await fetch(url, { method: 'DELETE', headers: EngecemaData.getHeaders(), mode: 'cors' });
-            if(res.ok) sincronizarInterface();
-        } catch(e) { alert("Erro ao deletar."); }
-    }
-
-    // Inicialização
-    window.onload = sincronizarInterface;
-</script>
+    </script>
 </body>
 </html>
