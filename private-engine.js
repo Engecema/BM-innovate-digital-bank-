@@ -1,11 +1,9 @@
 /**
- * MOTOR DE SEGURANÇA E FOMENTO DALLAS - ENGECEMA
- * Integração GitHub & IBM Cloud
+ * MOTOR PRIVADO ENGECEMA - ESPELHAMENTO RH
  */
 
-// Ao carregar a página, verifica se o usuário já está "logado"
 document.addEventListener("DOMContentLoaded", function() {
-    checkSession();
+    verificarEstadoSessao();
 });
 
 function handleLogin(event) {
@@ -14,50 +12,43 @@ function handleLogin(event) {
     const ag = document.getElementById('agencia').value;
     const ct = document.getElementById('conta').value;
 
-    if(ag.length >= 4 && ct.length >= 4) {
-        // Simula gravação de sessão (Padrão IBM Cloud Auth)
-        localStorage.setItem('engecema_session', 'active');
-        localStorage.setItem('user_ref', ag + "-" + ct);
+    if(ag !== "" && ct !== "") {
+        // Define a sessão ativa no navegador
+        localStorage.setItem('rh_session_active', 'true');
+        localStorage.setItem('rh_user', ag);
         
-        // Redireciona para o painel de RH / Admin
-        // Se estiver na index, apenas atualiza a barra superior
-        alert("Acesso autorizado! Redirecionando ao Painel RH...");
-        window.location.href = 'admin.html'; 
-    } else {
-        alert("Por favor, preencha os dados corretamente.");
+        // Em vez de ir para uma página externa escura, 
+        // ele apenas atualiza a interface para o modo "Logado"
+        renderizarPainelLogado();
     }
 }
 
-function checkSession() {
-    const session = localStorage.getItem('engecema_session');
-    const formLogin = document.getElementById('form-login');
-    const btnSair = document.getElementById('btn-sair');
+function verificarEstadoSessao() {
+    const isLogado = localStorage.getItem('rh_session_active');
+    if (isLogado === 'true') {
+        renderizarPainelLogado();
+    }
+}
 
-    if (session === 'active') {
-        // Se logado: Esconde formulário e mostra botão Sair
-        if(formLogin) formLogin.style.display = 'none';
-        if(btnSair) btnSair.style.display = 'block';
-    } else {
-        // Se deslogado: Mostra formulário e esconde botão Sair
-        if(formLogin) formLogin.style.display = 'flex';
-        if(btnSair) btnSair.style.display = 'none';
+function renderizarPainelLogado() {
+    const formLogin = document.getElementById('form-login');
+    const areaLogada = document.getElementById('area-logada');
+    const heroSection = document.querySelector('.hero h1');
+
+    if(formLogin) formLogin.style.display = 'none';
+    if(areaLogada) areaLogada.style.display = 'flex';
+    
+    // Altera o título para confirmar que entrou no painel de RH
+    if(heroSection) {
+        heroSection.innerHTML = "Painel de <b>Gestão RH</b> Ativo";
     }
 }
 
 function logout() {
-    // Limpa os dados de segurança
-    localStorage.removeItem('engecema_session');
-    localStorage.removeItem('user_ref');
+    // Limpa tudo e volta ao estado inicial
+    localStorage.removeItem('rh_session_active');
+    localStorage.removeItem('rh_user');
     
-    alert("Sessão encerrada com segurança.");
-    
-    // Redireciona para a home limpa
-    window.location.href = 'index.html';
-}
-
-// Interceptação de segurança para páginas privadas
-if (window.location.pathname.includes('admin.html') || window.location.pathname.includes('painel.html')) {
-    if (localStorage.getItem('engecema_session') !== 'active') {
-        window.location.href = 'index.html';
-    }
+    // Recarrega a página para limpar o cache visual
+    window.location.reload();
 }
