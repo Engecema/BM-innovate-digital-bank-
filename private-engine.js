@@ -1,54 +1,54 @@
 /**
- * MOTOR PRIVADO ENGECEMA - ESPELHAMENTO RH
+ * MOTOR DE SEGURANÇA DALLAS - VERSÃO RH ENGECEMA
  */
 
 document.addEventListener("DOMContentLoaded", function() {
-    verificarEstadoSessao();
+    controlarExibicao();
 });
 
-function handleLogin(event) {
+// FUNÇÃO QUE VALIDA O ACESSO E EVITA A TELA ESCURA
+function validarAcesso(event) {
     event.preventDefault();
     
-    const ag = document.getElementById('agencia').value;
-    const ct = document.getElementById('conta').value;
+    // Captura os dados apenas para simular o login
+    const agencia = document.getElementById('ag').value;
+    const conta = document.getElementById('ct').value;
 
-    if(ag !== "" && ct !== "") {
-        // Define a sessão ativa no navegador
-        localStorage.setItem('rh_session_active', 'true');
-        localStorage.setItem('rh_user', ag);
+    if(agencia.length === 4 && conta.length >= 4) {
+        // Grava a sessão no navegador (padrão IBM Cloud)
+        localStorage.setItem('sessao_rh_engecema', 'ativa');
         
-        // Em vez de ir para uma página externa escura, 
-        // ele apenas atualiza a interface para o modo "Logado"
-        renderizarPainelLogado();
+        // REDIRECIONAMENTO PARA O PAINEL EXISTENTE
+        // Aqui ele vai para a sua admin.html já logado
+        window.location.href = 'admin.html';
+    } else {
+        alert("Dados inválidos. Use o padrão Bradesco (4 dígitos agência).");
     }
 }
 
-function verificarEstadoSessao() {
-    const isLogado = localStorage.getItem('rh_session_active');
-    if (isLogado === 'true') {
-        renderizarPainelLogado();
-    }
-}
-
-function renderizarPainelLogado() {
+// CONTROLA SE MOSTRA LOGIN OU BOTÃO SAIR
+function controlarExibicao() {
+    const sessaoValida = localStorage.getItem('sessao_rh_engecema');
     const formLogin = document.getElementById('form-login');
-    const areaLogada = document.getElementById('area-logada');
-    const heroSection = document.querySelector('.hero h1');
+    const btnSair = document.getElementById('btn-sair');
 
-    if(formLogin) formLogin.style.display = 'none';
-    if(areaLogada) areaLogada.style.display = 'flex';
-    
-    // Altera o título para confirmar que entrou no painel de RH
-    if(heroSection) {
-        heroSection.innerHTML = "Painel de <b>Gestão RH</b> Ativo";
+    if (sessaoValida === 'ativa') {
+        if(formLogin) formLogin.style.display = 'none';
+        if(btnSair) btnSair.style.display = 'block';
+    } else {
+        if(formLogin) formLogin.style.display = 'flex';
+        if(btnSair) btnSair.style.display = 'none';
+        
+        // Proteção: Se estiver na admin.html sem logar, volta pra home
+        if (window.location.pathname.includes('admin.html')) {
+            window.location.href = 'index.html';
+        }
     }
 }
 
-function logout() {
-    // Limpa tudo e volta ao estado inicial
-    localStorage.removeItem('rh_session_active');
-    localStorage.removeItem('rh_user');
-    
-    // Recarrega a página para limpar o cache visual
-    window.location.reload();
+// FUNÇÃO DO BOTÃO SAIR
+function executarSair() {
+    localStorage.removeItem('sessao_rh_engecema');
+    alert("Desconectado com sucesso.");
+    window.location.href = 'index.html';
 }
