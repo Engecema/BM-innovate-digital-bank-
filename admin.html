@@ -4,90 +4,101 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="logo.png">
-    <title>Painel Gestão | Engecema SP</title>
+    <title>Engecema Admin | Painel de Gestão São Paulo</title>
     <style>
-        :root { --red-br: #cc092f; --bg-gray: #f4f7f9; }
-        body { background: var(--bg-gray); font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; }
+        :root { --br-red: #cc092f; --bg: #f4f7f9; --text: #333; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding-top: 80px; }
         
-        /* BOTÃO DE EMERGÊNCIA - POSIÇÃO FIXA NO TOPO DIREITO */
-        #LOGOUT-TOP-BUTTON {
-            position: fixed !important;
-            top: 20px !important;
-            right: 20px !important;
-            z-index: 2147483647 !important; /* Valor máximo de z-index possível */
-            background-color: var(--red-br) !important;
-            color: #ffffff !important;
-            padding: 12px 25px !important;
-            border-radius: 5px !important;
-            font-weight: bold !important;
-            text-decoration: none !important;
-            text-transform: uppercase !important;
-            font-size: 13px !important;
-            box-shadow: 0 5px 15px rgba(204, 9, 47, 0.4) !important;
-            border: 2px solid #ffffff !important;
-            cursor: pointer !important;
+        /* BARRA DE TOPO FIXA - PARA FORÇAR O BOTÃO A APARECER */
+        #TOP-BAR-SECURITY { 
+            position: fixed !important; 
+            top: 0 !important; 
+            left: 0 !important; 
+            width: 100% !important; 
+            height: 70px !important; 
+            background: #ffffff !important; 
+            border-bottom: 5px solid var(--br-red) !important; 
+            display: flex !important; 
+            justify-content: space-between !important; 
+            align-items: center !important; 
+            padding: 0 40px !important; 
+            box-sizing: border-box !important; 
+            z-index: 999999 !important; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+        }
+
+        .btn-sair-rh { 
+            background: var(--br-red) !important; 
+            color: #ffffff !important; 
+            border: none !important; 
+            padding: 10px 25px !important; 
+            border-radius: 4px !important; 
+            font-weight: bold !important; 
+            cursor: pointer !important; 
+            text-transform: uppercase !important; 
+            font-size: 13px !important; 
+            text-decoration: none !important; 
             display: block !important;
         }
 
-        header { background: #fff; padding: 15px 40px; border-bottom: 5px solid var(--red-br); display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .logo-img { height: 35px; }
-
-        .main-container { padding: 30px 40px; max-width: 1200px; margin: 0 auto; }
-        .card-info { background: #fff; padding: 30px; border-left: 8px solid var(--red-br); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; }
-        .val-large { color: #333; font-size: 42px; margin: 10px 0; font-weight: 800; }
+        .container { padding: 30px 40px; max-width: 1200px; margin: 0 auto; }
+        .card-gestao { background: #fff; padding: 30px; border-left: 8px solid var(--br-red); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; }
+        .valor-p { color: var(--text); font-size: 42px; margin: 10px 0; font-weight: 800; }
         
-        .section-title { color: var(--red-br); font-size: 13px; font-weight: 900; text-transform: uppercase; margin: 40px 0 15px 0; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
-        .services-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+        .secao-titulo { color: var(--br-red); font-size: 13px; font-weight: 900; text-transform: uppercase; margin: 40px 0 15px 0; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+        .grid-servicos { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
         
-        .service-card { background: #fff; padding: 15px; text-align: center; border: 1px solid #eee; cursor: pointer; border-radius: 4px; transition: 0.2s; min-height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .service-card:hover { border-color: var(--red-br); transform: translateY(-2px); }
-        .service-card span { font-size: 10px; font-weight: bold; color: #555; text-transform: uppercase; margin-top: 8px; }
+        .item-br { background: #fff; padding: 15px 5px; text-align: center; border: 1px solid #eee; cursor: pointer; transition: 0.2s; border-radius: 4px; min-height: 95px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .item-br span { font-size: 10px; font-weight: bold; color: #555; text-transform: uppercase; margin-top: 8px; }
 
-        #modal-sys { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 100000; align-items: center; justify-content: center; }
-        .modal-box { background: #fff; padding: 40px; border: 2px solid var(--red-br); border-radius: 8px; text-align: center; }
+        #modal-br { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 1000000; align-items: center; justify-content: center; }
+        .modal-content { background: #fff; padding: 40px; border: 2px solid var(--br-red); width: 350px; border-radius: 8px; text-align: center; }
+
+        /* LINHAS PARA COMPLETAR VOLUME DE ARQUIVO E FORÇAR ATUALIZAÇÃO */
+        /* VOLUMETRIA DE SEGURANÇA IBM CLOUD 01 */
+        /* VOLUMETRIA DE SEGURANÇA IBM CLOUD 02 */
+        /* VOLUMETRIA DE SEGURANÇA IBM CLOUD 03 */
+        /* VOLUMETRIA DE SEGURANÇA IBM CLOUD 04 */
+        /* VOLUMETRIA DE SEGURANÇA IBM CLOUD 05 */
     </style>
 </head>
 <body>
 
-    <!-- BOTÃO SAIR FORA DE QUALQUER CONTAINER -->
-    <a href="index.html" id="LOGOUT-TOP-BUTTON" onclick="localStorage.clear();">SAIR / LOGOUT</a>
-
-    <header>
-        <img src="logo.png" class="logo-img">
-        <div style="text-align: right; padding-right: 170px;">
-            <div style="font-size: 10px; font-weight: bold; color: var(--red-br);">PAINEL DE GESTÃO ENGECEMA</div>
-            <div style="font-size: 9px; color: #999;">SESSÃO IBM CLOUD ATIVA</div>
+    <div id="TOP-BAR-SECURITY">
+        <img src="logo.png" style="height: 35px;">
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <div style="text-align: right; line-height: 1.2;">
+                <div style="font-size: 10px; font-weight: bold; color: var(--br-red);">PAINEL DE GESTÃO | SP</div>
+                <div style="font-size: 9px; color: #999;">SESSÃO ATIVA</div>
+            </div>
+            <!-- BOTÃO SAIR COM LINK DIRETO PARA FORÇAR RENDERIZAÇÃO -->
+            <a href="index.html" class="btn-sair-rh" onclick="localStorage.clear();">SAIR</a>
         </div>
-    </header>
+    </div>
 
-    <div class="main-container">
-        <div class="card-info">
-            <span style="color:#888; font-size:11px; font-weight:bold;">PATRIMÔNIO SOB GESTÃO</span>
-            <h1 class="val-large">R$ 1.240.500,00</h1>
+    <div class="container">
+        <div class="card-gestao">
+            <span style="color:#888; font-size:11px; font-weight:bold; text-transform:uppercase;">Patrimônio Consolidado Engecema</span>
+            <h1 class="valor-p">R$ 1.240.500,00</h1>
             <div style="color:#15803d; font-size:10px; font-weight:bold;">● Sincronizado Regional São Paulo</div>
         </div>
 
-        <div class="section-title">Serviços e Gestão</div>
-        <div class="services-grid">
-            <div class="service-card" onclick="openMod('Pix')"><i>📱</i><span>Pix</span></div>
-            <div class="service-card" onclick="openMod('Saldo')"><i>📊</i><span>Saldo</span></div>
-            <div class="service-card" onclick="openMod('Equipes')"><i>👥</i><span>Equipes</span></div>
-            <div class="service-card" onclick="localStorage.clear(); window.location.href='index.html';"><i>❌</i><span style="color:red;">Sair</span></div>
+        <div class="secao-titulo">1. Transações e Gestão</div>
+        <div class="grid-servicos">
+            <div class="item-br" onclick="document.getElementById('modal-br').style.display='flex'"><i>📱</i><span>Pix</span></div>
+            <div class="item-br" onclick="document.getElementById('modal-br').style.display='flex'"><i>📊</i><span>Extrato</span></div>
+            <div class="item-br" onclick="document.getElementById('modal-br').style.display='flex'"><i>👥</i><span>Equipes</span></div>
+            <div class="item-br" onclick="localStorage.clear(); window.location.href='index.html';"><i>❌</i><span style="color:red;">Sair</span></div>
         </div>
     </div>
 
-    <div id="modal-sys">
-        <div class="modal-box">
-            <h3 id="sys-tit">Operação</h3>
-            <button onclick="document.getElementById('modal-sys').style.display='none'" style="background:var(--red-br); color:#fff; border:none; padding:10px 20px; cursor:pointer;">FECHAR</button>
+    <div id="modal-br">
+        <div class="modal-content">
+            <h3>Operação</h3>
+            <button onclick="document.getElementById('modal-br').style.display='none'" style="background:var(--br-red); color:#fff; border:none; padding:10px 20px; cursor:pointer; font-weight:bold;">FECHAR</button>
         </div>
     </div>
 
-    <script>
-        function openMod(t) { 
-            document.getElementById('modal-sys').style.display = 'flex'; 
-            document.getElementById('sys-tit').innerText = t; 
-        }
-    </script>
+    <script src="private-engine.js"></script>
 </body>
 </html>
