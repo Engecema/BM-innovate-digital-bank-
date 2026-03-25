@@ -4,55 +4,101 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="logo.png">
-    <title>Engecema Admin | Painel de Gestão</title>
+    <title>Engecema Admin | Painel de Gestão São Paulo</title>
     <style>
-        :root { --br-red: #cc092f; --bg: #f4f7f9; }
-        body { background: var(--bg); font-family: 'Segoe UI', Arial, sans-serif; margin: 0; }
+        :root { --br-red: #cc092f; --bg: #f4f7f9; --text: #333; --gold: #c5a059; }
+        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding-bottom: 100px; }
+        
         header { background: #fff; padding: 15px 40px; border-bottom: 5px solid var(--br-red); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .logo { height: 35px; }
-        .btn-logout { background: var(--br-red); color: #fff; border: none; padding: 8px 20px; border-radius: 4px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; }
+
+        /* BOTÃO SAIR NO HEADER */
+        .btn-sair-header { background: var(--br-red); color: #fff; border: none; padding: 8px 20px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 12px; text-transform: uppercase; transition: 0.3s; }
+        .btn-sair-header:hover { background: #a50725; }
+
         .container { padding: 30px 40px; max-width: 1200px; margin: 0 auto; }
+        
         .card-gestao { background: #fff; padding: 30px; border-left: 8px solid var(--br-red); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; }
-        .valor-p { color: #333; font-size: 42px; margin: 10px 0; font-weight: 800; }
-        .secao-titulo { color: var(--br-red); font-size: 13px; font-weight: 900; text-transform: uppercase; margin: 40px 0 15px 0; border-bottom: 1px solid #ddd; padding-bottom: 5px; }
+        .label-p { color: #888; text-transform: uppercase; font-size: 11px; font-weight: bold; letter-spacing: 1px; }
+        .valor-p { color: var(--text); font-size: 42px; margin: 10px 0; font-weight: 800; }
+        .status-node { color: #15803d; font-size: 10px; font-weight: bold; text-transform: uppercase; }
+
+        .secao-titulo { color: var(--br-red); font-size: 13px; font-weight: 900; text-transform: uppercase; margin: 40px 0 15px 0; border-bottom: 1px solid #ddd; padding-bottom: 5px; letter-spacing: 1px; }
         .grid-servicos { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
-        .item-br { background: #fff; padding: 15px 5px; text-align: center; border: 1px solid #eee; cursor: pointer; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 95px; }
+        
+        .item-br { background: #fff; padding: 15px 5px; text-align: center; border: 1px solid #eee; cursor: pointer; transition: 0.2s; border-radius: 4px; min-height: 95px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .item-br:hover { border-color: var(--br-red); background: #fdfdfd; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .item-br span { font-size: 10px; font-weight: bold; color: #555; text-transform: uppercase; margin-top: 8px; line-height: 1.2; }
+        .icon { font-size: 22px; color: var(--br-red); font-style: normal; }
+
+        /* MODAL */
         #modal-br { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 2000; align-items: center; justify-content: center; }
-        .modal-content { background: #fff; padding: 40px; border: 2px solid var(--br-red); width: 320px; border-radius: 8px; text-align: center; }
+        .modal-content { background: #fff; padding: 40px; border: 2px solid var(--br-red); width: 350px; border-radius: 8px; text-align: center; }
+        .modal-content input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        .modal-content button { width: 100%; padding: 15px; background: var(--br-red); color: #fff; border: none; font-weight: bold; text-transform: uppercase; cursor: pointer; border-radius: 4px; }
     </style>
 </head>
 <body>
 
 <header>
     <img src="logo.png" class="logo">
-    <button class="btn-logout" id="btn-sair-header" onclick="executarSair()">Sair / Logout</button>
+    <div style="display: flex; align-items: center; gap: 20px;">
+        <div style="text-align: right;">
+            <div style="font-size: 10px; font-weight: bold; color: var(--br-red);">PAINEL DE GESTÃO | SÃO PAULO</div>
+            <div style="font-size: 9px; color: #999;">SESSÃO IBM CLOUD ATIVA</div>
+        </div>
+        <!-- BOTÃO DE SAIR FÍSICO -->
+        <button class="btn-sair-header" onclick="executarSair()">Sair</button>
+    </div>
 </header>
 
 <div class="container">
     <div class="card-gestao">
-        <span style="color:#888; font-size:11px; font-weight:bold;">Patrimônio sob Gestão Engecema</span>
-        <h1 class="valor-p">R$ 1.240.500,00</h1>
-        <div style="color:#15803d; font-size:10px; font-weight:bold;">● Sincronizado IBM Cloud São Paulo</div>
+        <span class="label-p">Patrimônio Consolidado sob Gestão Engecema</span>
+        <h1 id="saldo-real" class="valor-p">R$ 1.240.500,00</h1>
+        <div class="status-node">● Sincronizado: IBM Cloud Regional São Paulo</div>
     </div>
 
-    <div class="secao-titulo">Gestão e Serviços</div>
+    <div class="secao-titulo">1. Transações e Consultas</div>
     <div class="grid-servicos">
         <div class="item-br" onclick="abrir('Pix')"><i>📱</i><span>Pix</span></div>
-        <div class="item-br" onclick="abrir('Saldo')"><i>📊</i><span>Saldo</span></div>
-        <div class="item-br" onclick="abrir('Colaboradores')"><i>👥</i><span>Equipe</span></div>
-        <div class="item-br" onclick="executarSair()"><i>❌</i><span>Sair</span></div>
+        <div class="item-br" onclick="abrir('Saldo e Extrato')"><i>📊</i><span>Saldo e Extrato</span></div>
+        <div class="item-br" onclick="abrir('Transferências')"><i>💸</i><span>Transferências</span></div>
+        <div class="item-br" onclick="abrir('Pagamentos')"><i>📄</i><span>Pagamentos</span></div>
+    </div>
+
+    <div class="secao-titulo">2. Gestão de Equipes</div>
+    <div class="grid-servicos">
+        <div class="item-br" onclick="abrir('Colaboradores')"><i>👥</i><span>Colaboradores</span></div>
+        <div class="item-br" onclick="abrir('Inclusão')"><i>📝</i><span>Inclusão</span></div>
+    </div>
+
+    <div class="secao-titulo">3. Perfil e Segurança</div>
+    <div class="grid-servicos">
+        <div class="item-br" onclick="executarSair()"><i>❌</i><span>Sair do Sistema</span></div>
     </div>
 </div>
 
 <div id="modal-br">
     <div class="modal-content">
         <h3 id="m-tit">Operação</h3>
-        <input type="text" placeholder="Chave / Destino" style="width:100%; padding:10px; margin:10px 0;">
-        <button onclick="fechar()" style="width:100%; padding:10px; background:var(--br-red); color:#fff; border:none; font-weight:bold; cursor:pointer;">Confirmar</button>
+        <input type="text" placeholder="Chave / Destino">
+        <button onclick="fechar()">Confirmar Operação</button>
         <p onclick="fechar()" style="color:#999; cursor:pointer; font-size:11px; margin-top:15px;">Cancelar</p>
     </div>
 </div>
 
+<!-- Scripts Integrados -->
 <script src="private-engine.js"></script>
+<script>
+    // Funções Locais de UI para garantir funcionamento imediato
+    function abrir(t) { 
+        document.getElementById('modal-br').style.display = 'flex'; 
+        document.getElementById('m-tit').innerText = t; 
+    }
+    function fechar() { 
+        document.getElementById('modal-br').style.display = 'none'; 
+    }
+</script>
 </body>
 </html>
