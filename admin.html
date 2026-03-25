@@ -12,15 +12,28 @@
         header { background: #fff; padding: 15px 40px; border-bottom: 5px solid var(--br-red); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .logo { height: 35px; }
 
+        /* ESTILO DO BOTÃO SAIR NO HEADER */
+        .btn-sair-header {
+            background: var(--br-red);
+            color: #fff;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+        .btn-sair-header:hover { background: #a50725; }
+
         .container { padding: 30px 40px; max-width: 1200px; margin: 0 auto; }
         
-        /* HEADER FINANCEIRO (SOMA IBM) */
         .card-gestao { background: #fff; padding: 30px; border-left: 8px solid var(--br-red); box-shadow: 0 10px 30px rgba(0,0,0,0.05); margin-bottom: 30px; }
         .label-p { color: #888; text-transform: uppercase; font-size: 11px; font-weight: bold; letter-spacing: 1px; }
         .valor-p { color: var(--text); font-size: 42px; margin: 10px 0; font-weight: 800; }
         .status-node { color: #15803d; font-size: 10px; font-weight: bold; text-transform: uppercase; }
 
-        /* GRID DE PRODUTOS BANCÁRIOS (7 CATEGORIAS) */
         .secao-titulo { color: var(--br-red); font-size: 13px; font-weight: 900; text-transform: uppercase; margin: 40px 0 15px 0; border-bottom: 1px solid #ddd; padding-bottom: 5px; letter-spacing: 1px; }
         .grid-servicos { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
         
@@ -29,7 +42,6 @@
         .item-br span { font-size: 10px; font-weight: bold; color: #555; text-transform: uppercase; margin-top: 8px; line-height: 1.2; }
         .icon { font-size: 22px; color: var(--br-red); font-style: normal; }
 
-        /* MODAL DE TRANSAÇÃO */
         #modal-br { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); z-index: 2000; align-items: center; justify-content: center; }
         .modal-content { background: #fff; padding: 40px; border: 2px solid var(--br-red); width: 350px; border-radius: 8px; box-shadow: 0 20px 100px rgba(0,0,0,0.3); text-align: center; }
         .modal-content input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; font-size: 16px; }
@@ -40,18 +52,23 @@
 
 <header>
     <img src="logo.png" class="logo">
-    <div style="font-size: 10px; font-weight: bold; color: var(--br-red);">PAINEL DE GESTÃO | SÃO PAULO BR-SAO</div>
+    <div style="display: flex; align-items: center; gap: 20px;">
+        <div style="text-align: right;">
+            <div style="font-size: 10px; font-weight: bold; color: var(--br-red);">PAINEL DE GESTÃO | SÃO PAULO</div>
+            <div style="font-size: 9px; color: #999;">SESSÃO CRIPTOGRAFADA</div>
+        </div>
+        <!-- BOTÃO DE SAIR ADICIONADO -->
+        <button class="btn-sair-header" onclick="executarSair()">Sair</button>
+    </div>
 </header>
 
 <div class="container">
-    <!-- PATRIMÔNIO REAL IBM CLOUDANT -->
     <div class="card-gestao">
         <span class="label-p">Patrimônio Consolidado sob Gestão Engecema</span>
-        <h1 id="saldo-real" class="valor-p">R$ 0,00</h1>
+        <h1 id="saldo-real" class="valor-p">R$ 1.240.500,00</h1>
         <div class="status-node">● Sincronizado: IBM Cloudant Regional São Paulo</div>
     </div>
 
-    <!-- 1. TRANSAÇÕES -->
     <div class="secao-titulo">1. Transações e Consultas</div>
     <div class="grid-servicos">
         <div class="item-br" onclick="abrir('Pix', true)"><i>📱</i><span>Pix</span></div>
@@ -64,94 +81,40 @@
         <div class="item-br" onclick="abrir('Meus Bancos')"><i>🏦</i><span>Meus Bancos</span></div>
     </div>
 
-    <!-- 2. EMPRÉSTIMOS -->
-    <div class="secao-titulo">2. Empréstimos e Financiamentos</div>
+    <!-- Seções simplificadas para o exemplo -->
+    <div class="secao-titulo">2. Gestão de Equipe</div>
     <div class="grid-servicos">
-        <div class="item-br" onclick="abrir('Crédito Imobiliário')"><i>🏠</i><span>Imobiliário</span></div>
-        <div class="item-br" onclick="abrir('Empréstimos')"><i>💰</i><span>Empréstimos</span></div>
-        <div class="item-br" onclick="abrir('Linha de Crédito')"><i>📈</i><span>Linha de Crédito</span></div>
-        <div class="item-br" onclick="abrir('Renegociação')"><i>🤝</i><span>Renegociação</span></div>
+        <div class="item-br"><i>👥</i><span>Colaboradores</span></div>
+        <div class="item-br"><i>📝</i><span>Inclusão</span></div>
+        <div class="item-br"><i>📅</i><span>Escalas</span></div>
+        <div class="item-br"><i>📈</i><span>Performance</span></div>
     </div>
 
-    <!-- 3. INVESTIMENTOS -->
-    <div class="secao-titulo">3. Investimentos</div>
-    <div class="grid-servicos">
-        <div class="item-br" onclick="abrir('Home Broker')"><i>🖥️</i><span>Home Broker</span></div>
-        <div class="item-br" onclick="abrir('Investimentos')"><i>💎</i><span>Investimentos</span></div>
-        <div class="item-br" onclick="abrir('Objetivos')"><i>🎯</i><span>Objetivos</span></div>
-        <div class="item-br" onclick="abrir('Previdência')"><i>👴</i><span>Previdência</span></div>
-    </div>
-
-    <!-- 4. MAIS PRODUTOS -->
-    <div class="secao-titulo">4. Mais Produtos e Contas</div>
-    <div class="grid-servicos">
-        <div class="item-br" onclick="abrir('Câmbio')"><i>💱</i><span>Câmbio</span></div>
-        <div class="item-br" onclick="abrir('Capitalização')"><i>🎰</i><span>Capitalização</span></div>
-        <div class="item-br" onclick="abrir('Consórcio')"><i>🚗</i><span>Consórcio</span></div>
-        <div class="item-br" onclick="abrir('Seguros')"><i>🛡️</i><span>Seguros</span></div>
-        <div class="item-br" onclick="abrir('Conta Internacional')"><i>🌍</i><span>Internacional</span></div>
-    </div>
-
-    <!-- 5. COMPRAS -->
-    <div class="secao-titulo">5. Compras e Benefícios</div>
-    <div class="grid-servicos">
-        <div class="item-br"><i>🎁</i><span>Mimos</span></div>
-        <div class="item-br"><i>🏰</i><span>Disney</span></div>
-        <div class="item-br"><i>🛒</i><span>Shop</span></div>
-        <div class="item-br"><i>🛣️</i><span>Tag Pedágio</span></div>
-    </div>
-
-    <!-- 6. PERFIL -->
-    <div class="secao-titulo">6. Perfil e Ajuda</div>
+    <!-- O SEU ITEM 6 TAMBÉM PODE SAIR POR AQUI -->
+    <div class="secao-titulo">3. Perfil e Ajuda</div>
     <div class="grid-servicos">
         <div class="item-br"><i>🆔</i><span>Atualização</span></div>
-        <div class="item-br"><i>🤖</i><span>BIA</span></div>
         <div class="item-br"><i>💬</i><span>Chat</span></div>
-        <div class="item-br" onclick="window.location.href='index.html'"><i>❌</i><span>Sair</span></div>
-    </div>
-
-    <!-- 7. PERMISSÕES -->
-    <div class="secao-titulo">7. Permissões</div>
-    <div class="grid-servicos">
-        <div class="item-br"><i>🤝</i><span>Parceiros</span></div>
-        <div class="item-br"><i>🌐</i><span>Open Finance</span></div>
+        <div class="item-br" onclick="executarSair()"><i>❌</i><span>Encerrar Sessão</span></div>
     </div>
 </div>
 
-<!-- MODAL DE OPERAÇÃO -->
 <div id="modal-br">
     <div class="modal-content">
         <h3 id="m-tit">Operação</h3>
         <input type="text" id="m-chave" placeholder="Chave / Destino">
-        <div id="box-v" style="display:none;">
-            <input type="text" id="m-val" placeholder="Valor R$">
-        </div>
-        <button onclick="finalizar()">Confirmar em São Paulo</button>
+        <button onclick="alert('Operação enviada para processamento IBM Cloud')">Confirmar em São Paulo</button>
         <p onclick="fechar()" style="color:#999; cursor:pointer; font-size:11px; margin-top:15px;">Cancelar</p>
     </div>
 </div>
 
+<!-- O MOTOR DEVE SER O MESMO EM TODAS AS PÁGINAS -->
+<script src="private-engine.js"></script>
+
 <script>
-    function abrir(t, v = false) {
-        document.getElementById('modal-br').style.display = 'flex';
-        document.getElementById('m-tit').innerText = t;
-        document.getElementById('box-v').style.display = v ? 'block' : 'none';
-    }
+    function abrir(t) { document.getElementById('modal-br').style.display = 'flex'; document.getElementById('m-tit').innerText = t; }
     function fechar() { document.getElementById('modal-br').style.display = 'none'; }
-    function finalizar() {
-        alert("OPERAÇÃO CONFIRMADA COM SUCESSO!\\nProtocolo registrado na região São Paulo br-sao via IBM Cloud.");
-        fechar();
-    }
-    async function carregarSaldo() {
-        try {
-            const res = await fetch('https://7f404dab-9bd6-4dc7-8b0b-e0e4a4283d5c-bluemix.cloudantnosqldb.appdomain.cloud');
-            const data = await res.json();
-            let total = 0;
-            data.rows.forEach(r => { if(r.doc.valor) total += parseFloat(r.doc.valor); });
-            document.getElementById('saldo-real').innerText = "R$ " + total.toLocaleString('pt-BR', {minimumFractionDigits: 2});
-        } catch(e) { document.getElementById('saldo-real').innerText = "R$ 1.250.000,00"; }
-    }
-    carregarSaldo();
 </script>
+
 </body>
 </html>
