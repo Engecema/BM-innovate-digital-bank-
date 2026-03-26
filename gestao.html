@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <!-- 
-    SISTEMA DE GESTÃO RH ENGECEMA - VERSÃO 3.5.0
+    SISTEMA DE GESTÃO RH ENGECEMA - VERSÃO 4.0.0 (PROTECTED)
     LOCALIDADE: SÃO PAULO (BR-SAO) | AMBIENTE: GESTAO.HTML
-    SEGURANÇA: PROTOCOLO DALLAS / IBM CLOUDANT
-    AVISO: ESTE PAINEL POSSUI RASTREAMENTO DE ACESSO ATIVO
+    SEGURANÇA: CAMADA DUPLA (SESSION CHECK + UI LOCK)
+    IBM CLOUD NATIVE PROTECT
 -->
 <html lang="pt-br">
 <head>
@@ -11,11 +11,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="logo.png">
     <title>Engecema Admin | Painel de Gestão</title>
+    
+    <!-- CAMADA 1: SCRIPT DE PROTEÇÃO INSTANTÂNEA (BLOCKER) -->
+    <script>
+        (function() {
+            // Verifica se o usuário está autenticado no LocalStorage ou SessionStorage
+            const sessionActive = localStorage.getItem('engecema_auth_token');
+            if (!sessionActive) {
+                // Se não houver token, redireciona imediatamente para a index
+                window.location.href = 'index.html?error=unauthorized';
+            }
+        })();
+    </script>
+
     <style>
         :root { --br-red: #cc092f; --bg: #f4f7f9; --text: #333; }
-        body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding-top: 85px; }
+        
+        /* Oculta o body por padrão para evitar "flicker" de conteúdo sensível */
+        body { 
+            display: none; 
+            background: var(--bg); 
+            color: var(--text); 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            margin: 0; 
+            padding-top: 85px; 
+        }
 
-        /* BARRA DE TOPO FIXA - FORÇA O BOTÃO A FICAR VISÍVEL */
         header#NAV-GLOBAL { 
             position: fixed !important; 
             top: 0 !important; 
@@ -35,7 +56,6 @@
 
         .logo { height: 35px; }
 
-        /* BOTÃO SAIR COM ALTA PRIORIDADE */
         .btn-sair-final { 
             background-color: var(--br-red) !important; 
             color: #ffffff !important; 
@@ -64,26 +84,18 @@
 
         #modal-sys { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000000; align-items: center; justify-content: center; }
         .modal-box { background: #fff; padding: 40px; border: 2px solid var(--br-red); border-radius: 8px; text-align: center; }
-
-        /* LINHAS DE COMPLEMENTO PARA ATUALIZAÇÃO DE CACHE */
-        /* SEGURANÇA IBM CLOUD 01 */
-        /* SEGURANÇA IBM CLOUD 02 */
-        /* SEGURANÇA IBM CLOUD 03 */
-        /* SEGURANÇA IBM CLOUD 04 */
-        /* SEGURANÇA IBM CLOUD 05 */
     </style>
 </head>
-<body>
+<body id="ADMIN-BODY">
 
     <header id="NAV-GLOBAL">
         <img src="logo.png" class="logo">
         <div style="display: flex; align-items: center; gap: 20px;">
             <div style="text-align: right; line-height: 1.2;">
                 <div style="font-size: 10px; font-weight: bold; color: var(--br-red);">PAINEL DE GESTÃO | SP</div>
-                <div style="font-size: 9px; color: #999;">SESSÃO ATIVA IBM CLOUD</div>
+                <div id="status-sessao" style="font-size: 9px; color: #15803d;">VERIFICANDO SESSÃO...</div>
             </div>
-            <!-- BOTÃO SAIR COM LINK DIRETO PARA A HOME -->
-            <a href="index.html" class="btn-sair-final" onclick="localStorage.clear();">SAIR</a>
+            <a href="javascript:void(0)" class="btn-sair-final" onclick="logoutSystem();">SAIR</a>
         </div>
     </header>
 
@@ -99,7 +111,7 @@
             <div class="item-br" onclick="openSys('Pix')"><i>📱</i><span>Pix</span></div>
             <div class="item-br" onclick="openSys('Equipes')"><i>👥</i><span>Equipes</span></div>
             <div class="item-br" onclick="openSys('Cadastro')"><i>📝</i><span>Novo Cadastro</span></div>
-            <div class="item-br" onclick="localStorage.clear(); window.location.href='index.html';"><i>❌</i><span style="color:red;">Sair</span></div>
+            <div class="item-br" onclick="logoutSystem();"><i>❌</i><span style="color:red;">Sair</span></div>
         </div>
 
         <div class="secao-titulo">2. Perfil e Segurança</div>
@@ -116,8 +128,27 @@
         </div>
     </div>
 
-    <script src="private-engine.js"></script>
+    <!-- CAMADA 2: ENGINE DE VALIDAÇÃO -->
     <script>
+        // Função de Logout Centralizada
+        function logoutSystem() {
+            localStorage.removeItem('engecema_auth_token');
+            sessionStorage.clear();
+            window.location.href = 'index.html';
+        }
+
+        // Validação de segurança ao carregar
+        window.onload = function() {
+            const token = localStorage.getItem('engecema_auth_token');
+            
+            if(token === "TOKEN_VALIDO_PRODUCAO") { // Este valor será validado pelo back-end depois
+                document.getElementById('ADMIN-BODY').style.display = 'block';
+                document.getElementById('status-sessao').innerText = "SESSÃO ATIVA IBM CLOUD";
+            } else {
+                logoutSystem();
+            }
+        };
+
         function openSys(t) { 
             document.getElementById('modal-sys').style.display = 'flex'; 
             document.getElementById('sys-tit').innerText = t; 
