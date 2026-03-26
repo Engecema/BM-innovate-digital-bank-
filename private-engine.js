@@ -5,7 +5,7 @@
 
 // --- CONFIGURAÇÕES IBM CLOUD (COLE SEUS DADOS AQUI) ---
 const IBM_CONFIG = {
-    apikey: "tL4h5JPtO0QwCdsmpGLgvBHHabvKq1PxVN9em0M_zUqO", // Cole a API Key do acesso-webhook
+    apikey: "plOC3p3xsBC45d9Cxlgsf1G9G5Ot0CHmXfnIt8s5FUJt", // Cole a API Key do acesso-webhook
     guid: "50341044-2194-4f79-a2ac-8f45959f423d",       // Cole o GUID do acesso-webhook
     region: "us-south",          // Verifique se sua região é us-south ou br-sao
     propertyName: "cloudant_endpoint"
