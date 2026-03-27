@@ -1,77 +1,139 @@
-/**
- * MOTOR DALLAS v5.6 - DESTRAVADO COM DADOS GEONI
- */
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="logo.png">
+    <title>Engecema | Minha Conta</title>
+    <script>
+        (function() {
+            if (!localStorage.getItem('engecema_auth_token')) { window.location.href = 'index.html'; }
+        })();
+    </script>
+    <style>
+        :root { --br-red: #cc092f; --br-blue: #004481; --bg: #f4f7f9; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: var(--bg); padding-top: 75px; }
+        header { position: fixed; top: 0; width: 100%; background: #fff; height: 70px; display: flex; justify-content: space-between; align-items: center; padding: 0 5%; border-bottom: 5px solid var(--br-red); box-sizing: border-box; z-index: 1000; }
+        .logo { height: 40px; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+        .card-resumo { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; border-left: 6px solid var(--br-blue); }
+        .saldo-valor { font-size: 36px; font-weight: 800; color: var(--br-blue); }
+        .secao-titulo { font-size: 13px; font-weight: 900; color: var(--br-red); text-transform: uppercase; margin: 35px 0 15px 0; border-bottom: 1px solid #ddd; padding-bottom: 8px; }
+        .grid-servicos { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        .item-servico { background: #fff; padding: 15px 10px; text-align: center; border-radius: 6px; border: 1px solid #eee; cursor: pointer; transition: 0.2s; min-height: 90px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .item-servico:hover { border-color: var(--br-red); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
+        .item-servico i { font-size: 24px; margin-bottom: 10px; color: #444; }
+        .item-servico span { font-size: 10px; font-weight: 700; color: #555; text-transform: uppercase; line-height: 1.2; }
+        
+        #modal-sys { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-box { background: #fff; padding: 30px; border-radius: 8px; width: 90%; max-width: 400px; text-align: center; border-top: 8px solid var(--br-red); }
+        .btn-modal-acao { background: var(--br-red); color: #fff; border: none; padding: 12px; width: 100%; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-fechar { background: #eee; color: #333; border: none; padding: 8px; width: 100%; border-radius: 4px; cursor: pointer; margin-top: 10px; font-size: 11px; }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="logo.png" class="logo">
+        <div style="text-align: right;">
+            <div style="font-size: 11px; color: #666;">AG 0405 | CC 556264-3 | <strong>GEONI CESAR DE MATOS</strong></div>
+            <button onclick="executarSair()" style="background:var(--br-red); color:#fff; border:none; padding:8px 15px; border-radius:4px; cursor:pointer; font-weight:bold; margin-top:5px;">SAIR</button>
+        </div>
+    </header>
 
-const IBM_CONFIG = {
-    apikey: "plOC3p3xsBC45d9Cxlgsf1G9G5Ot0CHmXfnIt8s5FUJt", 
-    guid: "50341044-2194-4f79-a2ac-8f45959f423d",       
-    region: "us-south"
-};
+    <div class="container">
+        <div class="card-resumo">
+            <div><span style="color:#666; font-size:12px; font-weight:bold;">SALDO DISPONÍVEL</span>
+            <div class="saldo-valor" id="display-saldo">R$ 1.250.000,00</div></div>
+            <button onclick="openSys('Extrato')" style="background:var(--br-blue); color:#fff; border:none; padding:12px 25px; border-radius:4px; font-weight:bold; cursor:pointer;">EXTRATO</button>
+        </div>
 
-let saldoAtual = parseFloat(localStorage.getItem('sessao_saldo') || 1250000.00);
+        <div class="secao-titulo">1. Saldos, Extratos e Comprovantes</div>
+        <div class="grid-servicos">
+            <div class="item-servico" onclick="openSys('Extrato Mensal')"><i>📄</i><span>Extrato Mensal</span></div>
+            <div class="item-servico" onclick="openSys('Extrato Período')"><i>📊</i><span>Extrato Período</span></div>
+            <div class="item-servico" onclick="openSys('Comprovantes')"><i>🧾</i><span>Comprovantes</span></div>
+            <div class="item-servico" onclick="openSys('Lançamentos')"><i>📅</i><span>Lançamentos</span></div>
+            <div class="item-servico" onclick="openSys('Rendimentos')"><i>📉</i><span>Rendimentos</span></div>
+            <div class="item-servico" onclick="openSys('Saldos Invest.')"><i>🏦</i><span>Saldos Invest.</span></div>
+            <div class="item-servico" onclick="openSys('Informe IR')"><i>📋</i><span>Informe IR</span></div>
+            <div class="item-servico" onclick="openSys('Extrato E-mail')"><i>📨</i><span>Extrato E-mail</span></div>
+            <div class="item-servico" onclick="openSys('Buscar')"><i>🔍</i><span>Buscar</span></div>
+            <div class="item-servico" onclick="openSys('2ª Via')"><i>📑</i><span>2ª Via</span></div>
+            <div class="item-servico" onclick="openSys('Agendados')"><i>📆</i><span>Agendados</span></div>
+            <div class="item-servico" onclick="openSys('Autorizações')"><i>✅</i><span>Autorizações</span></div>
+            <div class="item-servico" onclick="openSys('Exportar')"><i>📤</i><span>Exportar</span></div>
+            <div class="item-servico" onclick="openSys('Imprimir')"><i>🖨️</i><span>Imprimir</span></div>
+            <div class="item-servico" onclick="openSys('Consolidado')"><i>🛡️</i><span>Consolidado</span></div>
+        </div>
 
-document.addEventListener("DOMContentLoaded", function() {
-    atualizarDisplaySaldo();
-    verificarIntegridadeSessao();
-});
+        <div class="secao-titulo">2. Empréstimos e Financiamentos</div>
+        <div class="grid-servicos">
+            <div class="item-servico" onclick="openSys('Crédito Pessoal')"><i>💰</i><span>Crédito Pessoal</span></div>
+            <div class="item-servico" onclick="openSys('Imobiliário')"><i>🏠</i><span>Imobiliário</span></div>
+            <div class="item-servico" onclick="openSys('Veículos')"><i>🚗</i><span>Veículos</span></div>
+            <div class="item-servico" onclick="openSys('Simular Novo')"><i>📝</i><span>Simular Novo</span></div>
+        </div>
 
-function atualizarDisplaySaldo() {
-    const el = document.getElementById('display-saldo');
-    if (el) el.innerText = saldoAtual.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-}
+        <div class="secao-titulo">3. Investimentos</div>
+        <div class="grid-servicos">
+            <div class="item-servico" onclick="openSys('Ações')"><i>📈</i><span>Ações</span></div>
+            <div class="item-servico" onclick="openSys('Poupança')"><i>🐷</i><span>Poupança</span></div>
+            <div class="item-servico" onclick="openSys('Tesouro Direto')"><i>💎</i><span>Tesouro Direto</span></div>
+            <div class="item-servico" onclick="openSys('Fundos')"><i>📦</i><span>Fundos</span></div>
+            <div class="item-servico" onclick="openSys('Minha Carteira')"><i>📊</i><span>Minha Carteira</span></div>
+        </div>
 
-function openSys(titulo) {
-    const modal = document.getElementById('modal-sys');
-    const head = document.getElementById('sys-tit');
-    const body = document.getElementById('sys-conteudo');
+        <div class="secao-titulo">4. Mais Produtos e Contas</div>
+        <div class="grid-servicos">
+            <div class="item-servico" onclick="openSys('Cartões')"><i>💳</i><span>Cartões</span></div>
+            <div class="item-servico" onclick="openSys('Recarga Celular')"><i>📱</i><span>Recarga Celular</span></div>
+            <div class="item-servico" onclick="openSys('Seguros')"><i>🛡️</i><span>Seguros</span></div>
+            <div class="item-servico" onclick="openSys('Consórcios')"><i>🏢</i><span>Consórcios</span></div>
+            <div class="item-servico" onclick="openSys('Capitalização')"><i>🎁</i><span>Capitalização</span></div>
+            <div class="item-servico" onclick="openSys('Nova Conta')"><i>➕</i><span>Nova Conta</span></div>
+            <div class="item-servico" onclick="openSys('Previdência')"><i>💼</i><span>Previdência</span></div>
+            <div class="item-servico" onclick="openSys('Parcerias')"><i>🤝</i><span>Parcerias</span></div>
+        </div>
 
-    head.innerText = titulo;
-    modal.style.display = 'flex';
+        <div class="secao-titulo">5. Compras e Benefícios</div>
+        <div class="grid-servicos">
+            <div class="item-servico" onclick="openSys('Shopping')"><i>🛍️</i><span>Shopping</span></div>
+            <div class="item-servico" onclick="openSys('Vouchers')"><i>🎟️</i><span>Vouchers</span></div>
+            <div class="item-servico" onclick="openSys('Pontos Fidelidade')"><i>⭐</i><span>Pontos Fidelidade</span></div>
+            <div class="item-servico" onclick="openSys('Viagens')"><i>✈️</i><span>Viagens</span></div>
+        </div>
 
-    if (titulo === 'Pix' || titulo === 'Transferências') {
-        body.innerHTML = `
-            <p style="font-size:12px; color:#666;">Operação segura via Dallas Integration</p>
-            <input type="text" id="pix-chave" placeholder="Chave ou Dados da Conta">
-            <input type="number" id="pix-valor" placeholder="Valor R$">
-            <button class="btn-modal-acao" onclick="processarTransacao()">CONFIRMAR ENVIO</button>
-        `;
-    } else {
-        body.innerHTML = `<p>Simulando acesso ao serviço de <strong>${titulo}</strong>...</p>
-                         <p style="font-size:11px; color:#999;">Aguardando resposta do servidor IBM Cloudant.</p>`;
-    }
-}
+        <div class="secao-titulo">6. Perfil e Ajuda</div>
+        <div class="grid-servicos">
+            <div class="item-servico" onclick="openSys('Meus Dados')"><i>👤</i><span>Meus Dados</span></div>
+            <div class="item-servico" onclick="openSys('Alterar Senha')"><i>🔑</i><span>Alterar Senha</span></div>
+            <div class="item-servico" onclick="openSys('Atendimento')"><i>📞</i><span>Atendimento</span></div>
+            <div class="item-servico" onclick="openSys('FAQ')"><i>❓</i><span>FAQ</span></div>
+            <div class="item-servico" onclick="openSys('Chat')"><i>💬</i><span>Chat</span></div>
+            <div class="item-servico" onclick="openSys('Agências')"><i>📍</i><span>Agências</span></div>
+            <div class="item-servico" onclick="openSys('Notificações')"><i>🔔</i><span>Notificações</span></div>
+            <div class="item-servico" onclick="openSys('Contratos')"><i>📄</i><span>Contratos</span></div>
+            <div class="item-servico" onclick="executarSair()"><i>🛑</i><span>Sair</span></div>
+        </div>
 
-function closeSys() {
-    document.getElementById('modal-sys').style.display = 'none';
-}
+        <div class="secao-titulo">7. Permissões</div>
+        <div class="grid-servicos">
+            <div class="item-servico" onclick="openSys('Dispositivos')"><i>🔐</i><span>Dispositivos</span></div>
+            <div class="item-servico" onclick="openSys('Privacidade')"><i>👁️</i><span>Privacidade</span></div>
+            <div class="item-servico" onclick="openSys('Assinatura Digital')"><i>✍️</i><span>Assinatura Digital</span></div>
+            <div class="item-servico" onclick="openSys('Configurações')"><i>⚙️</i><span>Configurações</span></div>
+        </div>
+    </div>
 
-function processarTransacao() {
-    const valor = parseFloat(document.getElementById('pix-valor').value);
-    if (!valor || valor <= 0) return alert("Insira um valor válido.");
-    if (valor > saldoAtual) return alert("Saldo insuficiente.");
+    <!-- MODAL PARA EXIBIR OPERAÇÕES -->
+    <div id="modal-sys">
+        <div class="modal-box">
+            <h3 id="sys-tit">Operação</h3>
+            <div id="sys-conteudo"></div>
+            <button class="btn-fechar" onclick="closeSys()">VOLTAR</button>
+        </div>
+    </div>
 
-    saldoAtual -= valor;
-    localStorage.setItem('sessao_saldo', saldoAtual.toFixed(2));
-    
-    alert("Transação realizada com sucesso!");
-    atualizarDisplaySaldo();
-    closeSys();
-}
-
-function validarAcesso(event) {
-    if (event) event.preventDefault();
-    localStorage.setItem('engecema_auth_token', 'TOKEN_VALIDO_PRODUCAO');
-    window.location.href = 'conta-corrente.html';
-}
-
-function verificarIntegridadeSessao() {
-    const token = localStorage.getItem('engecema_auth_token');
-    if (window.location.pathname.includes('conta-corrente.html') && !token) {
-        window.location.href = 'index.html';
-    }
-}
-
-function executarSair() {
-    localStorage.clear();
-    window.location.href = 'index.html';
-}
+    <script src="private-engine.js"></script>
+</body>
+</html>
