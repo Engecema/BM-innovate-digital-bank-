@@ -16,7 +16,6 @@
         header { position: fixed; top: 0; width: 100%; background: #fff; height: 70px; display: flex; justify-content: space-between; align-items: center; padding: 0 5%; border-bottom: 5px solid var(--br-red); box-sizing: border-box; z-index: 1000; }
         .logo { height: 40px; }
         .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
-        
         .card-resumo { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; border-left: 6px solid var(--br-blue); }
         .saldo-valor { font-size: 36px; font-weight: 800; color: var(--br-blue); }
         .secao-titulo { font-size: 13px; font-weight: 900; color: var(--br-red); text-transform: uppercase; margin: 35px 0 15px 0; border-bottom: 1px solid #ddd; padding-bottom: 8px; }
@@ -26,8 +25,9 @@
         .item-servico i { font-size: 24px; margin-bottom: 10px; color: #444; }
         .item-servico span { font-size: 10px; font-weight: 700; color: #555; text-transform: uppercase; line-height: 1.2; }
         
+        /* Estilos da nova navegação */
         .btn-voltar { background: #666; color: #fff; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; margin-bottom: 20px; font-weight: bold; }
-        .btn-sair { background: var(--br-red); color: #fff; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        #tela-servico { display: none; } /* Inicia escondida */
     </style>
 </head>
 <body>
@@ -35,12 +35,12 @@
         <img src="logo.png" class="logo">
         <div style="text-align: right;">
             <div style="font-size: 11px; color: #666;">AG 0405 | CC 556264-3 | <strong>GEONI CESAR DE MATOS</strong></div>
-            <button class="btn-sair" onclick="executarSair()" style="margin-top: 5px;">SAIR</button>
+            <button onclick="executarSair()" style="background:var(--br-red); color:#fff; border:none; padding:8px 15px; border-radius:4px; cursor:pointer; font-weight:bold; margin-top:5px;">SAIR</button>
         </div>
     </header>
 
     <div class="container">
-        <!-- TELA 1: MENU PRINCIPAL (7 SEÇÕES) -->
+        <!-- ID NECESSÁRIO: tela-home -->
         <div id="tela-home">
             <div class="card-resumo">
                 <div><span style="color:#666; font-size:12px; font-weight:bold;">SALDO DISPONÍVEL</span>
@@ -48,6 +48,7 @@
                 <button onclick="openSys('Saldo e Extrato')" style="background:var(--br-blue); color:#fff; border:none; padding:12px 25px; border-radius:4px; font-weight:bold; cursor:pointer;">EXTRATO</button>
             </div>
 
+            <!-- SEÇÃO 1: Transações e Consultas -->
             <div class="secao-titulo">1. Transações e Consultas (15 itens)</div>
             <div class="grid-servicos">
                 <div class="item-servico" onclick="openSys('Agendamentos')"><i>📅</i><span>Agendamentos</span></div>
@@ -67,6 +68,7 @@
                 <div class="item-servico" onclick="openSys('Vender pelo Celular')"><i>🛍️</i><span>Vender pelo Celular</span></div>
             </div>
 
+            <!-- SEÇÃO 2: Empréstimos -->
             <div class="secao-titulo">2. Empréstimos e Financiamentos</div>
             <div class="grid-servicos">
                 <div class="item-servico" onclick="openSys('Credito Imobiliário')"><i>🏠</i><span>Credito Imobiliário</span></div>
@@ -75,6 +77,7 @@
                 <div class="item-servico" onclick="openSys('Renegociação de Dividas')"><i>🤝</i><span>Renegociação de Dividas</span></div>
             </div>
 
+            <!-- SEÇÃO 3: Investimentos -->
             <div class="secao-titulo">3. Investimentos</div>
             <div class="grid-servicos">
                 <div class="item-servico" onclick="openSys('Agora Home Broker')"><i>📉</i><span>Agora Home Broker</span></div>
@@ -83,6 +86,7 @@
                 <div class="item-servico" onclick="openSys('Previdência')"><i>💼</i><span>Previdência</span></div>
             </div>
 
+            <!-- SEÇÃO 4: Mais Produtos -->
             <div class="secao-titulo">4. Mais Produtos e Contas</div>
             <div class="grid-servicos">
                 <div class="item-servico" onclick="openSys('Cambio')"><i>💱</i><span>Cambio</span></div>
@@ -94,6 +98,7 @@
                 <div class="item-servico" onclick="openSys('Seguros')"><i>🛡️</i><span>Seguros</span></div>
             </div>
 
+            <!-- SEÇÃO 5: Compras -->
             <div class="secao-titulo">5. Compras e Benefícios</div>
             <div class="grid-servicos">
                 <div class="item-servico" onclick="openSys('Mimos')"><i>🎁</i><span>Mimos</span></div>
@@ -102,6 +107,7 @@
                 <div class="item-servico" onclick="openSys('Tag de Pedágio')"><i>🚗</i><span>Tag de Pedágio</span></div>
             </div>
 
+            <!-- SEÇÃO 6: Perfil e Ajuda -->
             <div class="secao-titulo">6. Perfil e Ajuda</div>
             <div class="grid-servicos">
                 <div class="item-servico" onclick="openSys('Atualização Cadastral')"><i>👤</i><span>Atualização Cadastral</span></div>
@@ -115,6 +121,7 @@
                 <div class="item-servico" onclick="openSys('Segurança')"><i>🔐</i><span>Segurança</span></div>
             </div>
 
+            <!-- SEÇÃO 7: Permissões -->
             <div class="secao-titulo">7. Permissões</div>
             <div class="grid-servicos">
                 <div class="item-servico" onclick="openSys('Autorização de Parceiros')"><i>🤝</i><span>Autorização de Parceiros</span></div>
@@ -124,9 +131,10 @@
             </div>
         </div>
 
-        <!-- TELA 2: ÁREA DE SERVIÇO (DINÂMICA) -->
-        <div id="tela-servico" style="display:none;">
+        <!-- ID NECESSÁRIO: tela-servico -->
+        <div id="tela-servico">
             <button class="btn-voltar" onclick="voltarHome()">⬅ VOLTAR AO MENU</button>
+            <!-- ID NECESSÁRIO: conteudo-dinamico -->
             <div id="conteudo-dinamico" style="background:#fff; padding:30px; border-radius:8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
                 <!-- Conteúdo injetado pelo motor -->
             </div>
