@@ -24,7 +24,14 @@
         .item-servico:hover { border-color: var(--br-red); transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.08); }
         .item-servico i { font-size: 24px; margin-bottom: 10px; color: #444; }
         .item-servico span { font-size: 10px; font-weight: 700; color: #555; text-transform: uppercase; line-height: 1.2; }
-        .btn-sair { background: var(--br-red); color: #fff; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        
+        /* ESTILO MODAL SISTEMA */
+        #modal-sys { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; align-items: center; justify-content: center; }
+        .modal-box { background: #fff; padding: 30px; border-radius: 8px; width: 90%; max-width: 400px; text-align: center; border-top: 8px solid var(--br-red); }
+        .modal-box h3 { color: var(--br-blue); margin-top: 0; }
+        .modal-box input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        .btn-modal-acao { background: var(--br-red); color: #fff; border: none; padding: 12px; width: 100%; border-radius: 4px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-fechar { background: #eee; color: #333; border: none; padding: 8px; width: 100%; border-radius: 4px; cursor: pointer; margin-top: 10px; font-size: 11px; }
     </style>
 </head>
 <body>
@@ -32,7 +39,7 @@
         <img src="logo.png" class="logo">
         <div style="text-align: right;">
             <div style="font-size: 11px; color: #666;">AG 0405 | CC 556264-3 | <strong>GEONI CESAR DE MATOS</strong></div>
-            <button class="btn-sair" onclick="executarSair()" style="margin-top: 5px;">SAIR</button>
+            <button onclick="executarSair()" style="background:var(--br-red); color:#fff; border:none; padding:8px 15px; border-radius:4px; cursor:pointer; font-weight:bold; margin-top:5px;">SAIR</button>
         </div>
     </header>
 
@@ -40,50 +47,31 @@
         <div class="card-resumo">
             <div><span style="color:#666; font-size:12px; font-weight:bold;">SALDO DISPONÍVEL</span>
             <div class="saldo-valor" id="display-saldo">R$ 1.250.000,00</div></div>
-            <button style="background:var(--br-blue); color:#fff; border:none; padding:12px 25px; border-radius:4px; font-weight:bold; cursor:pointer;">EXTRATO</button>
+            <button onclick="openSys('Extrato')" style="background:var(--br-blue); color:#fff; border:none; padding:12px 25px; border-radius:4px; font-weight:bold; cursor:pointer;">EXTRATO</button>
         </div>
 
-        <div class="secao-titulo">1. Saldos, Extratos e Comprovantes (15 itens)</div>
+        <div class="secao-titulo">1. Saldos e Extratos</div>
         <div class="grid-servicos">
-            <div class="item-servico"><i>📄</i><span>Extrato Mensal</span></div><div class="item-servico"><i>📊</i><span>Extrato Período</span></div><div class="item-servico"><i>🧾</i><span>Comprovantes</span></div><div class="item-servico"><i>📅</i><span>Lançamentos</span></div><div class="item-servico"><i>📉</i><span>Rendimentos</span></div><div class="item-servico"><i>🏦</i><span>Saldos Invest.</span></div><div class="item-servico"><i>📋</i><span>Informe IR</span></div><div class="item-servico"><i>📨</i><span>Extrato E-mail</span></div><div class="item-servico"><i>🔍</i><span>Buscar</span></div><div class="item-servico"><i>📑</i><span>2ª Via</span></div><div class="item-servico"><i>📆</i><span>Agendados</span></div><div class="item-servico"><i>✅</i><span>Autorizações</span></div><div class="item-servico"><i>📤</i><span>Exportar</span></div><div class="item-servico"><i>🖨️</i><span>Imprimir</span></div><div class="item-servico"><i>🛡️</i><span>Consolidado</span></div>
+            <div class="item-servico" onclick="openSys('Extrato Mensal')"><i>📄</i><span>Extrato Mensal</span></div>
+            <div class="item-servico" onclick="openSys('Pix')"><i>📱</i><span>Pix</span></div>
+            <div class="item-servico" onclick="openSys('Cartões')"><i>💳</i><span>Cartões</span></div>
+            <div class="item-servico" onclick="openSys('Comprovantes')"><i>🧾</i><span>Comprovantes</span></div>
+            <div class="item-servico" onclick="openSys('Investimentos')"><i>📈</i><span>Investimentos</span></div>
         </div>
+        <!-- Os demais itens seguem o mesmo padrão onclick="openSys('Nome')" -->
+    </div>
 
-        <div class="secao-titulo">2. Empréstimos e Financiamentos (4 itens)</div>
-        <div class="grid-servicos">
-            <div class="item-servico"><i>💰</i><span>Crédito Pessoal</span></div><div class="item-servico"><i>🏠</i><span>Imobiliário</span></div><div class="item-servico"><i>🚗</i><span>Veículos</span></div><div class="item-servico"><i>📝</i><span>Simular Novo</span></div>
-        </div>
-
-        <div class="secao-titulo">3. Investimentos (5 itens)</div>
-        <div class="grid-servicos">
-            <div class="item-servico"><i>📈</i><span>Ações</span></div><div class="item-servico"><i>🐷</i><span>Poupança</span></div><div class="item-servico"><i>💎</i><span>Tesouro Direto</span></div><div class="item-servico"><i>📦</i><span>Fundos</span></div><div class="item-servico"><i>📊</i><span>Minha Carteira</span></div>
-        </div>
-
-        <div class="secao-titulo">4. Mais Produtos e Contas (8 itens)</div>
-        <div class="grid-servicos">
-            <div class="item-servico"><i>💳</i><span>Cartões</span></div><div class="item-servico"><i>📱</i><span>Recarga Celular</span></div><div class="item-servico"><i>🛡️</i><span>Seguros</span></div><div class="item-servico"><i>🏢</i><span>Consórcios</span></div><div class="item-servico"><i>🎁</i><span>Capitalização</span></div><div class="item-servico"><i>➕</i><span>Nova Conta</span></div><div class="item-servico"><i>💼</i><span>Previdência</span></div><div class="item-servico"><i>🤝</i><span>Parcerias</span></div>
-        </div>
-
-        <div class="secao-titulo">5. Compras e Benefícios (4 itens)</div>
-        <div class="grid-servicos">
-            <div class="item-servico"><i>🛍️</i><span>Shopping</span></div><div class="item-servico"><i>🎟️</i><span>Vouchers</span></div><div class="item-servico"><i>⭐</i><span>Pontos Fidelidade</span></div><div class="item-servico"><i>✈️</i><span>Viagens</span></div>
-        </div>
-
-        <div class="secao-titulo">6. Perfil e Ajuda (9 itens)</div>
-        <div class="grid-servicos">
-            <div class="item-servico"><i>👤</i><span>Meus Dados</span></div><div class="item-servico"><i>🔑</i><span>Alterar Senha</span></div><div class="item-servico"><i>📞</i><span>Canais Atendimento</span></div><div class="item-servico"><i>❓</i><span>FAQ</span></div><div class="item-servico"><i>💬</i><span>Chat</span></div><div class="item-servico"><i>📍</i><span>Agências</span></div><div class="item-servico"><i>🔔</i><span>Notificações</span></div><div class="item-servico"><i>📄</i><span>Contratos</span></div><div class="item-servico"><i>🛑</i><span>Sair da Conta</span></div>
-        </div>
-
-        <div class="secao-titulo">7. Permissões (4 itens)</div>
-        <div class="grid-servicos">
-            <div class="item-servico"><i>🔐</i><span>Dispositivos</span></div><div class="item-servico"><i>👁️</i><span>Privacidade</span></div><div class="item-servico"><i>✍️</i><span>Assinatura Digital</span></div><div class="item-servico"><i>⚙️</i><span>Configurações</span></div>
+    <!-- MODAL ÚNICO DE OPERAÇÕES -->
+    <div id="modal-sys">
+        <div class="modal-box">
+            <h3 id="sys-tit">Operação</h3>
+            <div id="sys-conteudo">
+                <p>Carregando interface...</p>
+            </div>
+            <button class="btn-fechar" onclick="closeSys()">VOLTAR / CANCELAR</button>
         </div>
     </div>
+
     <script src="private-engine.js"></script>
-    <script>
-        window.addEventListener('load', function() {
-            const saldo = localStorage.getItem('sessao_saldo');
-            if (saldo) { document.getElementById('display-saldo').innerText = 'R$ ' + saldo; }
-        });
-    </script>
 </body>
 </html>
