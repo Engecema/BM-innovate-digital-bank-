@@ -1,6 +1,5 @@
 /**
- * MOTOR DALLAS v6.0.0 - NAVEGAÇÃO E SEGURANÇA
- * FOCO: CONTROLE DE TELAS (SINGLE PAGE)
+ * MOTOR DALLAS v6.1.0 - DESTRAVAMENTO DE NAVEGAÇÃO
  */
 
 const IBM_CONFIG = {
@@ -9,7 +8,7 @@ const IBM_CONFIG = {
     region: "us-south"
 };
 
-// Controle de Saldo (Simulação Geoni)
+// Controle de Saldo
 let saldoAtual = parseFloat(localStorage.getItem('sessao_saldo') || 1250000.00);
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -22,49 +21,55 @@ function atualizarDisplaySaldo() {
     if (el) el.innerText = saldoAtual.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
-// --- FUNÇÃO CENTRAL DE NAVEGAÇÃO (A QUE FAZ A MÁGICA) ---
+// --- FUNÇÃO QUE FAZ OS ÍCONES FUNCIONAREM (DESTRAVAR) ---
 function openSys(titulo) {
+    console.log("Abrindo serviço:", titulo);
     const home = document.getElementById('tela-home');
     const servico = document.getElementById('tela-servico');
     const conteudo = document.getElementById('conteudo-dinamico');
 
     if (!home || !servico || !conteudo) {
-        console.error("Erro: Estrutura de telas não encontrada no HTML.");
+        alert("Erro técnico: Estrutura de telas não encontrada.");
         return;
     }
 
-    // 1. Esconde o menu principal e mostra a área de serviço
+    // Esconde o menu e mostra a tela do serviço
     home.style.display = 'none';
     servico.style.display = 'block';
     window.scrollTo(0, 0);
 
-    // 2. Injeta o conteúdo específico baseado no ícone clicado
+    // Injeta o conteúdo dinâmico
     if (titulo === 'Pix' || titulo === 'Transferência') {
         conteudo.innerHTML = `
             <h2 style="color:#cc092f;">${titulo}</h2>
-            <p>Saldo disponível: <strong>${saldoAtual.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</strong></p>
+            <p>Saldo: <strong>${saldoAtual.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</strong></p>
             <hr>
             <div style="margin-top:20px;">
-                <input type="text" id="op-chave" placeholder="Chave Pix ou Dados Bancários" style="width:100%; padding:15px; margin-bottom:10px; border:1px solid #ccc; border-radius:4px;">
-                <input type="number" id="op-valor" placeholder="Valor R$" style="width:100%; padding:15px; border:1px solid #ccc; border-radius:4px;">
-                <button onclick="processarOperacao('${titulo}')" style="background:#cc092f; color:#fff; width:100%; border:none; padding:15px; margin-top:10px; cursor:pointer; font-weight:bold; border-radius:4px;">CONFIRMAR E ENVIAR</button>
+                <input type="text" id="op-chave" placeholder="Chave Pix ou Dados" style="width:100%; padding:15px; margin-bottom:10px; border:1px solid #ddd;">
+                <input type="number" id="op-valor" placeholder="Valor R$" style="width:100%; padding:15px; border:1px solid #ddd;">
+                <button onclick="processarOperacao('${titulo}')" style="background:#cc092f; color:#fff; width:100%; border:none; padding:15px; font-weight:bold; cursor:pointer; border-radius:4px;">CONFIRMAR ENVIO</button>
+            </div>
+        `;
+    } else if (titulo === 'Tia') {
+        conteudo.innerHTML = `
+            <div style="text-align:center;">
+                <i style="font-size:50px;">🤖</i>
+                <h2 style="color:#cc092f;">Assistente TIA</h2>
+                <p>Olá, Geoni! Como posso ajudar você hoje?</p>
+                <input type="text" placeholder="Digite sua dúvida..." style="width:100%; padding:15px; border:1px solid #ddd; border-radius:4px;">
             </div>
         `;
     } else {
-        // Conteúdo padrão para os demais itens
         conteudo.innerHTML = `
             <div style="text-align:center; padding:40px;">
                 <h2 style="color:#cc092f;">${titulo}</h2>
                 <p>Acessando base de dados <strong>Cloudant-yr</strong>...</p>
                 <div style="margin:20px auto; width:40px; height:40px; border:4px solid #f3f3f3; border-top:4px solid #cc092f; border-radius:50%; animation: spin 1s linear infinite;"></div>
-                <p style="font-size:12px; color:#666;">Sincronizando via IBM IAM Protection</p>
             </div>
-            <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
         `;
     }
 }
 
-// FUNÇÃO PARA VOLTAR AO MENU
 function voltarHome() {
     document.getElementById('tela-home').style.display = 'block';
     document.getElementById('tela-servico').style.display = 'none';
@@ -78,11 +83,11 @@ function processarOperacao(tipo) {
 
     saldoAtual -= valor;
     localStorage.setItem('sessao_saldo', saldoAtual.toFixed(2));
-    alert(`${tipo} concluído com sucesso!`);
+    alert(`${tipo} realizado com sucesso!`);
     voltarHome();
 }
 
-// --- FUNÇÕES DE SESSÃO E LOGOUT ---
+// Funções de Sessão
 function validarAcesso(event) {
     if (event) event.preventDefault();
     localStorage.setItem('engecema_auth_token', 'TOKEN_VALIDO_PRODUCAO');
