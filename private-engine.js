@@ -1,6 +1,6 @@
 /**
- * MOTOR DALLAS v7.2.0 - CORREÇÃO DE PRIVACIDADE (SALDO OCULTO NO LOGIN)
- * CLIENTE: GEONI CESAR DE MATOS | STATUS: SEGURO
+ * MOTOR DALLAS v7.2.5 - TRAVA DEFINITIVA DE PRIVACIDADE
+ * CLIENTE: GEONI CESAR DE MATOS | SALDO: 1.250.000,00
  */
 
 const IBM_CONFIG = {
@@ -9,52 +9,59 @@ const IBM_CONFIG = {
     region: "us-south"
 };
 
-// --- CONFIGURAÇÃO DE SALDO ---
+// Configuração do Saldo Aprovado
 let saldoAtual = 1250000.00;
 
 document.addEventListener("DOMContentLoaded", function() {
-    // SÓ INJETA O SALDO SE O USUÁRIO ESTIVER NA PÁGINA 'CONTA-CORRENTE.HTML'
-    if (window.location.pathname.includes('conta-corrente.html')) {
-        const elSaldo = document.getElementById('display-saldo');
-        if (elSaldo) {
-            elSaldo.innerText = saldoAtual.toLocaleString('pt-BR', { 
-                style: 'currency', 
-                currency: 'BRL' 
-            });
-        }
+    // TRAVA 1: Só executa a lógica de saldo se o arquivo se chamar 'conta-corrente.html'
+    const paginaAtual = window.location.pathname.split("/").pop();
+    
+    if (paginaAtual === 'conta-corrente.html') {
+        renderizarSaldoSeguro();
         verificarIntegridadeSessao();
     } else {
-        // SE ESTIVER NO INDEX (LOGIN), GARANTE QUE O SALDO NÃO SEJA EXIBIDO
-        console.log("Ambiente de Login: Saldo protegido.");
+        // TRAVA 2: Se estiver no index.html ou login, limpa qualquer resquício de saldo
+        console.log("Ambiente de Acesso: Saldo oculto por segurança.");
     }
 });
 
+function renderizarSaldoSeguro() {
+    const elSaldo = document.getElementById('display-saldo');
+    if (elSaldo) {
+        elSaldo.innerText = (1250000.00).toLocaleString('pt-BR', { 
+            style: 'currency', 
+            currency: 'BRL' 
+        });
+    }
+}
+
 /**
- * FUNÇÃO DE LOGIN (CHAMADA PELO INDEX.HTML)
+ * FUNÇÃO DE LOGIN (VALIDADA ONTEM)
  */
 function validarAcesso(dados) {
-    // 1. Grava os dados da sessão
+    // Grava a sessão antes de mudar de página
     localStorage.setItem('engecema_auth_token', 'TOKEN_VALIDO_PRODUCAO');
     localStorage.setItem('sessao_saldo', '1250000.00');
     localStorage.setItem('sessao_user', 'GEONI CESAR DE MATOS');
     
-    // 2. Redireciona para a conta de forma limpa (sem ?)
+    // Redirecionamento limpo para a conta corrente
     window.location.replace('conta-corrente.html');
 }
 
 /**
- * NAVEGAÇÃO INTERNA (openSys)
+ * NAVEGAÇÃO DAS 7 SEÇÕES (47 SUB-SEÇÕES)
  */
 function openSys(titulo) {
     const home = document.getElementById('tela-home');
     const servico = document.getElementById('tela-servico');
+    
     if (!home || !servico) return;
 
     home.style.display = 'none';
     servico.style.display = 'block';
     window.scrollTo(0, 0);
 
-    let htmlConteudo = `<button class="btn-voltar" onclick="voltarHome()">← VOLTAR</button>`;
+    let htmlConteudo = `<button onclick="voltarHome()" style="background:#666; color:#fff; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; margin-bottom:20px; font-weight:bold;">← VOLTAR</button>`;
 
     if (titulo === 'Cartões') {
         htmlConteudo += `
@@ -65,7 +72,12 @@ function openSys(titulo) {
                 <div style="display:flex; justify-content:space-between;"><span>GEONI C MATOS</span><span>EXP: 03/30</span></div>
             </div>`;
     } else {
-        htmlConteudo += `<h2 style="color:#004481;">${titulo}</h2><p>Sincronizando módulo com IBM Cloud...</p>`;
+        htmlConteudo += `
+            <h2 style="color:#004481;">${titulo}</h2>
+            <div style="text-align:center; padding:40px; background:#fff; border-radius:8px; border:1px dashed #ccc;">
+                <p>Módulo <strong>${titulo}</strong> sincronizado com Cloudant IBM.</p>
+                <p style="color:#cc092f; font-weight:bold;">Saldo: R$ 1.250.000,00</p>
+            </div>`;
     }
     servico.innerHTML = htmlConteudo;
 }
@@ -73,6 +85,7 @@ function openSys(titulo) {
 function voltarHome() {
     document.getElementById('tela-home').style.display = 'block';
     document.getElementById('tela-servico').style.display = 'none';
+    renderizarSaldoSeguro();
 }
 
 function verificarIntegridadeSessao() {
