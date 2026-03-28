@@ -6,38 +6,160 @@
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="shortcut icon" type="image/png" href="logo.png">
     <title>Engecema | Acesso à Conta</title>
+    
     <style>
-        :root { --br-red: #cc092f; --br-blue: #004481; --bg-light: #f4f7f9; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: var(--bg-light); display: flex; flex-direction: column; min-height: 100vh; }
+        :root { 
+            --br-red: #cc092f; 
+            --br-blue: #004481; 
+            --bg-light: #f4f7f9; 
+        }
+        
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            margin: 0; 
+            background: var(--bg-light); 
+            display: flex; 
+            flex-direction: column; 
+            min-height: 100vh; 
+        }
         
         header { 
-            background: #fff; padding: 12px 5%; display: flex; justify-content: space-between; align-items: center; 
-            border-bottom: 6px solid var(--br-red); box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 1000;
+            background: #fff; 
+            padding: 12px 5%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 6px solid var(--br-red); 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+            z-index: 1000;
         }
+        
         .logo { height: 45px; }
         
-        .auth-container { display: flex; align-items: center; gap: 10px; }
-        .login-bar { display: flex; gap: 6px; align-items: center; }
-        .login-bar input { padding: 8px; border: 1px solid #ccc; border-radius: 4px; width: 85px; font-size: 13px; outline: none; }
+        .auth-container { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        }
         
-        .btn-ok { background: var(--br-blue); color: #fff; border: none; padding: 8px 18px; border-radius: 4px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 12px; }
+        .login-bar { 
+            display: flex; 
+            gap: 6px; 
+            align-items: center; 
+        }
+        
+        .login-bar input { 
+            padding: 8px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+            width: 85px; 
+            font-size: 13px; 
+            outline: none; 
+        }
+        
+        .btn-ok { 
+            background: var(--br-blue); 
+            color: #fff; 
+            border: none; 
+            padding: 8px 18px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            font-size: 12px; 
+        }
 
-        .hero { background: #fff; padding: 50px 20px; text-align: center; border-bottom: 1px solid #eee; }
-        .hero h1 { font-size: 2.2em; margin: 0; font-weight: 300; color: #333; }
-        .hero h1 b { color: var(--br-red); font-weight: 800; }
+        .hero { 
+            background: #fff; 
+            padding: 50px 20px; 
+            text-align: center; 
+            border-bottom: 1px solid #eee; 
+        }
+        
+        .hero h1 { 
+            font-size: 2.2em; 
+            margin: 0; 
+            font-weight: 300; 
+            color: #333; 
+        }
+        
+        .hero h1 b { 
+            color: var(--br-red); 
+            font-weight: 800; 
+        }
 
-        .main-cta { max-width: 500px; margin: -30px auto 40px; background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee; }
+        .main-cta { 
+            max-width: 500px; 
+            margin: -30px auto 40px; 
+            background: #fff; 
+            padding: 40px; 
+            border-radius: 8px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); 
+            text-align: center; 
+            border: 1px solid #eee; 
+        }
 
-        .abertura-conta { margin-top: 20px; padding-top: 20px; border-top: 1px dashed #ccc; }
-        .icon-abertura { font-size: 45px; margin-bottom: 15px; display: block; }
+        .abertura-conta { 
+            margin-top: 20px; 
+            padding-top: 20px; 
+            border-top: 1px dashed #ccc; 
+        }
+        
+        .icon-abertura { 
+            font-size: 45px; 
+            margin-bottom: 15px; 
+            display: block; 
+        }
 
-        .btn-abrir-conta { display: inline-block; background: #fff; color: var(--br-blue); border: 2px solid var(--br-blue); padding: 15px 30px; text-decoration: none; border-radius: 4px; font-weight: bold; transition: 0.3s; }
-        .btn-abrir-conta:hover { background: var(--br-blue); color: #fff; }
+        .btn-abrir-conta { 
+            display: inline-block; 
+            background: #fff; 
+            color: var(--br-blue); 
+            border: 2px solid var(--br-blue); 
+            padding: 15px 30px; 
+            text-decoration: none; 
+            border-radius: 4px; 
+            font-weight: bold; 
+            transition: 0.3s; 
+        }
+        
+        .btn-abrir-conta:hover { 
+            background: var(--br-blue); 
+            color: #fff; 
+        }
 
-        .btn-open { display: none; background: var(--br-red); color: #fff; padding: 16px; text-decoration: none; border-radius: 4px; font-weight: bold; margin-top: 20px; }
+        .btn-open { 
+            display: none; 
+            background: var(--br-red); 
+            color: #fff; 
+            padding: 16px; 
+            text-decoration: none; 
+            border-radius: 4px; 
+            font-weight: bold; 
+            margin-top: 20px; 
+        }
 
-        footer { margin-top: auto; background: #fff; text-align: center; padding: 25px; color: #888; font-size: 0.8em; }
-        #btn-logout { display: none; background: var(--br-red); color: #fff; border: none; padding: 9px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; text-transform: uppercase; font-size: 11px;}
+        footer { 
+            margin-top: auto; 
+            background: #fff; 
+            text-align: center; 
+            padding: 25px; 
+            color: #888; 
+            font-size: 0.8em; 
+        }
+        
+        #btn-logout { 
+            display: none; 
+            background: var(--br-red); 
+            color: #fff; 
+            border: none; 
+            padding: 9px 20px; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            font-weight: bold; 
+            text-transform: uppercase; 
+            font-size: 11px;
+        }
     </style>
 </head>
 <body>
@@ -45,14 +167,14 @@
     <header>
         <img src="logo.png" alt="Engecema" class="logo">
         <div class="auth-container">
-            <!-- A TAG FORM FOI REMOVIDA PARA ELIMINAR O ERRO DO PONTO DE INTERROGAÇÃO (?) -->
-            <div id="form-login" class="login-bar">
-                <input type="text" id="ag" placeholder="Agência" maxlength="4" autocomplete="off">
-                <input type="text" id="ct" placeholder="Conta" maxlength="9" autocomplete="off">
-                <input type="password" id="senha" placeholder="Senha" maxlength="6">
-                <input type="password" id="senha_conf" placeholder="Confirmar" maxlength="6">
-                <button type="button" class="btn-ok" onclick="executarLoginManual()">OK</button>
-            </div>
+            <!-- Trava técnica onsubmit para eliminar o erro '?' da URL -->
+            <form id="form-login" class="login-bar" onsubmit="event.preventDefault(); validarAcesso(this);" autocomplete="off">
+                <input type="text" id="ag" placeholder="Agência" required maxlength="4" autocomplete="off">
+                <input type="text" id="ct" placeholder="Conta" required maxlength="8" autocomplete="off">
+                <input type="password" id="senha" placeholder="Senha" required maxlength="6" autocomplete="new-password">
+                <input type="password" id="senha_conf" placeholder="Confirmar" required maxlength="6" autocomplete="new-password">
+                <button type="submit" class="btn-ok">OK</button>
+            </form>
             <button id="btn-logout" onclick="executarSair()">Sair / Logout</button>
         </div>
     </header>
@@ -75,42 +197,27 @@
                 </div>
             </div>
 
-            <!-- Botão de acesso direto que aparece após login -->
             <a href="conta-corrente.html" id="btn-painel" class="btn-open">ENTRAR NO SISTEMA AGORA</a>
         </div>
     </main>
 
     <footer>
         <p><strong>Engecema Engenharia Fomento e Tecnologia Ltda.</strong><br>
-        Ambiente Seguro | IBM Cloud Protected</p>
+        Ambiente Seguro | IBM Cloud Protected | Sincronizado Dallas v7.0</p>
+        <p style="font-size: 10px; margin-top: 5px;">Cloudant-yr System Active</p>
     </footer>
 
-    <!-- CARREGAMENTO DO MOTOR PRIVADO -->
+    <!-- INTEGRAÇÃO COM O MOTOR PRIVADO -->
     <script src="private-engine.js"></script>
 
     <script>
-        // Função de disparo manual para evitar o comportamento padrão do navegador
-        function executarLoginManual() {
-            const agencia = document.getElementById('ag').value;
-            const conta = document.getElementById('ct').value;
-
-            if (agencia.length < 4 || conta.length < 5) {
-                alert("Dados insuficientes para acesso.");
-                return;
-            }
-
-            // Chama a função validarAcesso do private-engine.js que você já aprovou
-            if (typeof validarAcesso === "function") {
-                validarAcesso({ ag: agencia, ct: conta });
-            } else {
-                alert("Erro crítico: Motor 'private-engine.js' não carregado.");
-            }
-        }
-
-        // Controle de interface baseada na sessão
+        /**
+         * Inicialização do Estado de Sessão
+         * Verifica o token de produção gravado no private-engine.js
+         */
         window.addEventListener('load', function() {
             const token = localStorage.getItem('engecema_auth_token');
-            if(token) {
+            if(token === 'TOKEN_VALIDO_PRODUCAO') {
                 document.getElementById('form-login').style.display = 'none';
                 document.getElementById('btn-logout').style.display = 'block';
                 document.getElementById('btn-painel').style.display = 'block';
