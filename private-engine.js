@@ -10,7 +10,7 @@ const IBM_PRIVATE_CORE = {
     agencia: "0405",
     conta: "556264-3",
     cluster: "DALLAS-PROD-NODE-01",
-    version: "v31.4.2",
+    version: "v31.5.0",
     protocol: "TLS-1.3-SECURE",
     brand: "BRADESCO-PRIVATE-MIRROR",
     security_level: "MAXIMUM"
@@ -20,13 +20,13 @@ const EngineArchitecture = {
     total_nodes: 47,
     sections_limit: 7,
     schema: [
-        { id: "S1", label: "OPERACIONAL ESTRUTURADO", nodes: 7, color: "#004481", tier: "CORE" },
-        { id: "S2", label: "INVESTIMENTOS PRIVATE", nodes: 7, color: "#cc092f", tier: "ASSET" },
-        { id: "S3", label: "FOMENTO TECNOLÓGICO", nodes: 7, color: "#004481", tier: "TECH" },
-        { id: "S4", label: "RESERVA DE LIQUIDEZ", nodes: 7, color: "#cc092f", tier: "STABLE" },
-        { id: "S5", label: "CUSTÓDIA DE ATIVOS", nodes: 7, color: "#004481", tier: "SECURITY" },
-        { id: "S6", label: "TRANSACIONAL DALLAS", nodes: 6, color: "#cc092f", tier: "DATA" },
-        { id: "S7", label: "BUFFER DE SEGURANÇA", nodes: 6, color: "#333333", tier: "SAFETY" }
+        { id: "SEC-01", label: "OPERACIONAL ESTRUTURADO", nodes: 7, tier: "CRITICAL", color: "#004481" },
+        { id: "SEC-02", label: "INVESTIMENTOS PRIVATE", nodes: 7, tier: "ASSET", color: "#cc092f" },
+        { id: "SEC-03", label: "FOMENTO TECNOLÓGICO", nodes: 7, tier: "CORE", color: "#004481" },
+        { id: "SEC-04", label: "RESERVA DE LIQUIDEZ", nodes: 7, tier: "STABLE", color: "#cc092f" },
+        { id: "SEC-05", label: "CUSTÓDIA DE ATIVOS", nodes: 7, tier: "SECURITY", color: "#004481" },
+        { id: "SEC-06", label: "TRANSACIONAL DALLAS", nodes: 6, tier: "DATA", color: "#cc092f" },
+        { id: "SEC-07", label: "BUFFER DE SEGURANÇA", nodes: 6, tier: "SAFETY", color: "#333333" }
     ]
 };
 
@@ -34,7 +34,7 @@ const TypeValidator = {
     isNumber: (v) => typeof v === 'number' && !isNaN(v),
     isString: (v) => typeof v === 'string' && v.trim().length > 0,
     isObject: (v) => typeof v === 'object' && v !== null,
-    verify: function(c) {
+    verifyCore: function(c) {
         return this.isString(c.apikey) && this.isNumber(c.balance) && this.isString(c.guid);
     }
 };
@@ -42,6 +42,7 @@ const TypeValidator = {
 const MathEngine = {
     formatBRL: (v) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v),
     partition: function(balance) {
+        if (!TypeValidator.isNumber(balance)) return [];
         const unit = balance / EngineArchitecture.total_nodes;
         return EngineArchitecture.schema.map(s => ({
             ...s,
@@ -223,7 +224,7 @@ const TemplateFactory = {
 
 const EngineController = {
     boot: function() {
-        if (!TypeValidator.verify(IBM_PRIVATE_CORE)) {
+        if (!TypeValidator.verifyCore(IBM_PRIVATE_CORE)) {
             console.error("FATAL_ERROR: CONFIG_CORE_INTEGRITY_FAILED");
             return;
         }
@@ -315,6 +316,23 @@ const ErrorHandler = {
     }
 };
 
+const CacheManager = {
+    store: {},
+    get: function(k) { return this.store[k]; },
+    set: function(k, v) { this.store[k] = v; }
+};
+
+const InterceptorModule = {
+    active: true,
+    type: "NETWORK_GATE",
+    level: 7
+};
+
+const AuditObserver = {
+    enabled: true,
+    observe: function() { TelemetrySystem.push("AUDIT_OBSERVER", "RUNNING"); }
+};
+
 window.renderModule = (id) => EngineController.render(id);
 window.backToMenu = () => window.location.reload();
 
@@ -322,4 +340,5 @@ document.addEventListener('DOMContentLoaded', () => {
     EngineController.boot();
     DiagnosticTool.heartbeat();
     DiagnosticTool.runAudit();
+    AuditObserver.observe();
 });
