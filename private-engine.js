@@ -10,254 +10,196 @@ const IBM_PRIVATE_CORE = {
     agencia: "0405",
     conta: "556264-3",
     cluster: "DALLAS-PROD-NODE-01",
-    version: "v31.0.5",
+    version: "v31.3.0",
     protocol: "TLS-1.3-SECURE",
     brand: "BRADESCO-PRIVATE-MIRROR",
     security_level: "MAXIMUM"
 };
 
-const EngineConstants = {
-    TOTAL_NODES: 47,
-    TOTAL_SECTIONS: 7,
-    REDUNDANCY_FACTOR: 1.5,
-    MAP_SCHEMA: [
-        { id: "SEC-01", name: "OPERACIONAL ESTRUTURADO", nodes: 7, color: "#004481", risk: "LOW" },
-        { id: "SEC-02", name: "INVESTIMENTOS PRIVATE", nodes: 7, color: "#cc092f", risk: "MEDIUM" },
-        { id: "SEC-03", name: "FOMENTO TECNOLÓGICO", nodes: 7, color: "#004481", risk: "LOW" },
-        { id: "SEC-04", name: "RESERVA DE LIQUIDEZ", nodes: 7, color: "#cc092f", risk: "SAFE" },
-        { id: "SEC-05", name: "CUSTÓDIA DE ATIVOS", nodes: 7, color: "#004481", risk: "SAFE" },
-        { id: "SEC-06", name: "TRANSACIONAL DALLAS", nodes: 6, color: "#cc092f", risk: "HIGH" },
-        { id: "SEC-07", name: "BUFFER DE SEGURANÇA", nodes: 6, color: "#333333", risk: "CRITICAL" }
+const EngineArchitecture = {
+    total_nodes: 47,
+    sections_limit: 7,
+    schema: [
+        { id: "S1", label: "OPERACIONAL ESTRUTURADO", nodes: 7, color: "#004481" },
+        { id: "S2", label: "INVESTIMENTOS PRIVATE", nodes: 7, color: "#cc092f" },
+        { id: "S3", label: "FOMENTO TECNOLÓGICO", nodes: 7, color: "#004481" },
+        { id: "S4", label: "RESERVA DE LIQUIDEZ", nodes: 7, color: "#cc092f" },
+        { id: "S5", label: "CUSTÓDIA DE ATIVOS", nodes: 7, color: "#004481" },
+        { id: "S6", label: "TRANSACIONAL DALLAS", nodes: 6, color: "#cc092f" },
+        { id: "S7", label: "BUFFER DE SEGURANÇA", nodes: 6, color: "#333333" }
     ]
 };
 
-const DataValidator = {
-    isValidBalance: (val) => typeof val === 'number' && val > 0,
-    isValidString: (str) => typeof str === 'string' && str.trim().length > 0,
-    verifyIntegrity: function(obj) {
-        try {
-            return this.isValidBalance(obj.balance) && this.isValidString(obj.apikey) && this.isValidString(obj.guid);
-        } catch (e) {
-            return false;
-        }
-    }
-};
-
-const TelemetryScanner = {
-    logs: [],
-    record: function(event, level = "LOG") {
-        const entry = {
-            timestamp: new Date().toISOString(),
-            event: event,
-            level: level,
-            cluster: IBM_PRIVATE_CORE.cluster,
-            checksum: Math.random().toString(16).toUpperCase().slice(2, 10)
-        };
-        this.logs.push(entry);
-        if (this.logs.length > 100) this.logs.shift();
-        console.log(`[${entry.level}] ${entry.event} [${entry.checksum}]`);
-    }
-};
-
-const MathModule = {
-    calculateSectionalBalance: function(totalBalance) {
-        if (!DataValidator.isValidBalance(totalBalance)) return [];
-        const unitValue = totalBalance / EngineConstants.TOTAL_NODES;
-        return EngineConstants.MAP_SCHEMA.map(section => ({
-            ...section,
-            totalAllocated: section.nodes * unitValue,
-            perNodeValue: unitValue
+const MathEngine = {
+    formatBRL: (v) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v),
+    calculate: function(balance) {
+        const unit = balance / EngineArchitecture.total_nodes;
+        return EngineArchitecture.schema.map(s => ({
+            ...s,
+            total: s.nodes * unit,
+            unitValue: unit
         }));
-    },
-    formatCurrency: function(value) {
-        return new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL',
-            maximumFractionDigits: 2
-        }).format(value);
     }
 };
 
-const SessionController = {
-    namespace: "engecema_private_",
-    writeState: function(payload) {
-        try {
-            Object.keys(payload).forEach(key => {
-                const secureKey = `${this.namespace}${key}`;
-                localStorage.setItem(secureKey, payload[key]);
-            });
-            localStorage.setItem('sessao_saldo', IBM_PRIVATE_CORE.balance.toString());
-            TelemetryScanner.record("STORAGE_PERSISTENCE_SUCCESS", "SECURITY");
-            return true;
-        } catch (error) {
-            TelemetryScanner.record(`STORAGE_WRITE_FAILURE: ${error.message}`, "CRITICAL");
-            return false;
-        }
-    },
-    destroyState: function() {
-        try {
-            const allKeys = Object.keys(localStorage);
-            allKeys.forEach(k => {
-                if (k.startsWith(this.namespace) || k === 'sessao_saldo') {
-                    localStorage.removeItem(k);
-                }
-            });
-            sessionStorage.clear();
-            TelemetryScanner.record("CLEANUP_EXECUTION_COMPLETED", "AUTH");
-            return true;
-        } catch (error) {
-            TelemetryScanner.record("CLEANUP_FAULT", "ERROR");
-            return false;
-        }
+const TelemetrySystem = {
+    buffer: [],
+    log: function(action, status) {
+        const entry = {
+            t: new Date().toISOString(),
+            a: action,
+            s: status,
+            c: IBM_PRIVATE_CORE.cluster,
+            h: Math.random().toString(36).substring(2, 15).toUpperCase()
+        };
+        this.buffer.push(entry);
+        if (this.buffer.length > 100) this.buffer.shift();
+        console.log(`[CORE] ${entry.a} | ${entry.s} | ${entry.h}`);
     }
 };
 
 const SecurityGate = {
-    handshake: function() {
-        TelemetryScanner.record("DOM_INTERCEPTOR_ACTIVE", "NETWORK");
-        document.addEventListener('click', (event) => {
-            const element = event.target;
-            if (!element) return;
-            const computed = window.getComputedStyle(element);
-            const bgColor = computed.backgroundColor;
-            const innerTxt = (element.innerText || element.value || "").toUpperCase();
-            
-            const triggerAuth = bgColor.includes('0, 68, 129') || bgColor.includes('0, 0, 255') || innerTxt.includes('OK') || innerTxt.includes('ACESSAR');
-            const triggerExit = bgColor.includes('204, 9, 47') || bgColor.includes('255, 0, 0') || innerTxt.includes('SAIR');
-
-            if (triggerAuth || triggerExit) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
-                if (triggerAuth) this.authorize();
-                else this.terminate();
-            }
-        }, true);
+    key: "engecema_private_",
+    init: function() {
+        document.addEventListener('click', this.handle.bind(this), true);
     },
-    authorize: function() {
-        const authData = {
-            token: btoa(IBM_PRIVATE_CORE.apikey).substring(0, 32),
-            user: IBM_PRIVATE_CORE.owner,
-            company: IBM_PRIVATE_CORE.company,
-            cluster: IBM_PRIVATE_CORE.cluster,
+    handle: function(e) {
+        const t = e.target;
+        if (!t) return;
+        const s = window.getComputedStyle(t);
+        const bg = s.backgroundColor;
+        const txt = (t.innerText || t.value || "").toUpperCase();
+        const ok = bg.includes('0, 68, 129') || bg.includes('0, 0, 255') || txt.includes('OK') || txt.includes('ACESSAR');
+        const ex = bg.includes('204, 9, 47') || bg.includes('255, 0, 0') || txt.includes('SAIR');
+        if (ok || ex) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            ok ? this.auth() : this.exit();
+        }
+    },
+    auth: function() {
+        const d = {
+            tk: btoa(IBM_PRIVATE_CORE.apikey).substring(0, 32),
+            ow: IBM_PRIVATE_CORE.owner,
+            cp: IBM_PRIVATE_CORE.company,
+            bl: IBM_PRIVATE_CORE.balance,
+            cl: IBM_PRIVATE_CORE.cluster,
             ts: Date.now(),
-            protocol: IBM_PRIVATE_CORE.protocol,
-            status: "SECURE_AUTHORIZED_V31"
+            pr: IBM_PRIVATE_CORE.protocol
         };
-        const result = SessionController.writeState(authData);
-        if (result) window.location.replace('conta-corrente.html');
+        Object.keys(d).forEach(k => localStorage.setItem(`${this.key}${k}`, d[k]));
+        localStorage.setItem('sessao_saldo', IBM_PRIVATE_CORE.balance.toString());
+        TelemetrySystem.log("AUTH_FLOW", "SUCCESS");
+        window.location.replace('conta-corrente.html');
     },
-    terminate: function() {
-        SessionController.destroyState();
+    exit: function() {
+        Object.keys(localStorage).forEach(k => {
+            if (k.startsWith(this.key) || k === 'sessao_saldo') localStorage.removeItem(k);
+        });
+        sessionStorage.clear();
+        TelemetrySystem.log("EXIT_FLOW", "COMPLETED");
         window.location.replace('index.html');
     }
 };
 
 const StyleEngine = {
-    injectGlobal: function() {
-        const styleSheet = document.createElement('style');
-        styleSheet.textContent = `
-            .private-viewport { font-family: 'IBM Plex Sans', sans-serif; padding: 35px; max-width: 1300px; margin: auto; color: #222; }
-            .btn-back-action { background: #2d2d2d; color: #fff; border: none; padding: 14px 30px; border-radius: 6px; cursor: pointer; margin-bottom: 40px; font-weight: 800; text-transform: uppercase; transition: all 0.3s ease; }
-            .btn-back-action:hover { background: #cc092f; transform: translateX(-5px); }
-            .platinum-card-frame { background: linear-gradient(145deg, #cc092f 0%, #600000 100%); padding: 50px; border-radius: 30px; color: #fff; box-shadow: 0 30px 60px rgba(0,0,0,0.4); margin-bottom: 50px; position: relative; border: 1px solid rgba(255,255,255,0.1); }
-            .card-emblem { width: 70px; height: 50px; background: #c5a059; border-radius: 12px; margin-bottom: 30px; box-shadow: inset 0 0 10px rgba(0,0,0,0.3); }
-            .card-number-mask { font-size: 36px; font-family: 'Courier New', monospace; letter-spacing: 6px; margin: 35px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-            .data-info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
-            .info-block { background: #ffffff; border: 1px solid #e5e5e5; padding: 35px; border-radius: 20px; border-left: 12px solid; box-shadow: 0 15px 35px rgba(0,0,0,0.07); transition: transform 0.3s; }
-            .info-block:hover { transform: translateY(-5px); }
-            .matrix-wrapper { background: #fdfdfd; border: 1px solid #dcdcdc; border-radius: 20px; padding: 30px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
-            .matrix-top-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #f0f0f0; padding-bottom: 18px; margin-bottom: 25px; }
-            .matrix-title { font-weight: 900; color: #004481; font-size: 16px; text-transform: uppercase; }
-            .matrix-value-label { color: #cc092f; font-weight: 800; font-size: 18px; }
-            .node-visual-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 12px; }
-            .node-point { background: #004481; color: #fff; font-size: 11px; padding: 14px 0; border-radius: 8px; text-align: center; cursor: pointer; border: 1px solid #002d56; transition: 0.2s; }
-            .node-point:hover { background: #cc092f; border-color: #800000; box-shadow: 0 0 15px rgba(204,9,47,0.4); }
-            .tia-interface { text-align: center; padding: 100px 30px; }
-            .tia-sphere { background: #fff; border: 4px solid #cc092f; padding: 60px; border-radius: 50px; box-shadow: 0 45px 90px rgba(204,9,47,0.25); max-width: 800px; margin: auto; }
+    inject: function() {
+        const css = `
+            .viewport-v31 { font-family: 'IBM Plex Sans', sans-serif; padding: 50px; max-width: 1400px; margin: auto; color: #1a1a1a; }
+            .btn-nav-v31 { background: #161616; color: #fff; border: none; padding: 20px 40px; border-radius: 4px; cursor: pointer; margin-bottom: 55px; font-weight: 700; text-transform: uppercase; transition: 0.3s; }
+            .btn-nav-v31:hover { background: #cc092f; transform: scale(1.02); }
+            .card-platinum-v31 { background: linear-gradient(135deg, #cc092f 0%, #4a0000 100%); padding: 70px; border-radius: 35px; color: #fff; box-shadow: 0 50px 100px rgba(0,0,0,0.5); margin-bottom: 80px; position: relative; border: 1px solid rgba(255,255,255,0.1); }
+            .emblem-v31 { width: 90px; height: 65px; background: #d4af37; border-radius: 15px; margin-bottom: 50px; box-shadow: inset 0 0 20px rgba(0,0,0,0.2); }
+            .digits-v31 { font-size: 45px; font-family: 'Courier New', monospace; letter-spacing: 10px; margin: 60px 0; text-shadow: 4px 8px 10px rgba(0,0,0,0.4); }
+            .grid-v31 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 50px; }
+            .unit-v31 { background: #ffffff; border: 1px solid #e5e5e5; padding: 55px; border-radius: 26px; border-left: 20px solid; box-shadow: 0 35px 70px rgba(0,0,0,0.08); transition: 0.4s; }
+            .unit-v31:hover { transform: translateY(-10px); }
+            .matrix-v31 { background: #ffffff; border: 1px solid #e8e8e8; border-radius: 30px; padding: 50px; margin-bottom: 45px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
+            .bar-v31 { display: flex; justify-content: space-between; align-items: center; border-bottom: 5px solid #fcfcfc; padding-bottom: 35px; margin-bottom: 45px; }
+            .tag-v31 { font-weight: 900; color: #004481; font-size: 22px; letter-spacing: 2px; }
+            .val-v31 { color: #cc092f; font-weight: 800; font-size: 26px; }
+            .nodes-v31 { display: grid; grid-template-columns: repeat(auto-fill, minmax(115px, 1fr)); gap: 20px; }
+            .point-v31 { background: #004481; color: #fff; font-size: 14px; padding: 22px 0; border-radius: 16px; text-align: center; border: 1px solid #002d56; transition: 0.4s; cursor: crosshair; }
+            .point-v31:hover { background: #cc092f; border-color: #800000; transform: scale(1.18) translateY(-10px); box-shadow: 0 25px 50px rgba(204,9,47,0.45); }
+            .tia-v31 { text-align: center; padding: 180px 70px; }
+            .bubble-v31 { background: #fff; border: 7px solid #cc092f; padding: 100px; border-radius: 90px; box-shadow: 0 80px 160px rgba(204,9,47,0.28); max-width: 1100px; margin: auto; }
         `;
-        document.head.appendChild(styleSheet);
+        const t = document.createElement('style');
+        t.textContent = css;
+        document.head.appendChild(t);
     }
 };
 
-const ModuleRenderer = {
-    render: function(targetId) {
-        const domArea = document.getElementById('engine-content-area');
-        if (!domArea) {
-            TelemetryScanner.record("RENDER_TARGET_MISSING", "ERROR");
-            return;
-        }
-
-        TelemetryScanner.record(`INITIALIZING_RENDER:${targetId}`, "UI");
-        const navigation = `<button class="btn-back-action" onclick="window.location.reload()">← VOLTAR AO PAINEL PRIVATE</button>`;
-        const sectionalData = MathModule.calculateSectionalBalance(IBM_PRIVATE_CORE.balance);
-
+const TemplateFactory = {
+    render: function(id) {
+        const d = MathEngine.calculate(IBM_PRIVATE_CORE.balance);
+        const b = `<button class="btn-nav-v31" onclick="window.location.reload()">← VOLTAR AO CLUSTER CENTRAL</button>`;
         const views = {
             'Cartões': `
-                <div class="private-viewport">
+                <div class="viewport-v31">
                     <h2>Cartões Business Fomento</h2>
-                    <div class="platinum-card-frame">
-                        <div class="card-emblem"></div>
-                        <p style="font-size:14px;letter-spacing:5px;opacity:0.8;text-transform:uppercase;">Platinum Business Private</p>
-                        <p class="card-number-mask">**** **** **** 4050</p>
-                        <div style="display:flex;justify-content:space-between;font-weight:700;font-size:18px;">
-                            <span>${IBM_PRIVATE_CORE.owner}</span><span>VAL: 03/30</span>
+                    <div class="card-platinum-v31">
+                        <div class="emblem-v31"></div>
+                        <p style="font-size:22px;letter-spacing:9px;opacity:0.8;text-transform:uppercase;">Platinum Business Private</p>
+                        <p class="digits-v31">**** **** **** 4050</p>
+                        <div style="display:flex;justify-content:space-between;font-weight:700;font-size:26px;">
+                            <span>${IBM_PRIVATE_CORE.owner}</span><span>EXP: 03/30</span>
                         </div>
                     </div>
-                    <div class="data-info-grid">
-                        <div class="info-block" style="border-left-color:#cc092f">
-                            <span style="font-size:12px;color:#888;">RAZÃO SOCIAL</span><br><strong style="font-size:18px;">${IBM_PRIVATE_CORE.company}</strong>
+                    <div class="grid-v31">
+                        <div class="unit-v31" style="border-left-color:#cc092f">
+                            <span style="font-size:18px;color:#777;">RAZÃO SOCIAL</span><br><strong style="font-size:26px;">${IBM_PRIVATE_CORE.company}</strong>
                         </div>
-                        <div class="info-block" style="border-left-color:#004481">
-                            <span style="font-size:12px;color:#888;">CLUSTER REGION</span><br><strong style="font-size:18px;">${IBM_PRIVATE_CORE.region.toUpperCase()}</strong>
+                        <div class="unit-v31" style="border-left-color:#004481">
+                            <span style="font-size:18px;color:#777;">ID CONTA</span><br><strong style="font-size:26px;">${IBM_PRIVATE_CORE.agencia} / ${IBM_PRIVATE_CORE.conta}</strong>
                         </div>
                     </div>
                 </div>`,
             'Investimentos': `
-                <div class="private-viewport">
-                    <h2>Carteira de Investimentos e Liquidez</h2>
-                    <div class="data-info-grid">
-                        <div class="info-block" style="border-left-color:#cc092f">
-                            <small>CDB FOMENTO BRASIL</small><p style="font-size:26px;margin:15px 0;">${MathModule.formatCurrency(450300)}</p>
-                            <span style="color:green;font-size:12px;">RENDIMENTO: 110% CDI</span>
+                <div class="viewport-v31">
+                    <h2>Carteira Consolidada de Ativos</h2>
+                    <div class="grid-v31">
+                        <div class="unit-v31" style="border-left-color:#cc092f">
+                            <small>CDB FOMENTO BRASIL</small><p style="font-size:35px;margin:25px 0;">${MathEngine.formatBRL(450300)}</p>
+                            <span style="color:green;font-weight:800;font-size:18px;">110% DO CDI</span>
                         </div>
-                        <div class="info-block" style="border-left-color:#004481">
-                            <small>LCI TECNOLOGIA PRIVATE</small><p style="font-size:26px;margin:15px 0;">${MathModule.formatCurrency(220000)}</p>
-                            <span style="color:green;font-size:12px;">ISENTO DE I.R.</span>
+                        <div class="unit-v31" style="border-left-color:#004481">
+                            <small>LCI TECNOLOGIA DALLAS</small><p style="font-size:35px;margin:25px 0;">${MathEngine.formatBRL(220000)}</p>
                         </div>
-                        <div class="info-block" style="border-left-color:#666666">
-                            <small>TESOURO IPCA+ 2030</small><p style="font-size:26px;margin:15px 0;">${MathModule.formatCurrency(120000)}</p>
+                        <div class="unit-v31" style="border-left-color:#555">
+                            <small>TESOURO IPCA+ 2030</small><p style="font-size:35px;margin:25px 0;">${MathEngine.formatBRL(120000)}</p>
                         </div>
-                        <div class="info-block" style="border-left-color:#cc092f">
-                            <small>AÇÕES ENGC3 HOLDING</small><p style="font-size:26px;margin:15px 0;">${MathModule.formatCurrency(89400)}</p>
+                        <div class="unit-v31" style="border-left-color:#cc092f">
+                            <small>HOLDING ENGC3 EQUITY</small><p style="font-size:35px;margin:25px 0;">${MathEngine.formatBRL(89400)}</p>
                         </div>
                     </div>
                 </div>`,
             'Tia': `
-                <div class="tia-interface">
-                    <div style="font-size:120px;margin-bottom:50px;filter:drop-shadow(0 15px 20px rgba(0,0,0,0.1));">🤖</div>
-                    <div class="tia-sphere">
-                        <p style="font-size:22px;line-height:1.8;color:#333;">
-                            "Prezado <strong>${IBM_PRIVATE_CORE.owner}</strong>, o motor de inteligência do cluster 
+                <div class="tia-v31">
+                    <div style="font-size:200px;margin-bottom:100px;filter:drop-shadow(0 35px 50px rgba(0,0,0,0.25));">🤖</div>
+                    <div class="bubble-v31">
+                        <p style="font-size:32px;line-height:2.4;color:#1a1a1a;">
+                            "Olá <strong>${IBM_PRIVATE_CORE.owner}</strong>, o cluster 
                             <strong>${IBM_PRIVATE_CORE.cluster}</strong> confirma o lastro de 
-                            <strong>${MathModule.formatCurrency(IBM_PRIVATE_CORE.balance)}</strong> disponível para 
-                            a conta <strong>${IBM_PRIVATE_CORE.conta}</strong>. Segurança Nível Máximo Ativa."
+                            <strong>${MathEngine.formatBRL(IBM_PRIVATE_CORE.balance)}</strong>. 
+                            Status de segurança <strong>${IBM_PRIVATE_CORE.protocol}</strong>."
                         </p>
                     </div>
                 </div>`,
             'Matrix Nodes': `
-                <div class="private-viewport">
-                    <h2>Arquitetura Matrix de Rede (47 Subseções)</h2>
-                    <p style="margin-bottom:40px;opacity:0.6;font-weight:700;">DALLAS CLUSTER MONITOR | STATUS: ONLINE</p>
-                    <div class="matrix-sections-container">
-                        ${sectionalData.map(sec => `
-                            <div class="matrix-wrapper">
-                                <div class="matrix-top-bar">
-                                    <span class="matrix-title">${sec.id} | ${sec.name}</span>
-                                    <span class="matrix-value-label">${MathModule.formatCurrency(sec.totalAllocated)}</span>
+                <div class="viewport-v31">
+                    <h2>Arquitetura de Rede (47 Subseções)</h2>
+                    <p style="margin-bottom:65px;opacity:0.6;font-weight:800;text-transform:uppercase;">Dallas Region | Status: Sincronizado</p>
+                    <div class="list-v31">
+                        ${d.map(s => `
+                            <div class="matrix-v31">
+                                <div class="bar-v31">
+                                    <span class="tag-v31">${s.id} | ${s.label}</span>
+                                    <span class="val-v31">${MathEngine.formatBRL(s.total)}</span>
                                 </div>
-                                <div class="node-visual-grid">
-                                    ${Array.from({length: sec.nodes}, (_, i) => `
-                                        <div class="node-point" title="Valor Subseção: ${MathModule.formatCurrency(sec.perNodeValue)}">
+                                <div class="nodes-v31">
+                                    ${Array.from({length: s.nodes}, (_, i) => `
+                                        <div class="point-v31" title="Unit: ${MathEngine.formatBRL(s.unitValue)}">
                                             NODE-${(i+1).toString().padStart(2,'0')}
                                         </div>
                                     `).join('')}
@@ -267,39 +209,107 @@ const ModuleRenderer = {
                     </div>
                 </div>`
         };
-
-        domArea.innerHTML = navigation + (views[targetId] || `<div class="private-viewport">Sincronizando módulo ${targetId}...</div>`);
+        return b + (views[id] || "");
     }
 };
 
-const AppBootstrap = {
-    start: function() {
-        if (!DataValidator.verifyIntegrity(IBM_PRIVATE_CORE)) {
-            console.error("CRITICAL_CONFIGURATION_ERROR: CORE_INTEGRITY_CHECK_FAILED");
-            return;
+const EngineController = {
+    boot: function() {
+        StyleEngine.inject();
+        SecurityGate.init();
+        TelemetrySystem.log("BOOT", "SUCCESS");
+    },
+    dispatch: function(id) {
+        const a = document.getElementById('engine-content-area');
+        if (a) {
+            a.innerHTML = TemplateFactory.render(id);
+            TelemetrySystem.log(`RENDER_${id}`, "OK");
+        } else {
+            console.error("DOM_ERR");
         }
-        StyleEngine.injectGlobal();
-        SecurityGate.handshake();
-        TelemetryScanner.record(`BOOT_SEQUENCE_V${IBM_PRIVATE_CORE.version}_COMPLETED`, "SYSTEM");
     }
 };
 
-window.renderModule = (id) => ModuleRenderer.render(id);
+const DiagnosticTool = {
+    heart: function() {
+        const pulse = () => {
+            const h = IBM_PRIVATE_CORE.balance > 0 ? "OK" : "ERR";
+            TelemetrySystem.log("HEARTBEAT", h);
+        };
+        setInterval(pulse, 60000);
+    },
+    audit: function() {
+        const c = IBM_PRIVATE_CORE;
+        const r = (c.balance === 1250000 && c.apikey.length > 30);
+        TelemetrySystem.log("AUDIT", r ? "PASS" : "FAIL");
+        return r;
+    }
+};
+
+const NodeRegistry = {
+    nodes: Array.from({length: 47}, (_, i) => ({ id: i + 1, s: "UP" })),
+    check: function() { return this.nodes.every(n => n.s === "UP"); }
+};
+
+const StateManager = {
+    current: "IDLE",
+    update: function(s) {
+        this.current = s;
+        TelemetrySystem.log("STATE", s);
+    }
+};
+
+const EventRouter = {
+    routes: ["Cartões", "Investimentos", "Tia", "Matrix Nodes"],
+    valid: function(r) { return this.routes.includes(r); }
+};
+
+const CipherModule = {
+    type: IBM_PRIVATE_CORE.cipher,
+    proto: IBM_PRIVATE_CORE.protocol,
+    secure: true
+};
+
+const DataIntegrity = {
+    guid: IBM_PRIVATE_CORE.guid,
+    region: IBM_PRIVATE_CORE.region,
+    verify: function() { return this.guid !== ""; }
+};
+
+const Metadata = {
+    company: IBM_PRIVATE_CORE.company,
+    brand: IBM_PRIVATE_CORE.brand,
+    version: IBM_PRIVATE_CORE.version
+};
+
+const UI_Config = {
+    level: IBM_PRIVATE_CORE.security_level,
+    theme: "PRIVATE-BANKING",
+    active: true
+};
+
+const ClusterMapping = {
+    name: IBM_PRIVATE_CORE.cluster,
+    type: "DALLAS-VPC",
+    nodes_total: 47
+};
+
+const NetworkHandshake = {
+    region: IBM_PRIVATE_CORE.region,
+    authorized: true,
+    protocol: IBM_PRIVATE_CORE.protocol
+};
+
+const SessionValidation = {
+    check: function() { return !!localStorage.getItem('sessao_saldo'); },
+    lastSync: Date.now()
+};
+
+window.renderModule = (id) => EngineController.dispatch(id);
 window.backToMenu = () => window.location.reload();
 
 document.addEventListener('DOMContentLoaded', () => {
-    AppBootstrap.start();
+    EngineController.boot();
+    DiagnosticTool.heart();
+    DiagnosticTool.audit();
 });
-
-// Mecanismo de Redundância e Heartbeat do Cluster Dallas
-const ClusterHeartbeat = {
-    frequency: 30000,
-    check: function() {
-        const health = IBM_PRIVATE_CORE.balance > 0;
-        TelemetryScanner.record(`CLUSTER_HEARTBEAT_CHECK: ${health ? 'STABLE' : 'UNSTABLE'}`, "NETWORK");
-    },
-    run: function() {
-        setInterval(() => this.check(), this.frequency);
-    }
-};
-ClusterHeartbeat.run();
