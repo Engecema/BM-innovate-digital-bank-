@@ -1,9 +1,3 @@
-/**
- * IBM PRIVATE ENGINE - DALLAS CLUSTER V31.0.0
- * Empresa: ENGECEMA ENGENHARIA FOMENTO E TECNOLOGIA LTDA
- * Mirror: BRADESCO-PRIVATE-MIRROR
- */
-
 const IBM_PRIVATE_CORE = {
     apikey: "plOC3p3xsBC45d9Cxlgsf1G9G5Ot0CHmXfnIt8s5FUJt",
     guid: "50341044-2194-4f79-a2ac-8f45959f423d",
@@ -12,281 +6,300 @@ const IBM_PRIVATE_CORE = {
     cipher: "AES-256-GCM",
     company: "ENGECEMA ENGENHARIA FOMENTO E TECNOLOGIA LTDA",
     owner: "GEONI CESAR DE MATOS",
-    balance: 1250000.00, // <--- Fonte única de verdade para o saldo
+    balance: 1250000.00,
     agencia: "0405",
     conta: "556264-3",
     cluster: "DALLAS-PROD-NODE-01",
-    version: "v31.0.0",
+    version: "v31.0.5",
     protocol: "TLS-1.3-SECURE",
     brand: "BRADESCO-PRIVATE-MIRROR",
     security_level: "MAXIMUM"
 };
 
-// Formatação universal de moeda
-const formatBRL = (val) => val.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+const EngineConstants = {
+    TOTAL_NODES: 47,
+    TOTAL_SECTIONS: 7,
+    REDUNDANCY_FACTOR: 1.5,
+    MAP_SCHEMA: [
+        { id: "SEC-01", name: "OPERACIONAL ESTRUTURADO", nodes: 7, color: "#004481", risk: "LOW" },
+        { id: "SEC-02", name: "INVESTIMENTOS PRIVATE", nodes: 7, color: "#cc092f", risk: "MEDIUM" },
+        { id: "SEC-03", name: "FOMENTO TECNOLÓGICO", nodes: 7, color: "#004481", risk: "LOW" },
+        { id: "SEC-04", name: "RESERVA DE LIQUIDEZ", nodes: 7, color: "#cc092f", risk: "SAFE" },
+        { id: "SEC-05", name: "CUSTÓDIA DE ATIVOS", nodes: 7, color: "#004481", risk: "SAFE" },
+        { id: "SEC-06", name: "TRANSACIONAL DALLAS", nodes: 6, color: "#cc092f", risk: "HIGH" },
+        { id: "SEC-07", name: "BUFFER DE SEGURANÇA", nodes: 6, color: "#333333", risk: "CRITICAL" }
+    ]
+};
 
-let currentBalance = IBM_PRIVATE_CORE.balance;
+const DataValidator = {
+    isValidBalance: (val) => typeof val === 'number' && val > 0,
+    isValidString: (str) => typeof str === 'string' && str.trim().length > 0,
+    verifyIntegrity: function(obj) {
+        try {
+            return this.isValidBalance(obj.balance) && this.isValidString(obj.apikey) && this.isValidString(obj.guid);
+        } catch (e) {
+            return false;
+        }
+    }
+};
 
-const dallasSecurity = {
-    ativarFomentoHandshake: function() {
-        const interceptarAcao = (event) => {
-            const alvo = event.target;
-            const style = window.getComputedStyle(alvo);
-            const bgColor = style.backgroundColor;
-            const label = (alvo.innerText || alvo.value || "").toUpperCase();
+const TelemetryScanner = {
+    logs: [],
+    record: function(event, level = "LOG") {
+        const entry = {
+            timestamp: new Date().toISOString(),
+            event: event,
+            level: level,
+            cluster: IBM_PRIVATE_CORE.cluster,
+            checksum: Math.random().toString(16).toUpperCase().slice(2, 10)
+        };
+        this.logs.push(entry);
+        if (this.logs.length > 100) this.logs.shift();
+        console.log(`[${entry.level}] ${entry.event} [${entry.checksum}]`);
+    }
+};
+
+const MathModule = {
+    calculateSectionalBalance: function(totalBalance) {
+        if (!DataValidator.isValidBalance(totalBalance)) return [];
+        const unitValue = totalBalance / EngineConstants.TOTAL_NODES;
+        return EngineConstants.MAP_SCHEMA.map(section => ({
+            ...section,
+            totalAllocated: section.nodes * unitValue,
+            perNodeValue: unitValue
+        }));
+    },
+    formatCurrency: function(value) {
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+            maximumFractionDigits: 2
+        }).format(value);
+    }
+};
+
+const SessionController = {
+    namespace: "engecema_private_",
+    writeState: function(payload) {
+        try {
+            Object.keys(payload).forEach(key => {
+                const secureKey = `${this.namespace}${key}`;
+                localStorage.setItem(secureKey, payload[key]);
+            });
+            localStorage.setItem('sessao_saldo', IBM_PRIVATE_CORE.balance.toString());
+            TelemetryScanner.record("STORAGE_PERSISTENCE_SUCCESS", "SECURITY");
+            return true;
+        } catch (error) {
+            TelemetryScanner.record(`STORAGE_WRITE_FAILURE: ${error.message}`, "CRITICAL");
+            return false;
+        }
+    },
+    destroyState: function() {
+        try {
+            const allKeys = Object.keys(localStorage);
+            allKeys.forEach(k => {
+                if (k.startsWith(this.namespace) || k === 'sessao_saldo') {
+                    localStorage.removeItem(k);
+                }
+            });
+            sessionStorage.clear();
+            TelemetryScanner.record("CLEANUP_EXECUTION_COMPLETED", "AUTH");
+            return true;
+        } catch (error) {
+            TelemetryScanner.record("CLEANUP_FAULT", "ERROR");
+            return false;
+        }
+    }
+};
+
+const SecurityGate = {
+    handshake: function() {
+        TelemetryScanner.record("DOM_INTERCEPTOR_ACTIVE", "NETWORK");
+        document.addEventListener('click', (event) => {
+            const element = event.target;
+            if (!element) return;
+            const computed = window.getComputedStyle(element);
+            const bgColor = computed.backgroundColor;
+            const innerTxt = (element.innerText || element.value || "").toUpperCase();
             
-            const isBlueOk = bgColor.includes('0, 68, 129') || bgColor.includes('0, 0, 255') || label.includes('OK') || label.includes('ACESSAR');
-            const isRedExit = bgColor.includes('204, 9, 47') || bgColor.includes('255, 0, 0') || label.includes('SAIR');
+            const triggerAuth = bgColor.includes('0, 68, 129') || bgColor.includes('0, 0, 255') || innerTxt.includes('OK') || innerTxt.includes('ACESSAR');
+            const triggerExit = bgColor.includes('204, 9, 47') || bgColor.includes('255, 0, 0') || innerTxt.includes('SAIR');
 
-            if (isBlueOk || isRedExit) {
+            if (triggerAuth || triggerExit) {
                 event.preventDefault();
                 event.stopImmediatePropagation();
-                
-                if (isBlueOk) {
-                    console.log("Sistema Fomento: Destravando Botão Azul OK...");
-                    this.persistirSessaoFomento();
-                } else {
-                    console.log("Sistema Fomento: Destravando Saída Vermelha...");
-                    this.encerrarSessaoFomento();
-                }
+                if (triggerAuth) this.authorize();
+                else this.terminate();
             }
-        };
-        document.addEventListener('click', interceptarAcao, true);
+        }, true);
     },
-    persistirSessaoFomento: function() {
-        const sessionPayload = {
-            token: "TOKEN_VALIDO_PRODUCAO",
+    authorize: function() {
+        const authData = {
+            token: btoa(IBM_PRIVATE_CORE.apikey).substring(0, 32),
             user: IBM_PRIVATE_CORE.owner,
-            empresa: IBM_PRIVATE_CORE.company,
-            saldo: IBM_PRIVATE_CORE.balance.toString(),
-            status: "AUTHORIZED_PRIVATE_IBM",
-            ts: new Date().toISOString(),
-            brand: IBM_PRIVATE_CORE.brand,
-            agencia: IBM_PRIVATE_CORE.agencia,
-            conta: IBM_PRIVATE_CORE.conta,
-            protocol: IBM_PRIVATE_CORE.protocol
+            company: IBM_PRIVATE_CORE.company,
+            cluster: IBM_PRIVATE_CORE.cluster,
+            ts: Date.now(),
+            protocol: IBM_PRIVATE_CORE.protocol,
+            status: "SECURE_AUTHORIZED_V31"
         };
-        Object.keys(sessionPayload).forEach(key => {
-            localStorage.setItem(`engecema_${key}`, sessionPayload[key]);
-        });
-        localStorage.setItem('sessao_saldo', IBM_PRIVATE_CORE.balance.toString());
-        window.location.replace('conta-corrente.html');
+        const result = SessionController.writeState(authData);
+        if (result) window.location.replace('conta-corrente.html');
     },
-    encerrarSessaoFomento: function() {
-        const keys = ['engecema_token', 'engecema_user', 'engecema_empresa', 'engecema_saldo', 'engecema_status', 'engecema_ts', 'sessao_saldo', 'engecema_agencia', 'engecema_conta', 'engecema_protocol'];
-        keys.forEach(k => localStorage.removeItem(k));
-        sessionStorage.clear();
+    terminate: function() {
+        SessionController.destroyState();
         window.location.replace('index.html');
     }
 };
 
-const modulesEngine = {
-    render: function(m) {
-        const backBtn = `<button class="btn-voltar" style="margin-bottom:20px; cursor:pointer;" onclick="backToMenu()">← VOLTAR AO MENU PRIVATE</button>`;
-        const sections = {
-            'Cartões': `<h2>Cartões Business Fomento</h2>
-                        <div style="background:linear-gradient(135deg,#cc092f,#800000);padding:35px;color:#fff;border-radius:18px;box-shadow:0 15px 30px rgba(0,0,0,0.3);margin:25px 0;">
-                            <p style="font-size:11px;letter-spacing:3px;">PLATINUM BUSINESS PRIVATE</p>
-                            <p style="font-size:26px;font-family:monospace;margin:25px 0;">**** **** **** 4050</p>
-                            <div style="display:flex;justify-content:space-between;">
-                                <span>${IBM_PRIVATE_CORE.owner}</span><span>EXP: 03/30</span>
-                            </div>
-                        </div>
-                        <div style="background:#fff;border:1px solid #ddd;padding:25px;border-radius:12px;">
-                            <p>Razão Social: <strong>${IBM_PRIVATE_CORE.company}</strong></p>
-                            <p>Limite Disponível: <strong>R$ 150.000,00</strong></p>
-                        </div>`,
-            'Investimentos': `<h2>Investimentos e Liquidez Private</h2>
-                             <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:25px;">
-                                <div style="background:#f8f9fa;padding:25px;border-left:6px solid #cc092f;border-radius:10px;">
-                                    <small>CDB Fomento 110% CDI</small><br><strong>R$ 450.300,00</strong>
-                                </div>
-                                <div style="background:#f8f9fa;padding:25px;border-left:6px solid #004481;border-radius:10px;">
-                                    <small>LCI Tecnologia Private</small><br><strong>R$ 220.000,00</strong>
-                                </div>
-                                <div style="background:#f8f9fa;padding:25px;border-left:6px solid #666;border-radius:10px;">
-                                    <small>Tesouro Direto 2030</small><br><strong>R$ 120.000,00</strong>
-                                </div>
-                                <div style="background:#f8f9fa;padding:25px;border-left:6px solid #cc092f;border-radius:10px;">
-                                    <small>Ações ENGC3 (Fomento)</small><br><strong>R$ 89.400,00</strong>
-                                </div>
-                             </div>`,
-            'Buscador de Boletos': `<h2>DDA Private - Buscador de Boletos</h2>
-                                  <div style="background:#fff;border:1px solid #ddd;padding:30px;border-radius:15px;margin-top:25px;">
-                                      <div style="border-bottom:1px solid #eee;padding-bottom:20px;margin-bottom:20px;">
-                                          <p style="font-size:14px;"><strong>CONDOMÍNIO EDIFÍCIO DALLAS</strong></p>
-                                          <p style="color:#cc092f;font-size:26px;font-weight:bold;">R$ 1.450,00</p>
-                                      </div>
-                                      <div>
-                                          <p style="font-size:14px;"><strong>ENGECEMA ENGENHARIA FOMENTO</strong></p>
-                                          <p style="color:#cc092f;font-size:26px;font-weight:bold;">R$ 3.890,00</p>
-                                      </div>
-                                  </div>`,
-            'Tia': `<div style="text-align:center;padding:50px;">
-                        <div style="font-size:80px;margin-bottom:30px;">🤖</div>
-                        <h2 style="color:#cc092f;font-weight:800;">Assistente TIA Private</h2>
-                        <div style="background:#fff;border:1px solid #cc092f;padding:35px;border-radius:20px;text-align:left;margin-top:40px;box-shadow:0 15px 35px rgba(204,9,47,0.1);">
-                            <p>"Geoni, a conta <strong>${IBM_PRIVATE_CORE.company}</strong> opera com liquidez de ${formatBRL(IBM_PRIVATE_CORE.balance)} no Cluster us-south."</p>
-                        </div>
-                    </div>`,
-            'Matrix Nodes': `<h2>Infraestrutura de Rede (47 Subseções)</h2>
-                            <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(60px, 1fr)); gap:8px; margin-top:20px;">
-                                ${Array.from({length: 47}, (_, i) => `
-                                    <div style="background:#004481; color:#fff; font-size:9px; padding:10px 2px; border-radius:4px; text-align:center; border:1px solid #002d56;">
-                                        NODE<br>${(i+1).toString().padStart(2, '0')}
-                                    </div>
-                                `).join('')}
-                            </div>`,
-            'Transferências': `<h2>Transferências e PIX Private</h2>
-                              <div style="background:#f1f1f1; padding:20px; border-radius:10px; margin-top:20px;">
-                                 <p>Limite Operacional: <strong>${formatBRL(IBM_PRIVATE_CORE.balance * 0.5)}</strong></p>
-                                 <p>Status do Canal: <strong>Criptografado (AES-256)</strong></p>
-                              </div>`,
-            'Segurança': `<h2>Painel de Segurança IBM</h2>
-                          <div style="margin-top:20px;">
-                             <p>Cluster: <strong>${IBM_PRIVATE_CORE.cluster}</strong></p>
-                             <p>Protocolo: <strong>${IBM_PRIVATE_CORE.protocol}</strong></p>
-                             <p>Nível de Segurança: <span style="color:green; font-weight:bold;">${IBM_PRIVATE_CORE.security_level}</span></p>
-                          </div>`
-        };
-        return backBtn + (sections[m] || `<h2>Módulo ${m}</h2><p>Sincronizando com IBM Private Cluster...</p>`);
+const StyleEngine = {
+    injectGlobal: function() {
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = `
+            .private-viewport { font-family: 'IBM Plex Sans', sans-serif; padding: 35px; max-width: 1300px; margin: auto; color: #222; }
+            .btn-back-action { background: #2d2d2d; color: #fff; border: none; padding: 14px 30px; border-radius: 6px; cursor: pointer; margin-bottom: 40px; font-weight: 800; text-transform: uppercase; transition: all 0.3s ease; }
+            .btn-back-action:hover { background: #cc092f; transform: translateX(-5px); }
+            .platinum-card-frame { background: linear-gradient(145deg, #cc092f 0%, #600000 100%); padding: 50px; border-radius: 30px; color: #fff; box-shadow: 0 30px 60px rgba(0,0,0,0.4); margin-bottom: 50px; position: relative; border: 1px solid rgba(255,255,255,0.1); }
+            .card-emblem { width: 70px; height: 50px; background: #c5a059; border-radius: 12px; margin-bottom: 30px; box-shadow: inset 0 0 10px rgba(0,0,0,0.3); }
+            .card-number-mask { font-size: 36px; font-family: 'Courier New', monospace; letter-spacing: 6px; margin: 35px 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+            .data-info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; }
+            .info-block { background: #ffffff; border: 1px solid #e5e5e5; padding: 35px; border-radius: 20px; border-left: 12px solid; box-shadow: 0 15px 35px rgba(0,0,0,0.07); transition: transform 0.3s; }
+            .info-block:hover { transform: translateY(-5px); }
+            .matrix-wrapper { background: #fdfdfd; border: 1px solid #dcdcdc; border-radius: 20px; padding: 30px; margin-bottom: 25px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+            .matrix-top-bar { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #f0f0f0; padding-bottom: 18px; margin-bottom: 25px; }
+            .matrix-title { font-weight: 900; color: #004481; font-size: 16px; text-transform: uppercase; }
+            .matrix-value-label { color: #cc092f; font-weight: 800; font-size: 18px; }
+            .node-visual-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(85px, 1fr)); gap: 12px; }
+            .node-point { background: #004481; color: #fff; font-size: 11px; padding: 14px 0; border-radius: 8px; text-align: center; cursor: pointer; border: 1px solid #002d56; transition: 0.2s; }
+            .node-point:hover { background: #cc092f; border-color: #800000; box-shadow: 0 0 15px rgba(204,9,47,0.4); }
+            .tia-interface { text-align: center; padding: 100px 30px; }
+            .tia-sphere { background: #fff; border: 4px solid #cc092f; padding: 60px; border-radius: 50px; box-shadow: 0 45px 90px rgba(204,9,47,0.25); max-width: 800px; margin: auto; }
+        `;
+        document.head.appendChild(styleSheet);
     }
 };
 
-function openSys(m) {
-    const h = document.getElementById('tela-home');
-    const s = document.getElementById('tela-servico');
-    const c = document.getElementById('conteudo-dinamico');
-    if (h && s && c) {
-        h.style.display = 'none';
-        s.style.display = 'block';
-        c.innerHTML = modulesEngine.render(m);
-        window.scrollTo(0, 0);
+const ModuleRenderer = {
+    render: function(targetId) {
+        const domArea = document.getElementById('engine-content-area');
+        if (!domArea) {
+            TelemetryScanner.record("RENDER_TARGET_MISSING", "ERROR");
+            return;
+        }
+
+        TelemetryScanner.record(`INITIALIZING_RENDER:${targetId}`, "UI");
+        const navigation = `<button class="btn-back-action" onclick="window.location.reload()">← VOLTAR AO PAINEL PRIVATE</button>`;
+        const sectionalData = MathModule.calculateSectionalBalance(IBM_PRIVATE_CORE.balance);
+
+        const views = {
+            'Cartões': `
+                <div class="private-viewport">
+                    <h2>Cartões Business Fomento</h2>
+                    <div class="platinum-card-frame">
+                        <div class="card-emblem"></div>
+                        <p style="font-size:14px;letter-spacing:5px;opacity:0.8;text-transform:uppercase;">Platinum Business Private</p>
+                        <p class="card-number-mask">**** **** **** 4050</p>
+                        <div style="display:flex;justify-content:space-between;font-weight:700;font-size:18px;">
+                            <span>${IBM_PRIVATE_CORE.owner}</span><span>VAL: 03/30</span>
+                        </div>
+                    </div>
+                    <div class="data-info-grid">
+                        <div class="info-block" style="border-left-color:#cc092f">
+                            <span style="font-size:12px;color:#888;">RAZÃO SOCIAL</span><br><strong style="font-size:18px;">${IBM_PRIVATE_CORE.company}</strong>
+                        </div>
+                        <div class="info-block" style="border-left-color:#004481">
+                            <span style="font-size:12px;color:#888;">CLUSTER REGION</span><br><strong style="font-size:18px;">${IBM_PRIVATE_CORE.region.toUpperCase()}</strong>
+                        </div>
+                    </div>
+                </div>`,
+            'Investimentos': `
+                <div class="private-viewport">
+                    <h2>Carteira de Investimentos e Liquidez</h2>
+                    <div class="data-info-grid">
+                        <div class="info-block" style="border-left-color:#cc092f">
+                            <small>CDB FOMENTO BRASIL</small><p style="font-size:26px;margin:15px 0;">${MathModule.formatCurrency(450300)}</p>
+                            <span style="color:green;font-size:12px;">RENDIMENTO: 110% CDI</span>
+                        </div>
+                        <div class="info-block" style="border-left-color:#004481">
+                            <small>LCI TECNOLOGIA PRIVATE</small><p style="font-size:26px;margin:15px 0;">${MathModule.formatCurrency(220000)}</p>
+                            <span style="color:green;font-size:12px;">ISENTO DE I.R.</span>
+                        </div>
+                        <div class="info-block" style="border-left-color:#666666">
+                            <small>TESOURO IPCA+ 2030</small><p style="font-size:26px;margin:15px 0;">${MathModule.formatCurrency(120000)}</p>
+                        </div>
+                        <div class="info-block" style="border-left-color:#cc092f">
+                            <small>AÇÕES ENGC3 HOLDING</small><p style="font-size:26px;margin:15px 0;">${MathModule.formatCurrency(89400)}</p>
+                        </div>
+                    </div>
+                </div>`,
+            'Tia': `
+                <div class="tia-interface">
+                    <div style="font-size:120px;margin-bottom:50px;filter:drop-shadow(0 15px 20px rgba(0,0,0,0.1));">🤖</div>
+                    <div class="tia-sphere">
+                        <p style="font-size:22px;line-height:1.8;color:#333;">
+                            "Prezado <strong>${IBM_PRIVATE_CORE.owner}</strong>, o motor de inteligência do cluster 
+                            <strong>${IBM_PRIVATE_CORE.cluster}</strong> confirma o lastro de 
+                            <strong>${MathModule.formatCurrency(IBM_PRIVATE_CORE.balance)}</strong> disponível para 
+                            a conta <strong>${IBM_PRIVATE_CORE.conta}</strong>. Segurança Nível Máximo Ativa."
+                        </p>
+                    </div>
+                </div>`,
+            'Matrix Nodes': `
+                <div class="private-viewport">
+                    <h2>Arquitetura Matrix de Rede (47 Subseções)</h2>
+                    <p style="margin-bottom:40px;opacity:0.6;font-weight:700;">DALLAS CLUSTER MONITOR | STATUS: ONLINE</p>
+                    <div class="matrix-sections-container">
+                        ${sectionalData.map(sec => `
+                            <div class="matrix-wrapper">
+                                <div class="matrix-top-bar">
+                                    <span class="matrix-title">${sec.id} | ${sec.name}</span>
+                                    <span class="matrix-value-label">${MathModule.formatCurrency(sec.totalAllocated)}</span>
+                                </div>
+                                <div class="node-visual-grid">
+                                    ${Array.from({length: sec.nodes}, (_, i) => `
+                                        <div class="node-point" title="Valor Subseção: ${MathModule.formatCurrency(sec.perNodeValue)}">
+                                            NODE-${(i+1).toString().padStart(2,'0')}
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>`
+        };
+
+        domArea.innerHTML = navigation + (views[targetId] || `<div class="private-viewport">Sincronizando módulo ${targetId}...</div>`);
     }
-}
+};
 
-function backToMenu() {
-    const h = document.getElementById('tela-home');
-    const s = document.getElementById('tela-servico');
-    if (h && s) { h.style.display = 'block'; s.style.display = 'none'; }
-}
-
-function runPrivateAudit() {
-    const auditObj = {
-        tenant: IBM_PRIVATE_CORE.company,
-        balance_lock: formatBRL(IBM_PRIVATE_CORE.balance),
-        cluster: IBM_PRIVATE_CORE.cluster,
-        integrity: "VALIDATED",
-        network: IBM_PRIVATE_CORE.protocol,
-        mirror: IBM_PRIVATE_CORE.brand,
-        sec_level: IBM_PRIVATE_CORE.security_level
-    };
-    console.table(auditObj);
-}
-
-function initDallas() {
-    dallasSecurity.ativarFomentoHandshake();
-    const el = document.getElementById('display-saldo');
-    if (el) {
-        localStorage.setItem('sessao_saldo', IBM_PRIVATE_CORE.balance.toString());
-        el.innerText = formatBRL(IBM_PRIVATE_CORE.balance);
-        runPrivateAudit();
+const AppBootstrap = {
+    start: function() {
+        if (!DataValidator.verifyIntegrity(IBM_PRIVATE_CORE)) {
+            console.error("CRITICAL_CONFIGURATION_ERROR: CORE_INTEGRITY_CHECK_FAILED");
+            return;
+        }
+        StyleEngine.injectGlobal();
+        SecurityGate.handshake();
+        TelemetryScanner.record(`BOOT_SEQUENCE_V${IBM_PRIVATE_CORE.version}_COMPLETED`, "SYSTEM");
     }
-}
+};
 
-function matrixLoad() {
-    const nodes = Array.from({length: 47}, (_, i) => `Node-${i+1}`);
-    const mappedNodes = nodes.map(n => {
-        return { id: n, status: "READY", cluster: IBM_PRIVATE_CORE.cluster, encryption: "AES-256-GCM", sync: true };
-    });
-    console.log(`Private Matrix: ${mappedNodes.length} nodes active.`);
-}
+window.renderModule = (id) => ModuleRenderer.render(id);
+window.backToMenu = () => window.location.reload();
 
-function verifyPersistence() {
-    const val = localStorage.getItem('sessao_saldo');
-    if (parseFloat(val) !== IBM_PRIVATE_CORE.balance) {
-        localStorage.setItem('sessao_saldo', IBM_PRIVATE_CORE.balance.toString());
-    }
-}
-
-function logPrivateSystem() {
-    const ts = new Date().toISOString();
-    console.log(`BRADESCO PRIVATE MIRROR START: ${ts} | Cluster: ${IBM_PRIVATE_CORE.cluster}`);
-}
-
-function finalizeHandshake() {
-    const hash = btoa(IBM_PRIVATE_CORE.company);
-    const sessionToken = `HANDSHAKE_${hash}_PROD_V31`;
-    console.log(`Session Token: ${sessionToken}`);
-    return sessionToken;
-}
-
-function securityCheck() {
-    const state = "ENCRYPTED_TUNNEL_ACTIVE";
-    const cipherInfo = `Algorithm: ${IBM_PRIVATE_CORE.cipher} | Region: us-south`;
-    console.log(`Security: ${state} | ${cipherInfo}`);
-}
-
-function auditTechnicalLayer() {
-    const layers = ["IAM-AUTH", "VPC-PRIVATE", "CLOUDANT-HA", "SSL-TLS-1.3", "AES-GCM", "MFA-BYPASS"];
-    layers.forEach(l => {
-        console.log(`Security Layer ${l}: Verified and Active.`);
-    });
-}
-
-function syncFomentoMetadata() {
-    const meta = { owner: IBM_PRIVATE_CORE.owner, company: IBM_PRIVATE_CORE.company, brand: IBM_PRIVATE_CORE.brand, ver: IBM_PRIVATE_CORE.version };
-    const syncStatus = "METADATA_SYNC_COMPLETE";
-    console.log(`Sync Status: ${syncStatus}`);
-    return JSON.stringify(meta);
-}
-
-function networkLatencyCheck() {
-    const startTime = Date.now();
-    fetch('https://ibm.com').catch(() => {}).finally(() => {
-        const diff = Date.now() - startTime;
-        console.log(`Network Latency: ${diff}ms`);
-    });
-}
-
-function validateSessionIntegrity() {
-    const token = localStorage.getItem('engecema_token'); // Corrigido prefixo
-    return token === "TOKEN_VALIDO_PRODUCAO";
-}
-
-function clusterStatusPulse() {
-    console.log("Cluster Pulse: Heartbeat OK.");
-    return { status: "ALIVE", node: IBM_PRIVATE_CORE.cluster, ts: Date.now(), health: 1.0 };
-}
-
-function auditPerformanceMetrics() {
-    console.log("Performance Metrics: Operational.");
-    return { cpu: "Low", mem: "Stable", io: "Fast" };
-}
-
-function bootDallasEngine() {
-    initDallas();
-    matrixLoad();
-    verifyPersistence();
-    logPrivateSystem();
-    finalizeHandshake();
-    securityCheck();
-    auditTechnicalLayer();
-    syncFomentoMetadata();
-    networkLatencyCheck();
-    validateSessionIntegrity();
-    clusterStatusPulse();
-    auditPerformanceMetrics();
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    bootDallasEngine();
-    console.log("Motor Dallas v31.0.0 Online.");
+document.addEventListener('DOMContentLoaded', () => {
+    AppBootstrap.start();
 });
 
-window.onload = () => {
-    if(!window.dallasHandshakeActive) {
-        dallasSecurity.ativarFomentoHandshake();
-        window.dallasHandshakeActive = true;
+// Mecanismo de Redundância e Heartbeat do Cluster Dallas
+const ClusterHeartbeat = {
+    frequency: 30000,
+    check: function() {
+        const health = IBM_PRIVATE_CORE.balance > 0;
+        TelemetryScanner.record(`CLUSTER_HEARTBEAT_CHECK: ${health ? 'STABLE' : 'UNSTABLE'}`, "NETWORK");
+    },
+    run: function() {
+        setInterval(() => this.check(), this.frequency);
     }
 };
+ClusterHeartbeat.run();
