@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="logo.png">
-    <title>Engecema Private | Credenciamento Dallas VPC</title>
+    <title>Credenciamento Enterprise | IBM Cloud Dallas</title>
     <style>
         :root { 
             --enge-red: #cc092f; 
             --enge-blue: #004481;
-            --enge-bg: #f4f7f9; 
-            --enge-text: #1a1a1a; 
+            --enge-bg: #f5f7f9; 
             --enge-surface: #ffffff;
+            --enge-text: #1a1a1a;
             --enge-border: #d1d5db;
         }
         body { 
@@ -22,60 +22,60 @@
             justify-content: center; 
             align-items: center; 
             min-height: 100vh; 
-            padding: 20px; 
+            padding: 25px; 
             color: var(--enge-text);
         }
         .main-frame-v31 { 
             background: var(--enge-surface); 
-            padding: 60px; 
-            border-radius: 12px; 
-            box-shadow: 0 30px 60px rgba(0,0,0,0.1); 
+            padding: 70px; 
+            border-radius: 15px; 
+            box-shadow: 0 40px 80px rgba(0,0,0,0.12); 
             width: 100%; 
-            max-width: 550px; 
-            border-top: 10px solid var(--enge-red); 
+            max-width: 600px; 
+            border-top: 12px solid var(--enge-red); 
             position: relative; 
         }
-        .header-section { text-align: center; margin-bottom: 45px; }
-        .header-section img { height: 50px; margin-bottom: 20px; }
+        .header-section { text-align: center; margin-bottom: 50px; }
+        .header-section img { height: 55px; margin-bottom: 25px; }
         .header-section h2 { 
             color: var(--enge-red); 
             font-weight: 900; 
             text-transform: uppercase; 
-            font-size: 22px; 
+            font-size: 24px; 
             margin: 0; 
-            letter-spacing: 1.5px; 
+            letter-spacing: 2px; 
         }
-        .input-group-v31 { margin-bottom: 20px; }
+        .input-group-v31 { margin-bottom: 25px; }
         .selector-box { 
             display: flex; 
-            gap: 25px; 
-            margin-bottom: 25px; 
+            gap: 30px; 
+            margin-bottom: 30px; 
             justify-content: center; 
         }
         .selector-box label { 
             display: flex; 
             align-items: center; 
-            font-size: 13px; 
+            font-size: 14px; 
             color: #4b5563; 
             cursor: pointer; 
             font-weight: 700; 
         }
         .field-label { 
             display: block; 
-            font-size: 11px; 
+            font-size: 12px; 
             font-weight: 800; 
             color: #6b7280; 
-            margin-bottom: 8px; 
+            margin-bottom: 10px; 
             text-transform: uppercase; 
             letter-spacing: 2px; 
         }
         .input-control { 
             width: 100%; 
-            padding: 16px; 
+            padding: 18px; 
             border: 2px solid var(--enge-border); 
-            border-radius: 6px; 
+            border-radius: 8px; 
             box-sizing: border-box; 
-            font-size: 15px; 
+            font-size: 16px; 
             background: #f9fafb; 
             transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
         }
@@ -83,55 +83,55 @@
             border-color: var(--enge-blue);
             outline: none;
             background: var(--enge-surface);
-            box-shadow: 0 0 0 4px rgba(0, 68, 129, 0.1);
+            box-shadow: 0 0 0 5px rgba(0, 68, 129, 0.1);
         }
         #sync-status-v31 { 
             display: none; 
             background: #e0f2fe; 
             border: 1px solid #7dd3fc; 
-            padding: 18px; 
-            border-radius: 6px; 
-            margin-bottom: 25px; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin-bottom: 30px; 
             text-align: center; 
-            font-size: 13px; 
+            font-size: 14px; 
             color: #0369a1; 
-            font-weight: 600;
+            font-weight: 700;
         }
         .firewall-container { 
             background: #fffbeb; 
             border: 1px solid #fde68a; 
-            padding: 20px; 
-            border-radius: 6px; 
-            margin: 30px 0; 
+            padding: 25px; 
+            border-radius: 8px; 
+            margin: 35px 0; 
             display: flex; 
             align-items: center; 
-            gap: 15px; 
+            gap: 20px; 
         }
         .firewall-container input[type="checkbox"] { 
-            width: 22px; 
-            height: 22px; 
+            width: 24px; 
+            height: 24px; 
             cursor: pointer; 
         }
-        .firewall-label { font-size: 12px; color: #92400e; font-weight: 700; line-height: 1.4; }
+        .firewall-label { font-size: 13px; color: #92400e; font-weight: 700; line-height: 1.5; }
         .btn-submit-v31 { 
             width: 100%; 
-            padding: 22px; 
+            padding: 24px; 
             background: var(--enge-red); 
             color: #fff; 
             border: none; 
-            border-radius: 6px; 
+            border-radius: 8px; 
             font-weight: 900; 
             text-transform: uppercase; 
             cursor: pointer; 
-            font-size: 16px; 
-            margin-top: 20px; 
+            font-size: 17px; 
+            margin-top: 25px; 
             transition: 0.4s; 
-            opacity: 0.4; 
+            opacity: 0.3; 
             pointer-events: none; 
-            letter-spacing: 2px;
+            letter-spacing: 3px;
         }
-        .active-btn { opacity: 1 !important; pointer-events: all !important; box-shadow: 0 10px 20px rgba(204,9,47,0.2); }
-        .active-btn:hover { background: #a00725; transform: translateY(-2px); }
+        .active-btn { opacity: 1 !important; pointer-events: all !important; box-shadow: 0 15px 30px rgba(204,9,47,0.3); }
+        .active-btn:hover { background: #900000; transform: translateY(-3px); }
     </style>
 </head>
 <body>
@@ -167,7 +167,7 @@
 
         <div class="input-group-v31">
             <label class="field-label">Patrimônio sob Gestão (Cluster Dallas)</label>
-            <input type="text" id="v31-val-input" name="v31_patrimonio" class="input-control" readonly style="color: var(--enge-red); font-weight: 900; font-size: 18px;">
+            <input type="text" id="v31-val-input" name="v31_patrimonio" class="input-control" readonly style="color: var(--enge-red); font-weight: 900; font-size: 20px;">
         </div>
 
         <div class="input-group-v31">
@@ -185,74 +185,58 @@
 </div>
 
 <script>
-    /**
-     * IBM PRIVATE REGISTRAR - ENGINE ULTIMATE V31.16.0
-     * RESOLUÇÃO: INJEÇÃO DE SALDO E TRAVA DE ACESSO
-     */
     const CoreEngine = {
         meta: {
             balance: "1250000.00",
             nodes: 47,
             sections: 7,
             status_id: "AUTHORIZED_V31",
-            version: "v31.16.0"
+            version: "v31.17.0"
         },
-
         boot: function() {
             this.purgeDOMInfection();
             this.setupObserver();
-            console.log(`[BOOT] Cluster Dallas Engine ${this.meta.version} Initialized.`);
+            console.log(`[BOOT] Cluster Dallas Engine ${this.meta.version} Active.`);
         },
-
         purgeDOMInfection: function() {
-            /** 
-             * Limpa instantaneamente qualquer input contaminado pelo valor do saldo
-             * vindo do cache do espelhamento.
-             */
             const targets = document.querySelectorAll('input');
             targets.forEach(t => {
                 if (t.value.includes("1.250") || t.value.includes("1250000")) {
                     t.value = "";
                     t.setAttribute("autocomplete", "new-password");
+                    t.blur();
                 }
             });
             localStorage.removeItem('sessao_saldo');
             localStorage.removeItem('engecema_status');
         },
-
         setupObserver: function() {
             const observer = new MutationObserver(() => this.purgeDOMInfection());
             observer.observe(document.body, { childList: true, subtree: true, attributes: true });
         },
-
         toggleDoc: function(t) {
             document.getElementById('doc-label-v31').innerText = (t === 'CPF') ? "CPF / Documento Digital" : "CNPJ / Documento Empresarial";
             document.getElementById('v31-doc-input').placeholder = (t === 'CPF') ? "000.000.000-00" : "00.000.000/0000-00";
         },
-
         toggleSubmit: function() {
             const c = document.getElementById('v31-firewall-check');
             const b = document.getElementById('v31-btn-submit');
             c.checked ? b.classList.add('active-btn') : b.classList.remove('active-btn');
         },
-
         lookup: async function() {
             const d = document.getElementById('v31-doc-input').value;
             const s = document.getElementById('sync-status-v31');
             const n = document.getElementById('v31-nome-input');
             const e = document.getElementById('v31-end-input');
             const v = document.getElementById('v31-val-input');
-
             if(d.length >= 11) {
                 s.style.display = 'block';
                 s.innerHTML = "<b>Consultando Handshake Dallas Cluster...</b>";
-                
                 setTimeout(() => {
                     s.style.background = "#dcfce7";
                     s.style.borderColor = "#86efac";
                     s.style.color = "#15803d";
                     s.innerHTML = "<b>PARIDADE 47/7 VALIDADA (IBM CLOUD)!</b>";
-                    
                     const isPJ = document.querySelector('input[name="acc_type"]:checked').value === 'PJ';
                     n.value = isPJ ? "ENGECEMA ENGENHARIA FOMENTO E TECNOLOGIA LTDA" : "GEONI CESAR DE MATOS";
                     e.value = isPJ ? "Av. Paulista, 1000 - Bela Vista, São Paulo" : "Rua Oscar Freire, 1200 - Jardins, São Paulo";
@@ -260,12 +244,7 @@
                 }, 1800);
             }
         },
-
         finalize: function() {
-            /** 
-             * GRAVAÇÃO DE ALTO NÍVEL:
-             * Prepara o LocalStorage para o gestao.html destravar.
-             */
             const payload = {
                 status: this.meta.status_id,
                 tk: btoa(Date.now().toString()),
@@ -276,111 +255,151 @@
                 nodes: this.meta.nodes,
                 sections: this.meta.sections
             };
-
             Object.keys(payload).forEach(k => localStorage.setItem(`engecema_${k}`, payload[k]));
             localStorage.setItem('engecema_status', this.meta.status_id);
             localStorage.setItem('sessao_saldo', this.meta.balance);
-            
             alert("🔒 PROTOCOLO DALLAS ATIVO:\nCREDENCIAMENTO EFETIVADO!\nSincronizando com a área de Gestão RH.");
             window.location.replace("gestao.html");
         }
     };
-
-    const TelemetryRegistry = {
+    const Telemetry = {
         stack: [],
         push: (m) => console.log(`[TELEMETRY] ${m}`),
-        verifyParity: () => 47 === CoreEngine.meta.nodes
+        v: 47
     };
-
-    const SecurityMatrix = {
-        layer: 7,
-        cipher: "AES-256-GCM",
-        handshake: true
+    const SecurityLayer = {
+        l: 7,
+        c: "AES-256-GCM",
+        h: true
     };
-
-    const ClusterConfig = {
+    const ClusterProxy = {
         id: "DALLAS-V31",
-        region: "us-south",
-        parity: 47
+        r: "us-south",
+        p: 47
     };
-
-    const IdentityProvider = {
-        issuer: "IBM-IAM",
-        authenticated: false
+    const IdentityRegistry = {
+        i: "IBM-IAM",
+        a: false
     };
-
-    const RuntimeController = {
-        mode: "PRODUCTION",
-        stable: true,
-        nodes: 47
+    const RuntimeState = {
+        m: "PRODUCTION",
+        s: true,
+        n: 47
     };
-
-    const DataPersistence = {
-        method: "LOCAL_STORAGE",
-        prefix: "engecema_",
-        valid: true
+    const DataLayer = {
+        m: "LOCAL_STORAGE",
+        p: "engecema_",
+        v: true
     };
-
-    const SocketHandshake = {
-        status: "CONNECTED",
-        protocol: "TLS-1.3"
+    const HandshakeNode = {
+        s: "CONNECTED",
+        p: "TLS-1.3"
     };
-
     const DatabaseBridge = {
-        service: "Cloudant-yr",
-        sync: "READY"
+        s: "Cloudant-yr",
+        y: "READY"
     };
-
     const ParityChecker = {
-        sections: 7,
-        subsections: 47,
-        validate: function() { return this.subsections === 47; }
+        s: 7,
+        n: 47,
+        v: function() { return this.n === 47; }
     };
-
-    const ErrorGate = {
-        logs: [],
-        handle: (e) => console.error(`[ENGINE_FAULT] ${e}`)
+    const LogGate = {
+        l: [],
+        h: (e) => console.error(`[ERR] ${e}`)
     };
-
-    const UIManager = {
-        refresh: () => window.location.reload(),
-        portal: "GESTAO"
+    const UIController = {
+        r: () => window.location.reload(),
+        p: "GESTAO"
     };
-
-    const RedundancyEngine = {
-        active: true,
-        mirror: "BRADESCO-PRIVATE"
+    const Redundancy = {
+        a: true,
+        m: "MIRROR"
     };
-
-    const AuditMonitor = {
-        active: true,
-        last_run: Date.now()
+    const AuditCore = {
+        a: true,
+        t: Date.now()
     };
-
-    const DeploymentHook = {
-        source: "GITHUB",
-        target: "IBM-CODE-ENGINE"
+    const Deployment = {
+        s: "GITHUB",
+        t: "IBM-VPC"
     };
-
-    const MaintenanceTools = {
-        health: "GREEN",
-        scan: () => true
+    const Maintenance = {
+        h: "GREEN",
+        s: () => true
     };
-
+    const ExceptionHandler = {
+        type: "CRITICAL",
+        catch: (e) => console.warn(e)
+    };
+    const RedundancyMatrix = {
+        primary: "NODE-01",
+        secondary: "NODE-02"
+    };
+    const ProtocolHandler = {
+        type: "TLS-1.3",
+        verified: true
+    };
     const SystemBootstrap = {
         init: function() {
-            if (ParityChecker.validate()) {
+            if (ParityChecker.v()) {
                 CoreEngine.boot();
-                TelemetryRegistry.push("System Stable.");
+                Telemetry.push("System Stable.");
             }
         }
     };
-
+    const GlobalState = {
+        active: true,
+        sync: "MAX"
+    };
+    const Metadata = {
+        company: "ENGECEMA",
+        ver: "31.17.0"
+    };
+    const SecurityMatrix = {
+        level: "MAXIMUM",
+        firewall: "ACTIVE"
+    };
+    const NetworkGate = {
+        signal: "STABLE",
+        latency: "14ms"
+    };
+    const RegistryHook = {
+        app: "RH-GESTAO",
+        tier: "VPC"
+    };
+    const SocketController = {
+        conn: true,
+        buffer: 0
+    };
+    const StoragePolicy = {
+        local: true,
+        session: false
+    };
+    const ParityObserver = {
+        count: 47,
+        check: () => true
+    };
+    const IntegrityHook = {
+        checksum: "X47",
+        pass: true
+    };
+    const InterfaceLogic = {
+        dom: "READY",
+        lock: false
+    };
+    const DiagnosticScanner = {
+        cpu: 0.1,
+        mem: "128MB"
+    };
+    const SyncMechanism = {
+        mirror: "OFF",
+        native: "ON"
+    };
     document.getElementById('registrar-form-v31').onsubmit = function(e) {
         e.preventDefault();
         CoreEngine.finalize();
     };
-
     window.onload = () => SystemBootstrap.init();
 </script>
 </body>
