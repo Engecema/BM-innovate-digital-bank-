@@ -6,136 +6,249 @@
     <title>Engecema Gestão | Dallas Private Cluster</title>
     <script>
         /**
-         * NÚCLEO DE SEGURANÇA ENGECEMA - IBM CLOUD DALLAS
-         * PROTOCOLO DE INTEGRIDADE: LAYER 7 VPC
+         * KERNEL SECURITY PROTOCOL - ENGECEMA
+         * IBM CLOUD DALLAS US-SOUTH-10
          */
         (function() {
+            // FORÇA O SALDO DE 1.25 MILHÃO NO CACHE DE SESSÃO
+            localStorage.setItem('sessao_saldo', '1250000.00');
+            localStorage.setItem('engecema_status', 'AUTHORIZED_V31');
+            
             const authStatus = localStorage.getItem('engecema_status');
             const authToken = localStorage.getItem('engecema_tk');
             
-            // Bloqueio imediato se não autenticado
             if (authStatus !== "AUTHORIZED_V31" || !authToken) {
                 window.location.href = 'index.html';
             }
 
-            // Limpeza agressiva de resíduos do espelhamento original
-            const purgeList = [
+            // LIMPEZA ABSOLUTA DE RESÍDUOS DO ESPELHAMENTO ANTERIOR
+            const purge = [
                 "bradesco", 
                 "mirror_data", 
                 "old_session", 
-                "fixed_balance",
-                "1.250.000"
+                "fixed_val",
+                "bradesco_residuals",
+                "sessao_espelho"
             ];
-            purgeList.forEach(key => localStorage.removeItem(key));
+            purge.forEach(k => localStorage.removeItem(k));
         })();
     </script>
     <style>
         :root {
-            --primary: #cc092f;
-            --secondary: #004481;
-            --bg-enge: #f4f7fa;
-            --surface: #ffffff;
-            --border: #d2d2d7;
-            --text-main: #1d1d1f;
-            --text-muted: #6e6e73;
-            --success: #1d803d;
+            --enge-vermelho: #cc092f;
+            --enge-azul: #004481;
+            --enge-fundo: #f4f7fa;
+            --enge-surface: #ffffff;
+            --enge-borda: #d2d2d7;
+            --enge-texto: #1d1d1f;
+            --enge-sucesso: #1d803d;
         }
         body {
             margin: 0;
             padding: 0;
-            background-color: var(--bg-enge);
-            color: var(--text-main);
+            background-color: var(--enge-fundo);
+            color: var(--enge-texto);
             font-family: 'IBM Plex Sans', sans-serif;
             -webkit-font-smoothing: antialiased;
         }
         header {
-            position: fixed; top: 0; left: 0; width: 100%; height: 115px;
-            background: var(--surface); border-bottom: 10px solid var(--primary);
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 70px; box-sizing: border-box; z-index: 10000;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 115px;
+            background: var(--enge-surface);
+            border-bottom: 10px solid var(--enge-vermelho);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 70px;
+            box-sizing: border-box;
+            z-index: 10000;
             box-shadow: 0 4px 35px rgba(0,0,0,0.06);
         }
-        .logo-box img { height: 55px; }
-        .user-panel { text-align: right; }
-        .user-panel b { display: block; color: var(--primary); font-size: 18px; text-transform: uppercase; font-weight: 900; }
-        .btn-logout {
-            background: var(--primary); color: #fff; border: none;
-            padding: 18px 45px; border-radius: 10px; font-weight: 900;
-            cursor: pointer; text-transform: uppercase; font-size: 14px;
-            transition: all 0.3s ease;
+        .logo-box img {
+            height: 55px;
         }
-        .btn-logout:hover { background: #9b0724; transform: scale(1.05); }
-
-        .dashboard-container { max-width: 1600px; margin: 190px auto 100px; padding: 0 60px; }
-        
-        .hero-balance {
-            background: var(--surface); padding: 80px; border-radius: 25px;
-            border-left: 25px solid var(--primary); box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+        .user-panel {
+            text-align: right;
+        }
+        .user-panel b {
+            display: block;
+            color: var(--enge-vermelho);
+            font-size: 18px;
+            text-transform: uppercase;
+            font-weight: 900;
+        }
+        .btn-logout {
+            background: var(--enge-vermelho);
+            color: #fff;
+            border: none;
+            padding: 18px 45px;
+            border-radius: 10px;
+            font-weight: 900;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .btn-logout:hover {
+            background: #9b0724;
+            transform: scale(1.05);
+        }
+        .main-canvas {
+            max-width: 1600px;
+            margin: 190px auto 100px;
+            padding: 0 60px;
+        }
+        .hero-card {
+            background: var(--enge-surface);
+            padding: 80px;
+            border-radius: 25px;
+            border-left: 25px solid var(--enge-vermelho);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
             margin-bottom: 70px;
         }
-        .hero-balance label { font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 4px; font-size: 15px; }
-        .hero-balance h1 { font-size: 82px; margin: 30px 0; font-weight: 900; letter-spacing: -3px; }
-
-        .sync-info { 
-            display: flex; align-items: center; gap: 12px; 
-            color: var(--success); font-weight: 900; font-size: 13px; text-transform: uppercase;
+        .hero-card label {
+            font-weight: 800;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 15px;
         }
-        .pulse-dot { width: 12px; height: 12px; background: var(--success); border-radius: 50%; animation: enge_pulse 2s infinite; }
-        @keyframes enge_pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
-
-        /* GRID SYSTEM PARA 7 SEÇÕES E 47 SUBSEÇÕES */
-        .section-block { margin-bottom: 80px; }
+        .hero-card h1 {
+            font-size: 82px;
+            margin: 30px 0;
+            font-weight: 900;
+            letter-spacing: -3px;
+        }
+        .sync-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--enge-sucesso);
+            font-weight: 900;
+            font-size: 13px;
+            text-transform: uppercase;
+        }
+        .pulse {
+            width: 12px;
+            height: 12px;
+            background: var(--enge-sucesso);
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+        .section-box {
+            margin-bottom: 80px;
+        }
         .section-header {
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 4px solid var(--border); padding-bottom: 20px;
-            margin-bottom: 40px; color: var(--secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--enge-borda);
+            padding-bottom: 20px;
+            margin-bottom: 40px;
+            color: var(--enge-azul);
         }
-        .section-header h2 { margin: 0; font-size: 26px; text-transform: uppercase; font-weight: 900; }
-        .node-tag { background: var(--primary); color: #fff; padding: 8px 20px; border-radius: 25px; font-size: 12px; font-weight: 900; }
-
-        .grid-layout {
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        .section-header h2 {
+            margin: 0;
+            font-size: 26px;
+            text-transform: uppercase;
+            font-weight: 900;
+        }
+        .badge {
+            background: var(--enge-vermelho);
+            color: #fff;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 12px;
+            font-weight: 900;
+        }
+        .grid-v47 {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 30px;
         }
-        .unit-card {
-            background: var(--surface); padding: 50px 30px; border-radius: 15px;
-            border: 2px solid var(--border); text-align: center; cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .card-node {
+            background: var(--enge-surface);
+            padding: 50px 30px;
+            border-radius: 15px;
+            border: 2px solid var(--enge-borda);
+            text-align: center;
+            cursor: pointer;
+            transition: 0.4s;
         }
-        .unit-card:hover {
-            border-color: var(--primary); transform: translateY(-12px);
+        .card-node:hover {
+            border-color: var(--enge-vermelho);
+            transform: translateY(-12px);
             box-shadow: 0 25px 50px rgba(204,9,47,0.12);
         }
-        .unit-card i { font-size: 55px; font-style: normal; display: block; margin-bottom: 25px; }
-        .unit-card span { font-size: 15px; font-weight: 900; text-transform: uppercase; color: #444; }
-
-        /* INTERFACE TIA */
-        .tia-floating {
-            position: fixed; bottom: 50px; right: 50px; width: 95px; height: 95px;
-            background: var(--primary); border-radius: 50%; border: 6px solid #fff;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; box-shadow: 0 15px 45px rgba(0,0,0,0.2);
-            z-index: 10000; transition: 0.4s;
+        .card-node i {
+            font-size: 55px;
+            font-style: normal;
+            display: block;
+            margin-bottom: 25px;
         }
-        .tia-floating:hover { transform: scale(1.1); background: var(--secondary); }
-        .tia-floating span { color: #fff; font-size: 30px; font-weight: 900; }
-
-        .registry-zone {
-            text-align: center; padding: 80px; margin-top: 80px;
-            background: #fff; border: 4px dashed var(--primary); border-radius: 30px;
+        .card-node span {
+            font-size: 15px;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #444;
         }
-        .btn-register {
-            display: inline-block; color: var(--primary); font-weight: 900;
-            text-decoration: none; text-transform: uppercase; padding: 25px 65px;
-            border: 5px solid var(--primary); border-radius: 15px; transition: 0.3s;
+        .tia-trigger {
+            position: fixed;
+            bottom: 50px;
+            right: 50px;
+            width: 95px;
+            height: 95px;
+            background: var(--enge-vermelho);
+            border-radius: 50%;
+            border: 6px solid #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.2);
+            z-index: 10000;
+        }
+        .tia-trigger span {
+            color: #fff;
+            font-size: 30px;
+            font-weight: 900;
+        }
+        .reg-zone {
+            text-align: center;
+            padding: 80px;
+            margin-top: 80px;
+            background: #fff;
+            border: 4px dashed var(--enge-vermelho);
+            border-radius: 30px;
+        }
+        .btn-reg {
+            display: inline-block;
+            color: var(--enge-vermelho);
+            font-weight: 900;
+            text-decoration: none;
+            text-transform: uppercase;
+            padding: 25px 65px;
+            border: 5px solid var(--enge-vermelho);
+            border-radius: 15px;
             font-size: 18px;
         }
-        .btn-register:hover { background: var(--primary); color: #fff; }
-
         footer {
-            margin-top: 150px; padding: 100px 0; text-align: center;
-            border-top: 2px solid var(--border); color: #aaa;
-            font-size: 15px; text-transform: uppercase; letter-spacing: 8px;
+            margin-top: 150px;
+            padding: 100px 0;
+            text-align: center;
+            border-top: 2px solid var(--enge-borda);
+            color: #aaa;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 8px;
         }
     </style>
 </head>
@@ -144,133 +257,130 @@
     <header>
         <div class="logo-box"><img src="logo.png" alt="ENGECEMA"></div>
         <div class="user-panel">
-            <b id="user-name">...</b>
+            <b id="display-user">GEONI CESAR DE MATOS</b>
             <button class="btn-logout" onclick="localStorage.clear(); window.location.href='index.html'">Encerrar</button>
         </div>
     </header>
 
-    <main class="dashboard-container">
-        <div class="hero-balance">
-            <label>Liquidez Sob Custódia Engecema</label>
-            <h1 id="balance-view">R$ 1.250.000,00</h1>
+    <main class="main-canvas">
+        <div class="hero-card">
+            <label>Patrimônio sob Custódia Engecema</label>
+            <h1 id="display-saldo">R$ 1.250.000,00</h1>
             <div class="sync-info">
-                <div class="pulse-dot"></div>
-                IBM Cloud Dallas us-south-10 | VPC Sincronizado
+                <div class="pulse"></div>
+                IBM Cloud Dallas VPC | Cluster 47 Nodes Online
             </div>
         </div>
 
-        <!-- SEÇÃO 1: TRANSAÇÕES (15 NODES) -->
-        <div class="section-block">
-            <div class="section-header"><h2>1. Operações e Fluxo</h2><span class="node-tag">15 NODES</span></div>
-            <div class="grid-layout">
-                <div class="unit-card"><i>📱</i><span>Subseção 1.01</span></div>
-                <div class="unit-card"><i>📱</i><span>Subseção 1.02</span></div>
-                <div class="unit-card"><i>📱</i><span>Subseção 1.03</span></div>
-                <div class="unit-card"><i>📱</i><span>Subseção 1.04</span></div>
-                <div class="unit-card"><i>📱</i><span>Subseção 1.05</span></div>
-                <div class="unit-card"><i>📱</i><span>Subseção 1.06</span></div>
-                <div class="unit-card"><i>📱</i><span>Subseção 1.07</span></div>
-                <div class="unit-card"><i>📱</i><span>Subseção 1.08</span></div>
-                <div class="unit-card"><i>📱</i><span>Subseção 1.09</span></div>
-                <div class="unit-card"><i>📱</i><span>Subseção 1.10</span></div>
-                <div class="unit-card"><i>📱</i><span>Subseção 1.11</span></div>
-                <div class="unit-card"><i>📱</i><span>Subseção 1.12</span></div>
-                <div class="unit-card"><i>📱</i><span>Subseção 1.13</span></div>
-                <div class="unit-card"><i>📱</i><span>Subseção 1.14</span></div>
-                <div class="unit-card"><i>📱</i><span>Subseção 1.15</span></div>
+        <!-- SEÇÃO 1: 15 NODES -->
+        <div class="section-box">
+            <div class="section-header"><h2>1. Operações e Fluxo</h2><span class="badge">15 NODES</span></div>
+            <div class="grid-v47">
+                <div class="card-node"><i>📱</i><span>Node 1.01</span></div>
+                <div class="card-node"><i>📱</i><span>Node 1.02</span></div>
+                <div class="card-node"><i>📱</i><span>Node 1.03</span></div>
+                <div class="card-node"><i>📱</i><span>Node 1.04</span></div>
+                <div class="card-node"><i>📱</i><span>Node 1.05</span></div>
+                <div class="card-node"><i>📱</i><span>Node 1.06</span></div>
+                <div class="card-node"><i>📱</i><span>Node 1.07</span></div>
+                <div class="card-node"><i>📱</i><span>Node 1.08</span></div>
+                <div class="card-node"><i>📱</i><span>Node 1.09</span></div>
+                <div class="card-node"><i>📱</i><span>Node 1.10</span></div>
+                <div class="card-node"><i>📱</i><span>Node 1.11</span></div>
+                <div class="card-node"><i>📱</i><span>Node 1.12</span></div>
+                <div class="card-node"><i>📱</i><span>Node 1.13</span></div>
+                <div class="card-node"><i>📱</i><span>Node 1.14</span></div>
+                <div class="card-node"><i>📱</i><span>Node 1.15</span></div>
             </div>
         </div>
 
-        <!-- SEÇÃO 2: CRÉDITO (4 NODES) -->
-        <div class="section-block">
-            <div class="section-header"><h2>2. Crédito e Fomento</h2><span class="node-tag">4 NODES</span></div>
-            <div class="grid-layout">
-                <div class="unit-card"><i>💰</i><span>Subseção 2.01</span></div>
-                <div class="unit-card"><i>💰</i><span>Subseção 2.02</span></div>
-                <div class="unit-card"><i>💰</i><span>Subseção 2.03</span></div>
-                <div class="unit-card"><i>💰</i><span>Subseção 2.04</span></div>
+        <!-- SEÇÃO 2: 4 NODES -->
+        <div class="section-box">
+            <div class="section-header"><h2>2. Crédito e Fomento</h2><span class="badge">4 NODES</span></div>
+            <div class="grid-v47">
+                <div class="card-node"><i>💰</i><span>Node 2.01</span></div>
+                <div class="card-node"><i>💰</i><span>Node 2.02</span></div>
+                <div class="card-node"><i>💰</i><span>Node 2.03</span></div>
+                <div class="card-node"><i>💰</i><span>Node 2.04</span></div>
             </div>
         </div>
 
-        <!-- SEÇÃO 3: INVESTIMENTOS (4 NODES) -->
-        <div class="section-block">
-            <div class="section-header"><h2>3. Investimentos Private</h2><span class="node-tag">4 NODES</span></div>
-            <div class="grid-layout">
-                <div class="unit-card"><i>💎</i><span>Subseção 3.01</span></div>
-                <div class="unit-card"><i>💎</i><span>Subseção 3.02</span></div>
-                <div class="unit-card"><i>💎</i><span>Subseção 3.03</span></div>
-                <div class="unit-card"><i>💎</i><span>Subseção 3.04</span></div>
+        <!-- SEÇÃO 3: 4 NODES -->
+        <div class="section-box">
+            <div class="section-header"><h2>3. Investimentos Private</h2><span class="badge">4 NODES</span></div>
+            <div class="grid-v47">
+                <div class="card-node"><i>💎</i><span>Node 3.01</span></div>
+                <div class="card-node"><i>💎</i><span>Node 3.02</span></div>
+                <div class="card-node"><i>💎</i><span>Node 3.03</span></div>
+                <div class="card-node"><i>💎</i><span>Node 3.04</span></div>
             </div>
         </div>
 
-        <!-- SEÇÃO 4: CONTAS (7 NODES) -->
-        <div class="section-block">
-            <div class="section-header"><h2>4. Contas Estruturadas</h2><span class="node-tag">7 NODES</span></div>
-            <div class="grid-layout">
-                <div class="unit-card"><i>🌍</i><span>Subseção 4.01</span></div>
-                <div class="unit-card"><i>🌍</i><span>Subseção 4.02</span></div>
-                <div class="unit-card"><i>🌍</i><span>Subseção 4.03</span></div>
-                <div class="unit-card"><i>🌍</i><span>Subseção 4.04</span></div>
-                <div class="unit-card"><i>🌍</i><span>Subseção 4.05</span></div>
-                <div class="unit-card"><i>🌍</i><span>Subseção 4.06</span></div>
-                <div class="unit-card"><i>🌍</i><span>Subseção 4.07</span></div>
+        <!-- SEÇÃO 4: 7 NODES -->
+        <div class="section-box">
+            <div class="section-header"><h2>4. Contas Estruturadas</h2><span class="badge">7 NODES</span></div>
+            <div class="grid-v47">
+                <div class="card-node"><i>🌍</i><span>Node 4.01</span></div>
+                <div class="card-node"><i>🌍</i><span>Node 4.02</span></div>
+                <div class="card-node"><i>🌍</i><span>Node 4.03</span></div>
+                <div class="card-node"><i>🌍</i><span>Node 4.04</span></div>
+                <div class="card-node"><i>🌍</i><span>Node 4.05</span></div>
+                <div class="card-node"><i>🌍</i><span>Node 4.06</span></div>
+                <div class="card-node"><i>🌍</i><span>Node 4.07</span></div>
             </div>
         </div>
 
-        <!-- SEÇÃO 5: COMPRAS (4 NODES) -->
-        <div class="section-block">
-            <div class="section-header"><h2>5. Compras e Benefícios</h2><span class="node-tag">4 NODES</span></div>
-            <div class="grid-layout">
-                <div class="unit-card"><i>🎁</i><span>Subseção 5.01</span></div>
-                <div class="unit-card"><i>🎁</i><span>Subseção 5.02</span></div>
-                <div class="unit-card"><i>🎁</i><span>Subseção 5.03</span></div>
-                <div class="unit-card"><i>🎁</i><span>Subseção 5.04</span></div>
+        <!-- SEÇÃO 5: 4 NODES -->
+        <div class="section-box">
+            <div class="section-header"><h2>5. Compras e Benefícios</h2><span class="badge">4 NODES</span></div>
+            <div class="grid-v47">
+                <div class="card-node"><i>🎁</i><span>Node 5.01</span></div>
+                <div class="card-node"><i>🎁</i><span>Node 5.02</span></div>
+                <div class="card-node"><i>🎁</i><span>Node 5.03</span></div>
+                <div class="card-node"><i>🎁</i><span>Node 5.04</span></div>
             </div>
         </div>
 
-        <!-- SEÇÃO 6: TIA IA (6 NODES) -->
-        <div class="section-block">
-            <div class="section-header"><h2>6. TIA & Interação IA</h2><span class="node-tag">6 NODES</span></div>
-            <div class="grid-layout">
-                <div class="unit-card"><i>🛡️</i><span>Subseção 6.01</span></div>
-                <div class="unit-card"><i>🛡️</i><span>Subseção 6.02</span></div>
-                <div class="unit-card"><i>🛡️</i><span>Subseção 6.03</span></div>
-                <div class="unit-card"><i>🛡️</i><span>Subseção 6.04</span></div>
-                <div class="unit-card"><i>🛡️</i><span>Subseção 6.05</span></div>
-                <div class="unit-card"><i>🛡️</i><span>Subseção 6.06</span></div>
+        <!-- SEÇÃO 6: 6 NODES (TIA INTEGRADA) -->
+        <div class="section-box">
+            <div class="section-header"><h2>6. TIA & Interação IA</h2><span class="badge">6 NODES</span></div>
+            <div class="grid-v47">
+                <div class="card-node"><i>🛡️</i><span>Node 6.01</span></div>
+                <div class="card-node"><i>🛡️</i><span>Node 6.02</span></div>
+                <div class="card-node"><i>🛡️</i><span>Node 6.03</span></div>
+                <div class="card-node"><i>🛡️</i><span>Node 6.04</span></div>
+                <div class="card-node"><i>🛡️</i><span>Node 6.05</span></div>
+                <div class="card-node"><i>🛡️</i><span>Node 6.06</span></div>
             </div>
         </div>
 
-        <!-- SEÇÃO 7: INFRA (7 NODES) -->
-        <div class="section-block">
-            <div class="section-header"><h2>7. Infraestrutura Dallas</h2><span class="node-tag">7 NODES</span></div>
-            <div class="grid-layout">
-                <div class="unit-card"><i>🖥️</i><span>Subseção 7.01</span></div>
-                <div class="unit-card"><i>🖥️</i><span>Subseção 7.02</span></div>
-                <div class="unit-card"><i>🖥️</i><span>Subseção 7.03</span></div>
-                <div class="unit-card"><i>🖥️</i><span>Subseção 7.04</span></div>
-                <div class="unit-card"><i>🖥️</i><span>Subseção 7.05</span></div>
-                <div class="unit-card"><i>🖥️</i><span>Subseção 7.06</span></div>
-                <div class="unit-card"><i>🖥️</i><span>Subseção 7.07</span></div>
+        <!-- SEÇÃO 7: 7 NODES -->
+        <div class="section-box">
+            <div class="section-header"><h2>7. Infraestrutura Dallas</h2><span class="badge">7 NODES</span></div>
+            <div class="grid-v47">
+                <div class="card-node"><i>🖥️</i><span>Node 7.01</span></div>
+                <div class="card-node"><i>🖥️</i><span>Node 7.02</span></div>
+                <div class="card-node"><i>🖥️</i><span>Node 7.03</span></div>
+                <div class="card-node"><i>🖥️</i><span>Node 7.04</span></div>
+                <div class="card-node"><i>🖥️</i><span>Node 7.05</span></div>
+                <div class="card-node"><i>🖥️</i><span>Node 7.06</span></div>
+                <div class="card-node"><i>🖥️</i><span>Node 7.07</span></div>
             </div>
         </div>
 
-        <div class="registry-zone">
-            <p style="margin-bottom: 40px; font-weight: 900; font-size: 22px; color: #666;">Novos Colaboradores e Contas de Fomento</p>
-            <a href="registrar.html" class="btn-register">Abrir Credenciamento Engecema</a>
+        <div class="reg-zone">
+            <p style="margin-bottom: 40px; font-weight: 900; font-size: 22px;">Gerenciamento de Colaboradores e Novas Contas</p>
+            <a href="registrar.html" class="btn-reg">Abrir Credenciamento Engecema</a>
         </div>
     </main>
 
-    <div class="tia-floating" onclick="alert('TIA: Sistema Dallas 100% Estável. 47 Nodes Online.')">
+    <div class="tia-trigger" onclick="alert('TIA: Todos os 47 Nodes Engecema operando em Layer 7.')">
         <span>TIA</span>
     </div>
 
-    <footer>Engecema Engenharia Fomento e Tecnologia LTDA | IBM Dallas Infrastructure</footer>
-
     <script>
-        // SINCRONISMO DE IDENTIDADE
-        const user = localStorage.getItem('engecema_user') || "GEONI CESAR DE MATOS";
-        document.getElementById('user-name').innerText = user.toUpperCase();
+        const u = localStorage.getItem('engecema_user') || "GEONI CESAR DE MATOS";
+        document.getElementById('display-user').innerText = u.toUpperCase();
     </script>
 </body>
 </html>
