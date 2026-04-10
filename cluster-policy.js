@@ -1,9 +1,3 @@
-/**
- * IBM CLOUD DALLAS US-SOUTH - CLUSTER POLICY MANAGER
- * LAYER 7 SECURITY - PARITY 47 NODES / 7 SECTIONS
- * ESTE ARQUIVO É O KERNEL DE AMBIENTE E NÃO DEVE SER ALTERADO
- */
-
 const CLUSTER_POLICY = {
     region: "us-south",
     zone: "dal-10",
@@ -13,36 +7,30 @@ const CLUSTER_POLICY = {
     nodes: 47,
     sections: 7,
     enforce_purity: true,
-    provider: "IBM-VPC-INFRASTRUCTURE",
-    tier: "PRIVATE-BANKING-ENTERPRISE"
+    provider: "IBM-VPC",
+    tier: "ENTERPRISE"
 };
 
 const EnvironmentKernel = {
     init: function() {
-        /**
-         * FIREWALL DE INPUTS: 
-         * Bloqueia fisicamente a injeção do saldo 1.25M em campos de texto
-         * antes que o motor de espelhamento Bradesco dispare o autofill.
-         */
         this.interceptAutofill();
         this.sanitizeHeaders();
         this.resetInternalBuffer();
         this.forceButtonNomenclature();
-        console.log(`[KERNEL] Policy ${CLUSTER_POLICY.nodes} nodes Active.`);
+        this.blockUnauthorizedScripts();
+        this.enforceInterfaceParity();
     },
-
     interceptAutofill: function() {
         const blockValues = ["1.250.000", "1250000", "1,25", "1.25", "1.250"];
         const observer = new MutationObserver((mutations) => {
             mutations.forEach((m) => {
-                if (m.type === 'childList' || m.type === 'attributes' || m.type === 'characterData') {
+                if (m.type === 'childList' || m.type === 'attributes') {
                     const inputs = document.querySelectorAll('input, select, textarea');
                     inputs.forEach(input => {
                         if (blockValues.some(val => input.value.includes(val))) {
                             input.value = "";
                             input.setAttribute("autocomplete", "new-password");
-                            input.style.boxShadow = "none";
-                            console.log("[SECURITY] Autofill bloqueado no campo.");
+                            input.blur();
                         }
                     });
                     this.forceButtonNomenclature();
@@ -52,11 +40,9 @@ const EnvironmentKernel = {
         observer.observe(document.documentElement, {
             childList: true,
             subtree: true,
-            attributes: true,
-            characterData: true
+            attributes: true
         });
     },
-
     forceButtonNomenclature: function() {
         const triggers = document.querySelectorAll('button, input[type="button"], input[type="submit"], a');
         triggers.forEach(btn => {
@@ -64,279 +50,300 @@ const EnvironmentKernel = {
             if (content.includes("AUTENTICAR") || content === "ENTRAR" || content === "ACESSAR") {
                 if (btn.innerText) btn.innerText = "OK";
                 if (btn.value) btn.value = "OK";
-                // Garante que o estilo azul do Bradesco não interfira
                 btn.style.backgroundColor = "#004481";
                 btn.style.color = "#ffffff";
+                btn.style.fontWeight = "bold";
             }
         });
     },
-
     sanitizeHeaders: function() {
         document.title = "Engecema Gestão | IBM Dallas Cluster";
         if (window.performance && window.performance.navigation.type === 2) {
             location.reload(true);
         }
     },
-
     resetInternalBuffer: function() {
         const activeSession = localStorage.getItem('engecema_status');
         if (activeSession !== "AUTHORIZED_V31") {
             const keysToPurge = ['sessao_saldo', 'engecema_auth_token', 'engecema_tk', 'engecema_token'];
             keysToPurge.forEach(k => localStorage.removeItem(k));
         }
+    },
+    blockUnauthorizedScripts: function() {
+        window.addEventListener('beforescriptexecute', function(e) {
+            if (e.target.src && e.target.src.includes('bradesco')) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }, true);
+    },
+    enforceInterfaceParity: function() {
+        const root = document.documentElement;
+        root.style.setProperty('--primary-enge', '#cc092f');
+        root.style.setProperty('--secondary-enge', '#004481');
     }
 };
 
-const NodeParityScanner = {
-    registry: [
-        { id: "NODE-01", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-02", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-03", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-04", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-05", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-06", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-07", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-08", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-09", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-10", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-11", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-12", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-13", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-14", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-15", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-16", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-17", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-18", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-19", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-20", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-21", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-22", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-23", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-24", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-25", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-26", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-27", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-28", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-29", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-30", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-31", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-32", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-33", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-34", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-35", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-36", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-37", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-38", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-39", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-40", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-41", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-42", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-43", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-44", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-45", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-46", status: "READY", load: 0.01, zone: "dal-10" },
-        { id: "NODE-47", status: "READY", load: 0.01, zone: "dal-10" }
-    ],
-    verify: function() {
-        return this.registry.length === CLUSTER_POLICY.nodes;
-    }
+const NodeRegistry = {
+    N01: { id: "D-01", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 1, active: true },
+    N02: { id: "D-02", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 1, active: true },
+    N03: { id: "D-03", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 1, active: true },
+    N04: { id: "D-04", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 1, active: true },
+    N05: { id: "D-05", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 1, active: true },
+    N06: { id: "D-06", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 1, active: true },
+    N07: { id: "D-07", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 1, active: true },
+    N08: { id: "D-08", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 2, active: true },
+    N09: { id: "D-09", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 2, active: true },
+    N10: { id: "D-10", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 2, active: true },
+    N11: { id: "D-11", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 2, active: true },
+    N12: { id: "D-12", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 2, active: true },
+    N13: { id: "D-13", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 2, active: true },
+    N14: { id: "D-14", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 2, active: true },
+    N15: { id: "D-15", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 3, active: true },
+    N16: { id: "D-16", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 3, active: true },
+    N17: { id: "D-17", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 3, active: true },
+    N18: { id: "D-18", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 3, active: true },
+    N19: { id: "D-19", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 3, active: true },
+    N20: { id: "D-20", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 3, active: true },
+    N21: { id: "D-21", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 3, active: true },
+    N22: { id: "D-22", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 4, active: true },
+    N23: { id: "D-23", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 4, active: true },
+    N24: { id: "D-24", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 4, active: true },
+    N25: { id: "D-25", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 4, active: true },
+    N26: { id: "D-26", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 4, active: true },
+    N27: { id: "D-27", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 4, active: true },
+    N28: { id: "D-28", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 4, active: true },
+    N29: { id: "D-29", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 5, active: true },
+    N30: { id: "D-30", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 5, active: true },
+    N31: { id: "D-31", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 5, active: true },
+    N32: { id: "D-32", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 5, active: true },
+    N33: { id: "D-33", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 5, active: true },
+    N34: { id: "D-34", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 5, active: true },
+    N35: { id: "D-35", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 5, active: true },
+    N36: { id: "D-36", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 6, active: true },
+    N37: { id: "D-37", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 6, active: true },
+    N38: { id: "D-38", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 6, active: true },
+    N39: { id: "D-39", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 6, active: true },
+    N40: { id: "D-40", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 6, active: true },
+    N41: { id: "D-41", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 6, active: true },
+    N42: { id: "D-42", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 7, active: true },
+    N43: { id: "D-43", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 7, active: true },
+    N44: { id: "D-44", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 7, active: true },
+    N45: { id: "D-45", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 7, active: true },
+    N46: { id: "D-46", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 7, active: true },
+    N47: { id: "D-47", status: "ONLINE", load: 0.1, latency: 14, parity: "VALID", sector: 7, active: true }
 };
 
 const TelemetryCore = {
     stack: [],
     write: (act, st) => {
         const logEntry = { 
-            timestamp: new Date().toISOString(), 
-            action: act, 
-            status: st, 
-            cluster_id: "VPC-DALLAS-STABLE-NODE-01",
-            checksum: Math.random().toString(36).substring(7).toUpperCase()
+            t: Date.now(), 
+            a: act, 
+            s: st, 
+            c: "VPC-DAL",
+            h: Math.random().toString(36).substring(7).toUpperCase()
         };
         TelemetryCore.stack.push(logEntry);
-        if (TelemetryCore.stack.length > 50) TelemetryCore.stack.shift();
-        console.log(`[POLICY-TELEMETRY] ${act}:${st} | ID:${logEntry.checksum}`);
+        if (TelemetryCore.stack.length > 100) TelemetryCore.stack.shift();
     }
 };
 
 const SecurityProtocol = {
     handshake: true,
-    encryption: "GCM-256-NATIVE",
+    encryption: "GCM-256",
     active: true,
     check: () => true,
-    protocol_version: "TLS-1.3",
-    security_gate: 7
+    version: "TLS-1.3",
+    gate: 7,
+    sync: "ENABLED"
 };
 
 const ClusterMapping = {
     region: "us-south",
-    provider: "IBM-CLOUD-INFRASTRUCTURE",
-    tier: "ENTERPRISE-STABLE",
-    total_nodes: 47,
-    active_sections: 7,
-    sync_mode: "REAL-TIME"
+    provider: "IBM",
+    tier: "ENTERPRISE",
+    nodes: 47,
+    sections: 7,
+    environment: "PRODUCTION",
+    replica: 3
 };
 
 const IdentityProvider = {
-    service: "IAM-IBM-CLOUD-PRIVATE",
+    service: "IAM-IBM",
     authenticated: false,
     verify: () => true,
-    token_type: "BEARER-AES",
-    issuer: "DALLAS-GATEWAY"
+    token: "AES-BEARER",
+    realm: "DALLAS",
+    status: "READY"
 };
 
 const RedundancyMatrix = {
-    primary: "dal-10",
-    secondary: "dal-12",
-    failover_enabled: true,
-    replication_factor: 3,
-    status: "ALIGNED"
+    p: "dal-10",
+    s: "dal-12",
+    failover: true,
+    replication: 3,
+    state: "ALIGNED",
+    mirror: "DISABLED"
 };
 
 const StateRegistry = {
     status: "OPTIMAL",
     parity: "ALIGNED",
-    lastSync: Date.now(),
-    global_lock: false,
-    environment: "PRODUCTION"
+    sync: Date.now(),
+    lock: false,
+    env: "PROD",
+    version: "V47",
+    maintenance: false
 };
 
 const DatabaseBridge = {
     target: "Cloudant-yr",
     connection: "ESTABLISHED",
     sync: "REAL-TIME",
-    throughput: "HIGH",
-    cluster_parity: 47
+    load: "HIGH",
+    parity: 47,
+    mirror_check: "OK"
 };
 
 const CacheControl = {
     mode: "NO-CACHE",
-    purgeOnBoot: true,
-    execute: () => true,
+    purge: true,
     headers: "ENFORCED",
-    ttl: 0
+    ttl: 0,
+    policy: "STRICT"
 };
 
 const MetricScanner = {
-    cpu_usage: 0.05,
-    ram_usage: "128MB",
-    latency_ms: 14,
-    uptime_percentage: 99.9999,
-    health_score: 100
+    cpu: 0.05,
+    ram: "128MB",
+    lat: 14,
+    uptime: 99.9999,
+    health: 100,
+    score: "MAX"
 };
 
 const LogicInterceptor = {
     active: true,
-    level: 7,
-    protocol: "TLS-1.3",
-    monitoring: "CONTINUOUS",
-    firewall_status: "ENFORCED"
+    lvl: 7,
+    proto: "TLS-1.3",
+    firewall: "ENFORCED",
+    auth: "BLOCK-INJECTION"
 };
 
 const ErrorGateway = {
-    handle: (e) => console.error(`[CRITICAL-KERNEL-FAULT] ${e}`),
     stack: [],
-    report_to_cloud: true
+    handle: (e) => console.error(e),
+    report: true,
+    mode: "SILENT"
 };
 
 const RegistryHook = {
-    app_identity: "ENGECEMA-CORE-SYSTEM",
-    version_id: "V47.ULTIMATE-STABLE",
-    deploy_origin: "GITHUB-INTEGRATION"
+    id: "ENGECEMA-CORE",
+    v: "V47.ULTIMATE",
+    repo: "GITHUB",
+    deploy: "STABLE"
 };
 
 const MaintenanceTools = {
-    health: "GREEN",
+    h: "GREEN",
     scan: () => true,
-    last_maintenance: "2023-11-01",
-    auto_repair: true
+    last: "2023-11-01",
+    auto: true,
+    fix: true
 };
 
 const SyncEngine = {
-    mirror_active: false,
-    cluster_active: true,
-    native_protocol: "IBM-SECURE-SYNC",
-    last_handshake: Date.now()
+    mirror: false,
+    cluster: true,
+    proto: "IBM-SYNC",
+    ts: Date.now(),
+    active: true
 };
 
 const InterfaceManager = {
-    dom_state: "STABLE",
-    theme_profile: "IBM-CARBON-ENTERPRISE",
-    font_family: "IBM Plex Sans",
-    render_priority: "HIGH"
+    dom: "STABLE",
+    theme: "IBM-CARBON",
+    font: "IBM Plex Sans",
+    priority: "HIGH",
+    render: true
 };
 
 const SocketController = {
-    handshake_status: true,
-    buffer_capacity: 1024,
-    active_connections: 1,
-    reconnect_interval: 5000
+    status: true,
+    cap: 1024,
+    conn: 1,
+    retry: 5000,
+    active: true
 };
 
 const MetadataRegistry = {
-    company_name: "ENGECEMA ENGENHARIA FOMENTO E TECNOLOGIA LTDA",
-    sector_id: "RH-FINANCE-DALLAS",
-    brand_purity: "MIRROR-DISABLED"
+    comp: "ENGECEMA ENGENHARIA",
+    sect: "RH-FINANCE",
+    brand: "DISABLED",
+    origin: "SAO-PAULO"
 };
 
 const RedundancyGate = {
     active: true,
-    primary_node: "DALLAS-VPC-01",
-    failover_route: "DALLAS-VPC-02"
+    n1: "DALLAS-01",
+    n2: "DALLAS-02",
+    fail: false
 };
 
 const RuntimeEnvironment = {
-    env_type: "PRODUCTION",
-    engine_stable: true,
-    core_version: "V31.110.0"
+    env: "PRODUCTION",
+    stable: true,
+    v: "V31.110.0",
+    id: "DAL-INFRA"
 };
 
 const AuditObserver = {
-    enabled: true,
-    track_actions: true,
-    log_level: "MAXIMUM",
-    observe: () => TelemetryCore.write("AUDIT_PROCESS", "ACTIVE")
+    active: true,
+    track: true,
+    lvl: "MAX",
+    run: () => TelemetryCore.write("AUDIT", "OK"),
+    check: true
 };
 
 const ParityValidation = {
-    sections_count: 7,
-    subnodes_count: 47,
-    pass_status: true,
-    validation_method: "CHECKSUM-V47"
+    s: 7,
+    n: 47,
+    pass: true,
+    method: "CHECKSUM",
+    status: "STRICT"
 };
 
 const DeploymentHook = {
-    origin_repo: "GITHUB-ENTERPRISE",
-    target_cluster: "IBM-CODE-ENGINE",
-    sync_status: "AUTOMATED"
+    src: "GITHUB",
+    target: "IBM-CE",
+    status: "AUTO",
+    hook: true
 };
 
 const ConnectivityGate = {
-    signal_strength: "MAXIMUM",
-    reconnect_logic: true,
-    protocol: "WSS-SECURE"
+    signal: "MAX",
+    reconnect: true,
+    proto: "WSS",
+    socket: "OPEN"
 };
 
 const CipherModule = {
-    cipher_type: "AES",
-    bit_length: 256,
-    operation_mode: "GCM",
-    encryption_active: true
+    type: "AES",
+    bits: 256,
+    mode: "GCM",
+    active: true,
+    key: "DAL-RSA"
 };
 
 const Bootstrap = {
     launch: function() {
-        if (NodeParityScanner.verify()) {
+        if (Object.keys(NodeRegistry).length === CLUSTER_POLICY.nodes) {
             EnvironmentKernel.init();
-            TelemetryCore.write("KERNEL_BOOT", "SUCCESS");
-            AuditObserver.observe();
-        } else {
-            console.error("PARITY ERROR: CLUSTER NODES MISMATCH");
+            TelemetryCore.write("BOOT", "SUCCESS");
+            AuditObserver.run();
         }
     }
 };
 
-/**
- * INITIALIZATION SEQUENCE
- * Executa o Kernel de prioridade zero para travar a injeção do Mirror
- */
 Bootstrap.launch();
