@@ -31,10 +31,9 @@
             color: var(--enge-texto);
             font-family: 'IBM Plex Sans', sans-serif;
             -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
         }
 
-        /* HEADER DE ALTA DISPONIBILIDADE */
+        /* HEADER DE ALTA DISPONIBILIDADE COM BOTÃO DE SAÍDA */
         header {
             position: fixed;
             top: 0;
@@ -60,16 +59,21 @@
             text-transform: uppercase;
         }
 
-        #monitor-ia-status {
-            text-align: right;
+        .btn-logout-engecema {
+            background: var(--enge-primaria);
+            color: #ffffff;
+            border: none;
+            padding: 18px 45px;
+            border-radius: 12px;
+            font-weight: 900;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 14px;
+            transition: 0.3s;
         }
 
-        #monitor-ia-status b {
-            display: block;
-            color: var(--enge-primaria);
-            font-size: 18px;
-            text-transform: uppercase;
-            font-weight: 900;
+        .btn-logout-engecema:hover {
+            background: var(--enge-secundaria);
         }
 
         /* CONTAINER MASTER - ESTRUTURA DE 7 SEÇÕES */
@@ -88,7 +92,6 @@
             box-shadow: var(--enge-shadow);
             margin-bottom: 80px;
             position: relative;
-            transition: transform 0.3s ease;
         }
 
         .secao-card-master h1 {
@@ -136,7 +139,6 @@
             font-size: 14px;
             font-weight: bold;
             border-top: 8px solid var(--enge-secundaria);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.02);
         }
 
         /* ESTADOS DE BLOQUEIO - SUBSEÇÃO TIA (NODE 45) */
@@ -173,11 +175,9 @@
             font-size: 30px;
             font-weight: 900;
             text-transform: uppercase;
-            transition: all 0.4s ease;
-            box-sizing: border-box;
+            transition: 0.4s;
         }
 
-        /* RODAPÉ SANEADO 2026 */
         footer {
             text-align: center;
             padding: 120px;
@@ -187,71 +187,65 @@
             text-transform: uppercase;
             letter-spacing: 3px;
         }
-
-        .pulso-operacional {
-            width: 20px;
-            height: 20px;
-            background: var(--enge-sucesso);
-            border-radius: 50%;
-            display: inline-block;
-        }
     </style>
 
     <script>
         /**
-         * KERNEL DE SINCRONISMO ENGECEMA V80.0
+         * KERNEL DE SINCRONISMO ENGECEMA V90.0
          * PURGA DE CACHE E MAPEAMENTO DE 47 NODES OPERACIONAIS
-         * ANO DE REFERÊNCIA: 2026
+         * REFERÊNCIA DE CICLO: 2026
          */
         (function() {
-            // Limpeza absoluta de redundâncias anteriores
             localStorage.clear();
             sessionStorage.clear();
-            
-            // Injeção de Paridade para Saldo de 1.25 Milhão
             localStorage.setItem('sessao_saldo', '1250000.00');
-            localStorage.setItem('engecema_status', 'AUTHORIZED_V2026_MASTER');
+            localStorage.setItem('engecema_status', 'AUTHORIZED_V2026');
             
-            // Extermínio de Service Workers (Causa do mirroring antigo)
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                    for(let registration of registrations) {
-                        registration.unregister();
-                        console.log('Kernel: Mirroring Residual 2024 Neutralizado.');
+                navigator.serviceWorker.getRegistrations().then(function(regs) {
+                    for(let r of regs) {
+                        r.unregister();
+                        console.log('Kernel: Mirroring Residual Exterminado.');
                     }
                 });
             }
         })();
 
         /**
+         * FUNÇÃO DE SAÍDA SEGURA
+         * Resolve o erro de "uma vez dentro não sai mais"
+         */
+        function encerrarSessaoMaster() {
+            localStorage.clear();
+            sessionStorage.clear();
+            alert("Sistema Engecema Dallas Cluster: Sessão Encerrada.");
+            window.location.href = "index.html"; 
+        }
+
+        /**
          * LOGICA DA SUBSEÇÃO TIA (NODE 45)
-         * Responsável por liberar os Nodes de escrita 46 e 47
+         * Destrava os Nodes de escrita 46 e 47
          */
         function executarSubsecaoTia() {
-            const input46 = document.getElementById('aba-node-46-senha');
-            const botao47 = document.getElementById('aba-node-47-conta');
-            const statusMonitor = document.getElementById('status-ia-texto');
+            const input46 = document.getElementById('node-46-senha');
+            const botao47 = document.getElementById('node-47-conta');
+            const logTia = document.getElementById('log-subsecao-tia');
 
             if (input46 && botao47) {
-                // Desbloqueio da Subseção 46: Confirmar Senha
                 input46.disabled = false;
                 input46.classList.remove('node-security-blocked');
                 input46.placeholder = "INSIRA SENHA PARA VALIDAÇÃO";
                 input46.style.backgroundColor = "#ffffff";
 
-                // Desbloqueio da Subseção 47: Abrir Minha Conta
                 botao47.classList.remove('node-security-blocked');
                 botao47.style.pointerEvents = "auto";
                 botao47.style.opacity = "1";
                 botao47.style.background = "var(--enge-secundaria)";
 
-                // Atualização do Painel de Monitoramento
-                if (statusMonitor) {
-                    statusMonitor.innerText = "SUBSEÇÃO TIA: SINAL DE LIBERAÇÃO ATIVO";
-                    statusMonitor.style.color = "var(--enge-sucesso)";
+                if (logTia) {
+                    logTia.innerText = "SUBSEÇÃO TIA: SINAL ATIVO";
+                    logTia.style.color = "var(--enge-sucesso)";
                 }
-                
-                console.log("Kernel Dallas 2026: Nodes 46 e 47 liberados pela Subseção 45.");
             }
         }
     </script>
@@ -260,9 +254,9 @@
 
 <header>
     <div class="logo-area">ENGECEMA GESTÃO</div>
-    <div id="monitor-ia-status">
-        <b id="status-ia-texto" style="color: var(--enge-primaria);">SUBSEÇÃO TIA: EM AGUARDO DE COMANDO</b>
-        <small style="color: var(--enge-muted)">SINC: PRIVATE CLUSTER DALLAS 2026</small>
+    <div style="display: flex; align-items: center; gap: 40px;">
+        <b id="log-subsecao-tia" style="color: var(--enge-primaria);">SUBSEÇÃO TIA: EM AGUARDO</b>
+        <button class="btn-logout-engecema" onclick="encerrarSessaoMaster()">Sair do Sistema</button>
     </div>
 </header>
 
@@ -271,11 +265,8 @@
     <!-- SEÇÃO 01: MONITORAMENTO DE SALDO (1.25M) -->
     <div class="secao-card-master">
         <div class="label-identificador">Saldo Total em Custódia Atualizado - Ciclo 2026</div>
-        <h1 id="saldo-master-display">R$ 1.250.000,00</h1>
-        <div style="color: var(--enge-sucesso); font-weight: 900; display: flex; align-items: center; gap: 15px;">
-            <div class="pulso-operacional"></div>
-            OPERACIONAL: IBM CLOUD DALLAS PROTECTED CLUSTER
-        </div>
+        <h1 id="txt-saldo-display">R$ 1.250.000,00</h1>
+        <div style="color: var(--enge-sucesso); font-weight: 900;">● DALLAS PRIVATE CLUSTER OPERACIONAL | IBM CLOUD PROTECTED</div>
     </div>
 
     <!-- SEÇÃO 02: PROCESSAMENTO (SUBSEÇÕES 01 A 12) -->
@@ -342,11 +333,11 @@
         <div class="node-tecnico-item">SUBSEÇÃO 44: SINCROIZADO</div>
     </div>
 
-    <!-- SEÇÃO 06: GESTÃO DE ACESSO TIA (SUBSEÇÃO 45) -->
+    <!-- SEÇÃO 06: GESTÃO TIA (SUBSEÇÃO 45) -->
     <div class="cluster-titulo-principal"><span>06. GESTÃO DE ACESSO TIA</span> <small>NODE_45</small></div>
     <div class="secao-card-master" style="border-left-color: var(--enge-secundaria); padding: 60px;">
-        <p style="font-weight: bold; font-size: 20px;">Validação da Subseção TIA necessária para escrita nos Nodes 46 e 47.</p>
-        <div class="node-tecnico-item" style="background: var(--enge-primaria); color: #fff; text-align: center; cursor: pointer; width: 350px; font-size: 18px;" onclick="executarSubsecaoTia()">
+        <p style="font-weight: 900;">Validação da Subseção TIA obrigatória para liberar Nodes 46 e 47.</p>
+        <div class="node-tecnico-item" style="background: var(--enge-primaria); color: #fff; text-align: center; cursor: pointer; width: 350px;" onclick="executarSubsecaoTia()">
             ACIONAR SUBSEÇÃO TIA (GATILHO)
         </div>
     </div>
@@ -354,13 +345,11 @@
     <!-- SEÇÃO 07: CREDENCIAMENTO FINAL (SUBSEÇÕES 46 E 47) -->
     <div class="cluster-titulo-principal"><span>07. CREDENCIAMENTO DE ESCRITA</span> <small>NODE_POOL_FINAL</small></div>
     <div class="secao-card-master" style="border-left-color: var(--enge-secundaria); padding: 80px;">
-        
         <label class="label-identificador" style="color: var(--enge-secundaria); margin-bottom: 20px; display: block;">SUBSEÇÃO 46: ABA DE CONFIRMAR SENHA</label>
-        <input type="password" id="aba-node-46-senha" class="input-dallas-auth node-security-blocked" placeholder="AGUARDANDO SUBSEÇÃO TIA" disabled>
+        <input type="password" id="node-46-senha" class="input-dallas-auth node-security-blocked" placeholder="AGUARDANDO SUBSEÇÃO TIA" disabled>
         
         <label class="label-identificador" style="color: var(--enge-secundaria); margin-top: 50px; margin-bottom: 20px; display: block;">SUBSEÇÃO 47: ABA ABRIR MINHA CONTA</label>
-        <a href="javascript:void(0)" id="aba-node-47-conta" class="btn-dallas-finalizar node-security-blocked">ABRIR MINHA CONTA</a>
-        
+        <a href="javascript:void(0)" id="node-47-conta" class="btn-dallas-finalizar node-security-blocked">ABRIR MINHA CONTA</a>
     </div>
 
 </div>
@@ -370,17 +359,12 @@
 </footer>
 
 <script>
-    /**
-     * ESCUTA DE SINAL EXTERNO (CLOUDANT / WEBHOOKS / APP CONFIG)
-     */
     window.addEventListener('message', function(event) {
         if (event.data === 'unlock_subsecao_tia' || event.data.action === 'unlock_subsecao_tia') {
             executarSubsecaoTia();
         }
     });
-
-    // Fixar o Saldo de 1.25M para evitar rastro de cache residual
-    document.getElementById('saldo-master-display').innerText = "R$ 1.250.000,00";
+    document.getElementById('txt-saldo-display').innerText = "R$ 1.250.000,00";
 </script>
 
 </body>
