@@ -4,49 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Engecema Gestão | Dallas Private Cluster</title>
-    <script>
-        /**
-         * KERNEL DE DESBLOQUEIO ENGECEMA V20.0
-         * PARIDADE: 47 NODES OPERACIONAIS
-         */
-        (function() {
-            localStorage.setItem('sessao_saldo', '1250000.00');
-            localStorage.setItem('engecema_status', 'AUTHORIZED_V31');
-            
-            const blackListKeys = ["bradesco", "mirror_data", "autenticar_state"];
-            blackListKeys.forEach(k => localStorage.removeItem(k));
-
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistrations().then(registrations => {
-                    for(let registration of registrations) { registration.unregister(); }
-                });
-            }
-        })();
-
-        /**
-         * INTERAÇÃO COM A IA TIA - DESTRAVAMENTO DE SEGURANÇA
-         * Este método remove o bloqueio das abas ABRIR CONTA e CONFIRMAR SENHA
-         */
-        function destravarFluxoTia() {
-            // Referência aos elementos de segurança do cluster
-            const inputConfirmar = document.getElementById('confirmar-senha-node');
-            const btnRegistrar = document.getElementById('btn-registrar-master');
-            const statusNode = document.getElementById('status-ia-engecema');
-
-            if (inputConfirmar && btnRegistrar) {
-                // Executa o desbloqueio lógico e visual
-                inputConfirmar.disabled = false;
-                inputConfirmar.placeholder = "DIGITE PARA CONFIRMAR";
-                
-                btnRegistrar.classList.remove('btn-locked');
-                btnRegistrar.style.pointerEvents = "auto";
-                btnRegistrar.style.opacity = "1";
-                
-                statusNode.innerHTML = "VALIDAÇÃO TIA: CONCLUÍDA";
-                statusNode.style.color = "var(--enge-sucesso)";
-            }
-        }
-    </script>
     <style>
         :root {
             --enge-primaria: #cc092f;
@@ -59,71 +16,140 @@
             --enge-sucesso: #1d803d;
         }
         
-        body { margin: 0; background-color: var(--enge-fundo); color: var(--enge-texto); font-family: 'IBM Plex Sans', sans-serif; }
+        body { margin: 0; padding: 0; background-color: var(--enge-fundo); color: var(--enge-texto); font-family: 'IBM Plex Sans', sans-serif; -webkit-font-smoothing: antialiased; }
 
+        /* HEADER E LOGO */
         header {
-            position: fixed; top: 0; width: 100%; height: 130px;
+            position: fixed; top: 0; left: 0; width: 100%; height: 130px;
             background: var(--enge-superficie); border-bottom: 15px solid var(--enge-primaria);
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0 80px; z-index: 10000; box-shadow: 0 10px 50px rgba(0,0,0,0.1);
+            padding: 0 80px; box-sizing: border-box; z-index: 10000; box-shadow: 0 10px 50px rgba(0,0,0,0.1);
         }
 
-        .btn-locked {
-            background: #ccc !important;
-            cursor: not-allowed !important;
-            pointer-events: none;
-            opacity: 0.5;
+        /* CONTEÚDO E SEÇÕES */
+        .conteudo-principal { max-width: 1750px; margin: 220px auto 100px; padding: 0 100px; }
+        
+        .card-balanco-master {
+            background: var(--enge-superficie); padding: 80px; border-radius: 50px;
+            border-left: 35px solid var(--enge-primaria); box-shadow: 0 45px 100px rgba(0,0,0,0.1); margin-bottom: 80px;
         }
 
-        /* [RESTANTE DO SEU CSS DE 47 SUBSEÇÕES AQUI] */
+        .sessao-cluster { margin-bottom: 100px; background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        
+        .cabecalho-cluster {
+            color: var(--enge-secundaria); font-size: 32px; font-weight: 900;
+            text-transform: uppercase; border-bottom: 5px solid #f0f0f0; padding-bottom: 20px;
+            display: flex; justify-content: space-between; margin-bottom: 40px;
+        }
+
+        /* ESTADO DAS ABAS TRAVADAS */
+        .aba-travada { opacity: 0.4; pointer-events: none; filter: grayscale(1); }
+        
+        input[type="password"] {
+            width: 100%; padding: 25px; border: 3px solid var(--enge-borda);
+            border-radius: 15px; font-size: 22px; text-align: center; font-weight: 900;
+        }
+
+        .btn-engecema-registrar {
+            display: block; width: 100%; background: var(--enge-primaria); color: #ffffff;
+            padding: 30px; border-radius: 20px; font-size: 24px; font-weight: 900;
+            text-align: center; text-decoration: none; text-transform: uppercase;
+            margin-top: 20px; transition: 0.3s;
+        }
+
+        .btn-locked { background: #6e6e73 !important; cursor: not-allowed; }
+
+        footer { text-align: center; padding: 60px; color: var(--enge-muted); font-weight: bold; border-top: 1px solid var(--enge-borda); }
     </style>
 </head>
 <body>
 
 <header>
     <div id="logo-container">
-        <div style="font-size: 32px; font-weight: 900; color: var(--enge-primaria);">ENGECEMA</div>
+        <span style="font-size: 35px; font-weight: 900; color: var(--enge-primaria);">ENGECEMA GESTÃO</span>
     </div>
     <div id="identidade-painel">
-        <b>SESSÃO MASTER</b>
-        <span id="status-ia-engecema" style="color: var(--enge-primaria); font-weight: 900;">AGUARDANDO VALIDAÇÃO TIA...</span>
+        <b id="status-ia">AGUARDANDO TIA...</b>
     </div>
 </header>
 
 <div class="conteudo-principal">
-    <!-- SEÇÃO 1: BALANÇO MASTER (ESPELHAMENTO) -->
+    
+    <!-- SEÇÃO 1: SALDO MASTER (SINCROIZADO) -->
     <div class="card-balanco-master">
-        <label>Saldo em Custódia</label>
-        <h1>R$ 1.250.000,00</h1>
-        <div class="tag-sincronismo">
-            <div class="ponto-pulso-dallas"></div>
-            SINCROIZADO COM DALLAS CLUSTER
-        </div>
+        <label style="letter-spacing: 5px; font-weight: 900; color: var(--enge-muted);">SALDO EM CUSTÓDIA</label>
+        <h1 id="valor-saldo">R$ 0,00</h1>
+        <div style="color: var(--enge-sucesso); font-weight: 900;">SINCROIZADO COM DALLAS CLUSTER</div>
     </div>
 
-    <!-- SEÇÃO 2: CONTROLE DE ACESSO E SEGURANÇA (FOCO DA CORREÇÃO) -->
-    <div id="bloco-abertura-conta">
-        <h2>Área de Credenciamento</h2>
-        
-        <div style="max-width: 500px; margin: 0 auto;">
-            <input type="password" id="confirmar-senha-node" 
-                   style="width:100%; padding:25px; margin-bottom:20px; border-radius:15px; border:3px solid var(--enge-borda); font-size:20px; text-align:center;" 
-                   placeholder="BLOQUEADO PELA TIA" disabled>
-            
-            <a href="#" id="btn-registrar-master" class="btn-engecema-registrar btn-locked">
-                ABRIR MINHA CONTA
-            </a>
+    <!-- SEÇÃO 2: ABA CONFIRMAR SENHA (REFERÊNCIA TIA) -->
+    <div class="sessao-cluster" id="secao-confirmacao">
+        <div class="cabecalho-cluster">
+            <span>02. SEGURANÇA DE ACESSO</span>
+            <span style="font-size: 14px;">SUBSEÇÕES 01-12</span>
         </div>
+        <input type="password" id="input-confirmar-senha" placeholder="BLOQUEADO PELA TIA" disabled>
     </div>
 
-    <!-- SEÇÕES RESTANTES (AS OUTRAS 5 SEÇÕES E SUBSEÇÕES CONTINUAM ABAIXO) -->
+    <!-- SEÇÃO 3: ABA ABRIR MINHA CONTA (REFERÊNCIA TIA) -->
+    <div class="sessao-cluster" id="secao-abertura">
+        <div class="cabecalho-cluster">
+            <span>03. CREDENCIAMENTO FINAL</span>
+            <span style="font-size: 14px;">SUBSEÇÕES 13-24</span>
+        </div>
+        <a href="#" id="btn-abrir-conta" class="btn-engecema-registrar btn-locked">ABRIR MINHA CONTA</a>
+    </div>
+
+    <!-- SEÇÕES 4 A 7 (ESPAÇO PARA AS 47 SUBSEÇÕES) -->
+    <div id="nodes-restantes"></div>
+
 </div>
 
+<footer>
+    © 2024 Engecema Dallas Private Cluster | IBM Cloud Protected Architecture
+</footer>
+
 <script>
-    // Listener para o Watson Assistant/IBM Cloud disparar o desbloqueio
+    // 1. Inicialização do Kernel e Saldo
+    (function inicializarKernel() {
+        const saldoFixado = "1250000.00";
+        localStorage.setItem('sessao_saldo', saldoFixado);
+        document.getElementById('valor-saldo').innerText = "R$ " + parseFloat(saldoFixado).toLocaleString('pt-BR', {minimumFractionDigits: 2});
+        
+        // Simulação de preenchimento das 47 subseções nas seções restantes
+        const container = document.getElementById('nodes-restantes');
+        for(let i=4; i<=7; i++) {
+            container.innerHTML += `
+                <div class="sessao-cluster">
+                    <div class="cabecalho-cluster"><span>0${i}. NODE OPERACIONAL</span></div>
+                    <div style="color: var(--enge-muted)">Sincronizando subseções do cluster Dallas...</div>
+                </div>`;
+        }
+    })();
+
+    // 2. FUNÇÃO DE DESBLOQUEIO (CHAMADA PELA TIA)
+    function destravarFluxoTia() {
+        // Destrava Aba Confirmar Senha
+        const inputSenha = document.getElementById('input-confirmar-senha');
+        inputSenha.disabled = false;
+        inputSenha.placeholder = "DIGITE SUA SENHA AGORA";
+        inputSenha.style.borderColor = "var(--enge-sucesso)";
+
+        // Destrava Aba Abrir Minha Conta
+        const btnAbrir = document.getElementById('btn-abrir-conta');
+        btnAbrir.classList.remove('btn-locked');
+        btnAbrir.style.background = "var(--enge-secundaria)";
+        
+        // Atualiza Status
+        document.getElementById('status-ia').innerText = "VALIDAÇÃO CONCLUÍDA";
+        document.getElementById('status-ia').style.color = "var(--enge-sucesso)";
+        
+        console.log("Kernel gestao.html: Acesso liberado pela IA.");
+    }
+
+    // Listener para integração IBM Cloud
     window.addEventListener('message', function(event) {
-        // Verifica se a mensagem veio da IA Tia autorizando o fluxo
-        if (event.data && event.data.action === 'IA_TIA_UNLOCK') {
+        if (event.data.action === 'UNLOCK_ENGECEMA') {
             destravarFluxoTia();
         }
     });
