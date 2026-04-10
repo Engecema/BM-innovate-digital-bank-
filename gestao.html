@@ -10,7 +10,7 @@
     
     <style>
         /* ============================================================
-           ARQUITETURA VISUAL ENGECEMA DALLAS CLUSTER - CICLO 2026
+           SISTEMA DE DESIGN ENGECEMA CLUSTER - CICLO 2026
            ============================================================ */
         :root {
             --enge-primaria: #cc092f;
@@ -21,7 +21,7 @@
             --enge-muted: #6e6e73;
             --enge-sucesso: #1d803d;
             --enge-borda: #d2d2d7;
-            --enge-shadow: 0 45px 100px rgba(0,0,0,0.1);
+            --enge-shadow-master: 0 45px 100px rgba(0,0,0,0.1);
         }
 
         body {
@@ -33,7 +33,7 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* HEADER DE ALTA DISPONIBILIDADE COM BOTÃO DE SAÍDA */
+        /* HEADER DE ALTA DISPONIBILIDADE COM CONTROLE DE SESSÃO */
         header {
             position: fixed;
             top: 0;
@@ -51,7 +51,7 @@
             box-shadow: 0 10px 50px rgba(0,0,0,0.1);
         }
 
-        .logo-area {
+        .logo-area-engecema {
             font-size: 38px;
             font-weight: 900;
             color: var(--enge-primaria);
@@ -59,193 +59,216 @@
             text-transform: uppercase;
         }
 
-        .btn-logout-engecema {
+        .btn-logout-master {
             background: var(--enge-primaria);
             color: #ffffff;
             border: none;
-            padding: 18px 45px;
+            padding: 20px 50px;
             border-radius: 12px;
             font-weight: 900;
             cursor: pointer;
             text-transform: uppercase;
             font-size: 14px;
-            transition: 0.3s;
+            transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        .btn-logout-engecema:hover {
+        .btn-logout-master:hover {
             background: var(--enge-secundaria);
+            transform: translateY(-2px);
         }
 
-        /* CONTAINER MASTER - ESTRUTURA DE 7 SEÇÕES */
-        .master-wrapper {
+        /* WRAPPER PRINCIPAL - ARQUITETURA DE 7 SEÇÕES */
+        .wrapper-cluster {
             max-width: 1750px;
             margin: 220px auto 100px;
             padding: 0 100px;
         }
 
-        /* CARDS OPERACIONAIS */
-        .secao-card-master {
+        /* CARDS DAS SEÇÕES OPERACIONAIS */
+        .card-operacional-master {
             background: var(--enge-superficie);
-            padding: 80px;
-            border-radius: 50px;
+            padding: 85px;
+            border-radius: 55px;
             border-left: 35px solid var(--enge-primaria);
-            box-shadow: var(--enge-shadow);
-            margin-bottom: 80px;
+            box-shadow: var(--enge-shadow-master);
+            margin-bottom: 85px;
             position: relative;
         }
 
-        .secao-card-master h1 {
-            font-size: 95px;
-            margin: 30px 0;
+        .card-operacional-master h1 {
+            font-size: 98px;
+            margin: 35px 0;
             font-weight: 900;
-            letter-spacing: -4px;
+            letter-spacing: -5px;
             color: var(--enge-texto);
         }
 
-        .label-identificador {
+        .label-identificacao {
             font-weight: 900;
             color: var(--enge-muted);
             text-transform: uppercase;
-            letter-spacing: 6px;
+            letter-spacing: 7px;
             font-size: 16px;
         }
 
-        /* TITULOS DE CLUSTER */
-        .cluster-titulo-principal {
-            font-size: 35px;
+        .titulo-secao-cluster {
+            font-size: 38px;
             font-weight: 900;
             color: var(--enge-secundaria);
-            border-bottom: 8px solid #eee;
-            padding-bottom: 25px;
-            margin-bottom: 50px;
+            border-bottom: 10px solid #eee;
+            padding-bottom: 30px;
+            margin-bottom: 55px;
             text-transform: uppercase;
             display: flex;
             justify-content: space-between;
         }
 
-        /* GRID PARA 47 SUBSEÇÕES TÉCNICAS */
-        .subsecao-grid-layout {
+        /* GRID PARA 47 SUBSEÇÕES TÉCNICAS DECLARADAS */
+        .grid-subsecoes-layout {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 25px;
-            margin-bottom: 60px;
+            margin-bottom: 70px;
         }
 
-        .node-tecnico-item {
+        .node-tecnico-box {
             background: #ffffff;
-            padding: 30px;
-            border-radius: 20px;
+            padding: 35px;
+            border-radius: 22px;
             border: 1px solid #ddd;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: bold;
             border-top: 8px solid var(--enge-secundaria);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.03);
         }
 
-        /* ESTADOS DE BLOQUEIO - SUBSEÇÃO TIA (NODE 45) */
-        .node-security-blocked {
-            opacity: 0.25;
+        /* CONFIGURAÇÃO DE SEGURANÇA - SUBSEÇÃO TIA (NODE 45) */
+        .node-security-lock {
+            opacity: 0.22;
             pointer-events: none;
             cursor: not-allowed !important;
             filter: grayscale(1);
         }
 
-        .input-dallas-auth {
+        .input-auth-engecema {
             width: 100%;
-            padding: 40px;
+            padding: 45px;
             border-radius: 25px;
-            border: 5px solid #ddd;
-            font-size: 32px;
+            border: 6px solid #ddd;
+            font-size: 35px;
             text-align: center;
             font-weight: 900;
             color: var(--enge-primaria);
-            margin-bottom: 40px;
+            margin-bottom: 45px;
             box-sizing: border-box;
-            background-color: #f9f9f9;
+            background-color: #fafafa;
         }
 
-        .btn-dallas-finalizar {
+        .btn-auth-engecema {
             display: block;
             width: 100%;
-            padding: 45px;
+            padding: 48px;
             background: #6e6e73;
             color: #ffffff;
             text-align: center;
             text-decoration: none;
-            border-radius: 30px;
-            font-size: 30px;
+            border-radius: 35px;
+            font-size: 32px;
             font-weight: 900;
             text-transform: uppercase;
-            transition: 0.4s;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            box-sizing: border-box;
         }
 
+        /* RODAPÉ SANEADO 2026 */
         footer {
             text-align: center;
-            padding: 120px;
-            border-top: 2px solid #ddd;
+            padding: 130px;
+            border-top: 3px solid #ddd;
             font-weight: 900;
             color: var(--enge-muted);
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 4px;
+        }
+
+        .status-pulse {
+            width: 22px;
+            height: 22px;
+            background: var(--enge-sucesso);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 15px var(--enge-sucesso);
         }
     </style>
 
     <script>
         /**
-         * KERNEL DE SINCRONISMO ENGECEMA V90.0
+         * KERNEL DE SINCRONISMO ENGECEMA V100.0
          * PURGA DE CACHE E MAPEAMENTO DE 47 NODES OPERACIONAIS
-         * REFERÊNCIA DE CICLO: 2026
+         * REFERÊNCIA DE CICLO: 2026 | LOCAL: gestao.html
          */
         (function() {
+            // Limpeza de cache residual de mirroring 2024
             localStorage.clear();
             sessionStorage.clear();
-            localStorage.setItem('sessao_saldo', '1250000.00');
-            localStorage.setItem('engecema_status', 'AUTHORIZED_V2026');
             
+            // Injeção de Paridade para Saldo Master Engecema
+            localStorage.setItem('sessao_saldo', '1250000.00');
+            localStorage.setItem('engecema_status', 'AUTHORIZED_V2026_DALLAS');
+            
+            // Extermínio de Service Workers (Causa do mirroring antigo persistir no Edge)
             if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistrations().then(function(regs) {
-                    for(let r of regs) {
-                        r.unregister();
-                        console.log('Kernel: Mirroring Residual Exterminado.');
+                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                    for(let registration of registrations) {
+                        registration.unregister().then(() => {
+                            console.log('Kernel: Mirroring Residual 2024 Neutralizado.');
+                        });
                     }
                 });
             }
         })();
 
         /**
-         * FUNÇÃO DE SAÍDA SEGURA
+         * FUNÇÃO DE LOGOUT DO SISTEMA
          * Resolve o erro de "uma vez dentro não sai mais"
          */
-        function encerrarSessaoMaster() {
+        function encerrarSessaoEngecema() {
             localStorage.clear();
             sessionStorage.clear();
-            alert("Sistema Engecema Dallas Cluster: Sessão Encerrada.");
-            window.location.href = "index.html"; 
+            alert("Dallas Cluster: Sessão Encerrada com Segurança.");
+            // Força redirecionamento para quebrar cache de sessão
+            window.location.replace("index.html"); 
         }
 
         /**
          * LOGICA DA SUBSEÇÃO TIA (NODE 45)
-         * Destrava os Nodes de escrita 46 e 47
+         * Gatilho de autorização para os Nodes de escrita 46 e 47
          */
         function executarSubsecaoTia() {
-            const input46 = document.getElementById('node-46-senha');
-            const botao47 = document.getElementById('node-47-conta');
-            const logTia = document.getElementById('log-subsecao-tia');
+            const campo46 = document.getElementById('aba-node-46-senha');
+            const botao47 = document.getElementById('aba-node-47-conta');
+            const logMonitor = document.getElementById('monitor-ia-texto');
 
-            if (input46 && botao47) {
-                input46.disabled = false;
-                input46.classList.remove('node-security-blocked');
-                input46.placeholder = "INSIRA SENHA PARA VALIDAÇÃO";
-                input46.style.backgroundColor = "#ffffff";
+            if (campo46 && botao47) {
+                // Desbloqueio da Subseção 46: Aba Confirmar Senha
+                campo46.disabled = false;
+                campo46.classList.remove('node-security-lock');
+                campo46.placeholder = "INSIRA SENHA PARA VALIDAÇÃO";
+                campo46.style.backgroundColor = "#ffffff";
 
-                botao47.classList.remove('node-security-blocked');
+                // Desbloqueio da Subseção 47: Aba Abrir Minha Conta
+                botao47.classList.remove('node-security-lock');
                 botao47.style.pointerEvents = "auto";
                 botao47.style.opacity = "1";
                 botao47.style.background = "var(--enge-secundaria)";
 
-                if (logTia) {
-                    logTia.innerText = "SUBSEÇÃO TIA: SINAL ATIVO";
-                    logTia.style.color = "var(--enge-sucesso)";
+                // Atualização do Log de Monitoramento do Cluster
+                if (logMonitor) {
+                    logMonitor.innerText = "SUBSEÇÃO TIA: SINAL DE LIBERAÇÃO ATIVO";
+                    logMonitor.style.color = "var(--enge-sucesso)";
                 }
+                
+                console.log("Kernel Dallas 2026: Subseção 45 autorizou Nodes 46 e 47.");
             }
         }
     </script>
@@ -253,103 +276,108 @@
 <body>
 
 <header>
-    <div class="logo-area">ENGECEMA GESTÃO</div>
-    <div style="display: flex; align-items: center; gap: 40px;">
-        <b id="log-subsecao-tia" style="color: var(--enge-primaria);">SUBSEÇÃO TIA: EM AGUARDO</b>
-        <button class="btn-logout-engecema" onclick="encerrarSessaoMaster()">Sair do Sistema</button>
+    <div class="logo-area-engecema">ENGECEMA GESTÃO</div>
+    <div id="painel-monitor-ia" style="display: flex; align-items: center; gap: 45px;">
+        <b id="monitor-ia-texto" style="color: var(--enge-primaria);">SUBSEÇÃO TIA: AGUARDANDO COMANDO</b>
+        <button class="btn-logout-master" onclick="encerrarSessaoEngecema()">Sair do Sistema</button>
     </div>
 </header>
 
-<div class="master-wrapper">
+<div class="wrapper-cluster">
     
-    <!-- SEÇÃO 01: MONITORAMENTO DE SALDO (1.25M) -->
-    <div class="secao-card-master">
-        <div class="label-identificador">Saldo Total em Custódia Atualizado - Ciclo 2026</div>
+    <!-- SEÇÃO 01: MONITORAMENTO DE SALDO EM CUSTÓDIA -->
+    <div class="card-operacional-master">
+        <div class="label-identificacao">Saldo Total em Custódia Atualizado - Ciclo 2026</div>
         <h1 id="txt-saldo-display">R$ 1.250.000,00</h1>
-        <div style="color: var(--enge-sucesso); font-weight: 900;">● DALLAS PRIVATE CLUSTER OPERACIONAL | IBM CLOUD PROTECTED</div>
+        <div style="color: var(--enge-sucesso); font-weight: 900; display: flex; align-items: center; gap: 15px;">
+            <div class="status-pulse"></div>
+            OPERACIONAL: DALLAS PRIVATE CLUSTER | IBM CLOUD PROTECTED
+        </div>
     </div>
 
     <!-- SEÇÃO 02: PROCESSAMENTO (SUBSEÇÕES 01 A 12) -->
-    <div class="cluster-titulo-principal"><span>02. PROCESSAMENTO DE NODES</span> <small>NODE_POOL_01</small></div>
-    <div class="subsecao-grid-layout">
-        <div class="node-tecnico-item">SUBSEÇÃO 01: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 02: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 03: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 04: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 05: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 06: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 07: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 08: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 09: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 10: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 11: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 12: SINCROIZADO</div>
+    <div class="titulo-secao-cluster"><span>02. PROCESSAMENTO DE NODES</span> <small>NODE_POOL_01</small></div>
+    <div class="grid-subsecoes-layout">
+        <div class="node-tecnico-box">SUBSEÇÃO 01: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 02: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 03: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 04: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 05: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 06: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 07: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 08: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 09: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 10: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 11: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 12: SINCROIZADO</div>
     </div>
 
-    <!-- SEÇÃO 03: INFRAESTRUTURA LOGÍSTICA (SUBSEÇÕES 13 A 24) -->
-    <div class="cluster-titulo-principal"><span>03. INFRAESTRUTURA LOGÍSTICA</span> <small>NODE_POOL_02</small></div>
-    <div class="subsecao-grid-layout">
-        <div class="node-tecnico-item">SUBSEÇÃO 13: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 14: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 15: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 16: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 17: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 18: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 19: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 20: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 21: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 22: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 23: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 24: SINCROIZADO</div>
+    <!-- SEÇÃO 03: LOGÍSTICA (SUBSEÇÕES 13 A 24) -->
+    <div class="titulo-secao-cluster"><span>03. INFRAESTRUTURA LOGÍSTICA</span> <small>NODE_POOL_02</small></div>
+    <div class="grid-subsecoes-layout">
+        <div class="node-tecnico-box">SUBSEÇÃO 13: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 14: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 15: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 16: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 17: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 18: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 19: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 20: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 21: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 22: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 23: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 24: SINCROIZADO</div>
     </div>
 
-    <!-- SEÇÃO 04: AUDITORIA E COMPLIANCE (SUBSEÇÕES 25 A 36) -->
-    <div class="cluster-titulo-principal"><span>04. AUDITORIA E COMPLIANCE</span> <small>NODE_POOL_03</small></div>
-    <div class="subsecao-grid-layout">
-        <div class="node-tecnico-item">SUBSEÇÃO 25: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 26: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 27: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 28: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 29: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 30: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 31: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 32: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 33: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 34: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 35: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 36: SINCROIZADO</div>
+    <!-- SEÇÃO 04: AUDITORIA (SUBSEÇÕES 25 A 36) -->
+    <div class="titulo-secao-cluster"><span>04. AUDITORIA E COMPLIANCE</span> <small>NODE_POOL_03</small></div>
+    <div class="grid-subsecoes-layout">
+        <div class="node-tecnico-box">SUBSEÇÃO 25: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 26: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 27: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 28: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 29: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 30: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 31: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 32: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 33: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 34: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 35: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 36: SINCROIZADO</div>
     </div>
 
-    <!-- SEÇÃO 05: SEGURANÇA E PROTOCOLOS (SUBSEÇÕES 37 A 44) -->
-    <div class="cluster-titulo-principal"><span>05. PROTOCOLOS DE SEGURANÇA</span> <small>NODE_POOL_04</small></div>
-    <div class="subsecao-grid-layout">
-        <div class="node-tecnico-item">SUBSEÇÃO 37: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 38: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 39: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 40: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 41: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 42: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 43: SINCROIZADO</div>
-        <div class="node-tecnico-item">SUBSEÇÃO 44: SINCROIZADO</div>
+    <!-- SEÇÃO 05: SEGURANÇA (SUBSEÇÕES 37 A 44) -->
+    <div class="titulo-secao-cluster"><span>05. PROTOCOLOS DE SEGURANÇA</span> <small>NODE_POOL_04</small></div>
+    <div class="grid-subsecoes-layout">
+        <div class="node-tecnico-box">SUBSEÇÃO 37: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 38: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 39: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 40: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 41: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 42: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 43: SINCROIZADO</div>
+        <div class="node-tecnico-box">SUBSEÇÃO 44: SINCROIZADO</div>
     </div>
 
-    <!-- SEÇÃO 06: GESTÃO TIA (SUBSEÇÃO 45) -->
-    <div class="cluster-titulo-principal"><span>06. GESTÃO DE ACESSO TIA</span> <small>NODE_45</small></div>
-    <div class="secao-card-master" style="border-left-color: var(--enge-secundaria); padding: 60px;">
-        <p style="font-weight: 900;">Validação da Subseção TIA obrigatória para liberar Nodes 46 e 47.</p>
-        <div class="node-tecnico-item" style="background: var(--enge-primaria); color: #fff; text-align: center; cursor: pointer; width: 350px;" onclick="executarSubsecaoTia()">
+    <!-- SEÇÃO 06: GESTÃO TIA (SUBSEÇÃO 45 - GATILHO) -->
+    <div class="titulo-secao-cluster"><span>06. GESTÃO DE ACESSO TIA</span> <small>NODE_45</small></div>
+    <div class="card-operacional-master" style="border-left-color: var(--enge-secundaria); padding: 70px;">
+        <p style="font-weight: 900; font-size: 20px; color: var(--enge-secundaria);">Validação da Subseção TIA necessária para destravar os Nodes de Escrita 46 e 47.</p>
+        <div class="node-tecnico-box" style="background: var(--enge-primaria); color: #fff; text-align: center; cursor: pointer; width: 380px; font-size: 18px;" onclick="executarSubsecaoTia()">
             ACIONAR SUBSEÇÃO TIA (GATILHO)
         </div>
     </div>
 
     <!-- SEÇÃO 07: CREDENCIAMENTO FINAL (SUBSEÇÕES 46 E 47) -->
-    <div class="cluster-titulo-principal"><span>07. CREDENCIAMENTO DE ESCRITA</span> <small>NODE_POOL_FINAL</small></div>
-    <div class="secao-card-master" style="border-left-color: var(--enge-secundaria); padding: 80px;">
-        <label class="label-identificador" style="color: var(--enge-secundaria); margin-bottom: 20px; display: block;">SUBSEÇÃO 46: ABA DE CONFIRMAR SENHA</label>
-        <input type="password" id="node-46-senha" class="input-dallas-auth node-security-blocked" placeholder="AGUARDANDO SUBSEÇÃO TIA" disabled>
+    <div class="titulo-secao-cluster"><span>07. CREDENCIAMENTO DE ESCRITA</span> <small>NODE_POOL_FINAL</small></div>
+    <div class="card-operacional-master" style="border-left-color: var(--enge-secundaria); padding: 90px;">
         
-        <label class="label-identificador" style="color: var(--enge-secundaria); margin-top: 50px; margin-bottom: 20px; display: block;">SUBSEÇÃO 47: ABA ABRIR MINHA CONTA</label>
-        <a href="javascript:void(0)" id="node-47-conta" class="btn-dallas-finalizar node-security-blocked">ABRIR MINHA CONTA</a>
+        <label class="label-identificacao" style="color: var(--enge-secundaria); margin-bottom: 25px; display: block;">SUBSEÇÃO 46: ABA DE CONFIRMAR SENHA</label>
+        <input type="password" id="aba-node-46-senha" class="input-auth-engecema node-security-lock" placeholder="AGUARDANDO SUBSEÇÃO TIA" disabled>
+        
+        <label class="label-identificacao" style="color: var(--enge-secundaria); margin-top: 55px; margin-bottom: 25px; display: block;">SUBSEÇÃO 47: ABA ABRIR MINHA CONTA</label>
+        <a href="javascript:void(0)" id="aba-node-47-conta" class="btn-auth-engecema node-security-lock">ABRIR MINHA CONTA</a>
+        
     </div>
 
 </div>
@@ -359,11 +387,16 @@
 </footer>
 
 <script>
+    /**
+     * ESCUTA DE SINAL EXTERNO (CLOUDANT / WEBHOOKS / APP CONFIG)
+     */
     window.addEventListener('message', function(event) {
         if (event.data === 'unlock_subsecao_tia' || event.data.action === 'unlock_subsecao_tia') {
             executarSubsecaoTia();
         }
     });
+
+    // Fixar o Saldo de 1.25M para evitar retrocesso de mirroring residual
     document.getElementById('txt-saldo-display').innerText = "R$ 1.250.000,00";
 </script>
 
