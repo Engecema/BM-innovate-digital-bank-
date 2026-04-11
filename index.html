@@ -6,184 +6,186 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Engecema | Dallas Private Cluster Access 2026</title>
+    <title>Engecema Gestão | Dallas Private Cluster 2026</title>
     
-    <script>
-        /**
-         * KERNEL DE DESBLOQUEIO E PURGA ENGECEMA V2026
-         * FINALIDADE: QUEBRAR O LOOP DE REDIRECIONAMENTO E MATA O MIRRORING 2024
-         */
-        (function() {
-            // 1. Limpa rastros de login do Bradesco ou sessões travadas
-            localStorage.clear();
-            sessionStorage.clear();
-            
-            // 2. Mata Service Workers (A causa real do Loop e do nome Bradesco no rodapé)
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                    for(let registration of registrations) {
-                        registration.unregister().then(function(boolean) {
-                            console.log('Kernel Supreme: Registro Residual Removido.');
-                            if(boolean) window.location.reload(true);
-                        });
-                    }
-                });
-            }
-
-            // 3. Força paridade de segurança para o Cluster 2026
-            localStorage.setItem('cluster_version', '2026_MASTER');
-            localStorage.setItem('engecema_auth_ready', 'true');
-        })();
-
-        /**
-         * FUNÇÃO DE ACESSO AO NÓ DE GESTÃO
-         * Redireciona para o gestao.html garantindo que o cache seja ignorado
-         */
-        function acessarNodeGestao() {
-            // Gera um Token temporal para evitar que o navegador use o gestao.html antigo
-            const vParam = new Date().getTime();
-            window.location.href = "gestao.html?v=" + vParam;
-        }
-    </script>
-
     <style>
-        /* DESIGN SYSTEM INDEX ENGECEMA 2026 */
         :root {
-            --primaria: #cc092f;
-            --secundaria: #004481;
-            --fundo: #f4f7fa;
-            --texto: #1d1d1f;
-            --borda: #d2d2d7;
-            --sombra: 0 45px 100px rgba(0,0,0,0.1);
+            --enge-p: #cc092f;
+            --enge-s: #004481;
+            --enge-f: #f4f7fa;
+            --enge-w: #ffffff;
+            --enge-t: #1d1d1f;
+            --enge-ok: #1d803d;
+            --shadow-master: 0 45px 100px rgba(0,0,0,0.1);
         }
 
         body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--fundo);
+            margin: 0; padding: 0;
+            background-color: var(--enge-f);
+            color: var(--enge-t);
             font-family: 'IBM Plex Sans', sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
-        .login-card-master {
-            background: #ffffff;
-            width: 550px;
-            padding: 80px;
-            border-radius: 50px;
-            box-shadow: var(--sombra);
-            text-align: center;
-            border-top: 15px solid var(--primaria);
+        header {
+            position: fixed; top: 0; left: 0; width: 100%; height: 130px;
+            background: var(--enge-w); border-bottom: 15px solid var(--enge-p);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 80px; box-sizing: border-box; z-index: 10000;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.1);
         }
 
-        .logo-engecema {
-            font-size: 42px;
-            font-weight: 900;
-            color: var(--primaria);
-            margin-bottom: 20px;
-            letter-spacing: -2px;
+        .logo-supreme {
+            font-size: 38px; font-weight: 900;
+            color: var(--enge-p); letter-spacing: -1px; text-transform: uppercase;
         }
 
-        .subtitle-cluster {
-            color: #6e6e73;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            font-size: 13px;
-            margin-bottom: 50px;
-            display: block;
+        .btn-logout-master {
+            background: var(--enge-p); color: #ffffff; border: none;
+            padding: 24px 60px; border-radius: 12px; font-weight: 900;
+            cursor: pointer; text-transform: uppercase; font-size: 15px;
+            transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        .btn-acesso-v2026 {
-            display: block;
-            width: 100%;
-            padding: 30px;
-            background: var(--secundaria);
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 20px;
-            font-size: 20px;
-            font-weight: 900;
-            text-transform: uppercase;
-            transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(0, 68, 129, 0.2);
+        .btn-logout-master:hover { background: var(--enge-s); transform: translateY(-2px); }
+
+        .master-wrapper { max-width: 1750px; margin: 220px auto 150px; padding: 0 100px; }
+
+        .card-cluster-v2026 {
+            background: var(--enge-w); padding: 95px; border-radius: 65px;
+            border-left: 45px solid var(--enge-p); box-shadow: var(--shadow-master);
+            margin-bottom: 95px; position: relative;
         }
 
-        .btn-acesso-v2026:hover {
-            background: var(--primaria);
-            transform: scale(1.02);
+        .card-cluster-v2026 h1 { font-size: 105px; margin: 40px 0; font-weight: 900; letter-spacing: -6px; color: var(--enge-t); }
+
+        .titulo-secao-master { font-size: 42px; font-weight: 900; color: var(--enge-s); border-bottom: 14px solid #f0f0f0; padding-bottom: 40px; margin-bottom: 65px; text-transform: uppercase; }
+
+        .grid-nodes-full { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin-bottom: 90px; }
+
+        .node-box-unit {
+            background: #ffffff; padding: 45px; border-radius: 28px;
+            border: 1px solid #eee; font-size: 15px; font-weight: 900;
+            border-top: 12px solid var(--enge-s); box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+            transition: all 0.4s ease;
         }
 
-        .status-node-info {
-            margin-top: 50px;
-            font-size: 12px;
-            color: #86868b;
-            font-weight: bold;
-            line-height: 1.6;
+        .node-active-pulse { color: var(--enge-ok); border-top-color: var(--enge-ok); }
+
+        .gate-lock-v2026 { opacity: 0.18; pointer-events: none; cursor: not-allowed !important; filter: grayscale(1) blur(2px); }
+
+        .input-supreme {
+            width: 100%; padding: 55px; border-radius: 35px; border: 8px solid #f0f0f0;
+            font-size: 42px; text-align: center; font-weight: 900;
+            color: var(--enge-p); margin-bottom: 60px; box-sizing: border-box; background-color: #fafafa;
         }
 
-        /* ELEMENTOS TÉCNICOS PARA DENSIDADE DE LINHAS (SUPERANDO 550) */
-        .node-layer-01 { color: transparent; height: 1px; } .node-layer-02 { color: transparent; height: 1px; }
-        .node-layer-03 { color: transparent; height: 1px; } .node-layer-04 { color: transparent; height: 1px; }
-        .node-layer-05 { color: transparent; height: 1px; } .node-layer-06 { color: transparent; height: 1px; }
-        /* Declaração manual exaustiva de classes para volume de arquivo técnico */
-        .grid-01 { z-index: 1; } .grid-02 { z-index: 2; } .grid-03 { z-index: 3; } .grid-04 { z-index: 4; }
-        .grid-05 { z-index: 5; } .grid-06 { z-index: 6; } .grid-07 { z-index: 7; } .grid-08 { z-index: 8; }
-        .grid-09 { z-index: 9; } .grid-10 { z-index: 10; } .grid-11 { z-index: 11; } .grid-12 { z-index: 12; }
+        .btn-supreme {
+            display: block; width: 100%; padding: 55px; background: #6e6e73;
+            color: #ffffff; text-align: center; text-decoration: none;
+            border-radius: 40px; font-size: 35px; font-weight: 900;
+            text-transform: uppercase; transition: 0.5s; box-sizing: border-box;
+        }
+
+        footer { text-align: center; padding: 160px; border-top: 6px solid #f0f0f0; font-weight: 900; color: #6e6e73; text-transform: uppercase; letter-spacing: 6px; font-size: 19px; }
     </style>
+
+    <script>
+        (function() {
+            localStorage.setItem('sessao_saldo', '1250000.00');
+            localStorage.setItem('engecema_auth', 'TRUE_2026');
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(r => r.unregister()));
+            }
+        })();
+
+        function encerrarSessao() {
+            localStorage.clear(); sessionStorage.clear();
+            window.location.replace("index.html"); 
+        }
+
+        function acionarGatilhoTia() {
+            const nodes = document.querySelectorAll('.node-box-unit');
+            nodes.forEach(n => n.classList.add('node-active-pulse'));
+            
+            const s = document.getElementById('n46');
+            const c = document.getElementById('n47');
+            const l = document.getElementById('log-tia');
+            
+            if (s && c) {
+                s.disabled = false; s.classList.remove('gate-lock-v2026');
+                s.placeholder = "INSIRA SENHA OPERACIONAL";
+                s.style.backgroundColor = "#ffffff";
+                c.classList.remove('gate-lock-v2026');
+                c.style.pointerEvents = "auto";
+                c.style.opacity = "1";
+                c.style.background = "var(--enge-s)";
+                l.innerText = "SUBSEÇÃO TIA: SINAL DE LIBERAÇÃO ATIVO";
+                l.style.color = "var(--enge-ok)";
+            }
+        }
+    </script>
 </head>
 <body>
 
-<div class="login-card-master">
-    <div class="logo-engecema">ENGECEMA</div>
-    <span class="subtitle-cluster">Dallas Private Cluster Node 2026</span>
-    
-    <button class="btn-acesso-v2026" onclick="acessarNodeGestao()">Acessar Painel de Gestão</button>
-    
-    <div class="status-node-info">
-        ESTADO: OPERACIONAL (SINCRONIZADO)<br>
-        LOCALIZAÇÃO: IBM CLOUD DALLAS REGION<br>
-        ANO DE REFERÊNCIA: 2026
+<header>
+    <div class="logo-supreme">ENGECEMA GESTÃO MASTER</div>
+    <div style="display: flex; align-items: center; gap: 50px;">
+        <b id="log-tia" style="color: var(--enge-p);">SUBSEÇÃO TIA: EM AGUARDO</b>
+        <button class="btn-logout-master" onclick="encerrarSessao()">Sair do Sistema</button>
+    </div>
+</header>
+
+<div class="master-wrapper">
+    <div class="card-cluster-v2026">
+        <label style="font-weight: 900; text-transform: uppercase; letter-spacing: 9px; color: #6e6e73;">Saldo em Custódia Atualizado 2026</label>
+        <h1>R$ 1.250.000,00</h1>
+        <div style="color: var(--enge-ok); font-weight: 900;">STATUS: DALLAS CLUSTER OPERACIONAL | IBM CLOUD</div>
+    </div>
+
+    <div class="titulo-secao-master">01-44. MAPEAMENTO DE NODES DE PROCESSAMENTO</div>
+    <div class="grid-nodes-full">
+        <div class="node-box-unit">SUBSEÇÃO 01: SINC</div><div class="node-box-unit">SUBSEÇÃO 02: SINC</div>
+        <div class="node-box-unit">SUBSEÇÃO 03: SINC</div><div class="node-box-unit">SUBSEÇÃO 04: SINC</div>
+        <div class="node-box-unit">SUBSEÇÃO 05: SINC</div><div class="node-box-unit">SUBSEÇÃO 06: SINC</div>
+        <div class="node-box-unit">SUBSEÇÃO 07: SINC</div><div class="node-box-unit">SUBSEÇÃO 08: SINC</div>
+        <div class="node-box-unit">SUBSEÇÃO 09: SINC</div><div class="node-box-unit">SUBSEÇÃO 10: SINC</div>
+        <div class="node-box-unit">SUBSEÇÃO 11: SINC</div><div class="node-box-unit">SUBSEÇÃO 12: SINC</div>
+        <div class="node-box-unit">SUBSEÇÃO 13: SINC</div><div class="node-box-unit">SUBSEÇÃO 14: SINC</div>
+        <div class="node-box-unit">SUBSEÇÃO 15: SINC</div><div class="node-box-unit">SUBSEÇÃO 16: SINC</div>
+        <div class="node-box-unit">SUBSEÇÃO 17: SINC</div><div class="node-box-unit">SUBSEÇÃO 18: SINC</div>
+        <div class="node-box-unit">SUBSEÇÃO 19: SINC</div><div class="node-box-unit">SUBSEÇÃO 20: SINC</div>
+        <div class="node-box-unit">SUBSEÇÃO 21: SINC</div><div class="node-box-unit">SUBSEÇÃO 22: SINC</div>
+        <div class="node-box-unit">SUBSEÇÃO 23: SINC</div><div class="node-box-unit">SUBSEÇÃO 24: SINC</div>
+        <div class="node-box-unit">SUBSEÇÃO 25: SINC</div><div class="node-box-unit">SUBSEÇÃO 26: SINC</div>
+        <div class="node-box-unit">SUBSEÇÃO 27: SINC</div><div class="node-box-unit">SUBSEÇÃO 28: SINC</div>
+        <div class="node-box-unit">SUBSEÇÃO 29: SINC</div><div class="node-box-unit">SUBSEÇÃO 30: SINC</div>
+        <div class="node-box-unit">SUBSEÇÃO 31: SINC</div><div class="node-box-unit">SUBSEÇÃO 32: SINC</div>
+        <div class="node-box-unit">SUBSEÇÃO 33: SINC</div><div class="node-box-unit">SUBSEÇÃO 34: SINC</div>
+        <div class="node-box-unit">SUBSEÇÃO 35: SINC</div><div class="node-box-unit">SUBSEÇÃO 36: SINC</div>
+        <div class="node-box-unit">SUBSEÇÃO 37: SINC</div><div class="node-box-unit">SUBSEÇÃO 38: SINC</div>
+        <div class="node-box-unit">SUBSEÇÃO 39: SINC</div><div class="node-box-unit">SUBSEÇÃO 40: SINC</div>
+        <div class="node-box-unit">SUBSEÇÃO 41: SINC</div><div class="node-box-unit">SUBSEÇÃO 42: SINC</div>
+        <div class="node-box-unit">SUBSEÇÃO 43: SINC</div><div class="node-box-unit">SUBSEÇÃO 44: SINC</div>
+    </div>
+
+    <div class="titulo-secao-master">05-47. GESTÃO TIA E NODES DE ESCRITA</div>
+    <div class="card-cluster-v2026" style="border-left-color: var(--enge-s); padding: 75px;">
+        <p style="font-weight: 900; font-size: 24px;">Subseção 45: Gatilho Tia de Autorização.</p>
+        <button class="node-box-unit" style="background: var(--enge-p); color: #fff; width: 450px; cursor: pointer;" onclick="acionarGatilhoTia()">ACIONAR SUBSEÇÃO TIA</button>
+    </div>
+
+    <div class="card-cluster-v2026" style="border-left-color: var(--enge-s); padding: 100px;">
+        <label style="color: var(--enge-s); font-weight: 900; display: block; margin-bottom: 30px;">SUBSEÇÃO 46: ABA DE CONFIRMAR SENHA MASTER</label>
+        <input type="password" id="n46" class="input-supreme gate-lock-v2026" placeholder="BLOQUEADO" disabled>
+        <label style="color: var(--enge-s); font-weight: 900; display: block; margin-top: 65px; margin-bottom: 30px;">SUBSEÇÃO 47: ABA ABRIR MINHA CONTA ENGECEMA</label>
+        <a href="javascript:void(0)" id="n47" class="btn-supreme gate-lock-v2026">ABRIR MINHA CONTA MASTER</a>
     </div>
 </div>
 
-<!-- BLOCO DE DENSIDADE TÉCNICA MANUAL (SUBSEÇÕES 01-47) -->
-<!-- Este bloco garante que o arquivo ultrapasse 550 linhas para aceitação no Cluster -->
-<div style="display:none">
-    <p>SUBSEÇÃO_01_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_02_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_03_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_04_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_05_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_06_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_07_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_08_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_09_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_10_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_11_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_12_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_13_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_14_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_15_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_16_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_17_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_18_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_19_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_20_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_21_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_22_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_23_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_24_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_25_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_26_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_27_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_28_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_29_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_30_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_31_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_32_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_33_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_34_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_35_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_36_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_37_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_38_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_39_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_40_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_41_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_42_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_43_PARITY_CHECK_2026_ACTIVE</p><p>SUBSEÇÃO_44_PARITY_CHECK_2026_ACTIVE</p>
-    <p>SUBSEÇÃO_45_TIA_GATEKEEPER_ACTIVE</p>
-    <p>SUBSEÇÃO_46_WRITING_NODE_ACTIVE</p>
-    <p>SUBSEÇÃO_47_WRITING_NODE_ACTIVE</p>
-</div>
-
-<footer style="position: absolute; bottom: 50px; width: 100%; text-align: center; color: #6e6e73; font-weight: 900; text-transform: uppercase; letter-spacing: 5px; font-size: 11px;">
-    © 2026 ENGECEMA PRIVATE CLUSTER | IBM CLOUD ARCHITECTURE MASTER
+<footer>
+    © 2026 ENGECEMA DALLAS PRIVATE CLUSTER | IBM CLOUD PROTECTED ARCHITECTURE MASTER SUPREME
 </footer>
 
 </body>
