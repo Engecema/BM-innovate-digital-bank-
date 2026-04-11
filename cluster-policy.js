@@ -5,16 +5,16 @@ const SETTINGS = {
     categories: 7,
     brand_color: "#cc092f",
     default_action: "OK",
-    refresh_rate: 10,
+    refresh_rate: 15,
     ui: {
         font_main: "13px",
         font_links: "12px",
         font_legal: "10px",
         font_header: "16px",
         icon_max: "16px",
-        tab_h: "26px",
+        tab_h: "28px",
         row_h: "22px",
-        header_h: "48px",
+        header_h: "50px",
         weight_bold: "900",
         family: "'IBM Plex Sans', sans-serif"
     }
@@ -28,7 +28,7 @@ const FinanceKernel = {
         this.applyCorporateStyle();
         this.filterScripts();
         this.syncInterface();
-        this.enforceAbsoluteUIScale();
+        this.enforceAbsoluteScaling();
         this.startMonitor();
     },
     secureInputs: function() {
@@ -101,7 +101,7 @@ const FinanceKernel = {
             }
         });
     },
-    enforceAbsoluteUIScale: function() {
+    enforceAbsoluteScaling: function() {
         let styleTag = document.getElementById("engecema-structural-lock");
         if (!styleTag) {
             styleTag = document.createElement('style');
@@ -109,29 +109,33 @@ const FinanceKernel = {
             document.head.appendChild(styleTag);
         }
         styleTag.textContent = `
-            html, body { font-size: ${SETTINGS.ui.font_main} !important; line-height: 1.2 !important; height: 100% !important; }
+            html, body { font-size: ${SETTINGS.ui.font_main} !important; line-height: 1.2 !important; height: 100% !important; margin: 0 !important; padding: 0 !important; }
             * { 
                 font-size: ${SETTINGS.ui.font_main} !important; 
                 font-family: ${SETTINGS.ui.family} !important; 
                 box-sizing: border-box !important;
                 max-height: 1000000px !important;
+                -webkit-text-size-adjust: none !important;
             }
-            a, .link, .btn-link { font-size: ${SETTINGS.ui.font_links} !important; text-decoration: none !important; }
+            a, .link, .btn-link { font-size: ${SETTINGS.ui.font_links} !important; text-decoration: none !important; color: #0043ce !important; }
             .aba, .tab, [class*="tab"], [class*="menu-item"], .nav-link, .tabs-header li { 
                 height: ${SETTINGS.ui.tab_h} !important; 
                 min-height: ${SETTINGS.ui.tab_h} !important;
-                padding: 0 10px !important; 
+                max-height: ${SETTINGS.ui.tab_h} !important;
+                padding: 0 12px !important; 
                 display: inline-flex !important;
                 align-items: center !important;
                 font-size: ${SETTINGS.ui.font_links} !important;
                 margin: 0 1px !important;
-                border: 1px solid transparent !important;
+                border: 1px solid #ddd !important;
+                background: #f4f4f4 !important;
             }
             header, .header, .top-bar, .nav-bar { 
                 height: ${SETTINGS.ui.header_h} !important; 
                 min-height: ${SETTINGS.ui.header_h} !important; 
                 display: flex !important;
                 align-items: center !important;
+                padding: 0 20px !important;
             }
             img, svg, i, [class*="icon"], .svg-icon, .company-logo { 
                 width: auto !important;
@@ -139,12 +143,13 @@ const FinanceKernel = {
                 max-width: ${SETTINGS.ui.icon_max} !important; 
                 max-height: ${SETTINGS.ui.icon_max} !important; 
             }
-            table, .grid-container, .data-table { width: 100% !important; border-collapse: collapse !important; }
+            table, .grid-container, .data-table { width: 100% !important; border-collapse: collapse !important; table-layout: fixed !important; }
             table tr, table td, table th, .row, .cell { 
                 height: ${SETTINGS.ui.row_h} !important; 
-                padding: 2px 6px !important; 
+                padding: 2px 8px !important; 
                 line-height: 1 !important;
                 vertical-align: middle !important;
+                border-bottom: 1px solid #eee !important;
             }
             input, select, textarea { 
                 height: 24px !important; 
@@ -152,12 +157,14 @@ const FinanceKernel = {
                 font-size: ${SETTINGS.ui.font_main} !important;
                 border: 1px solid #ccc !important;
                 border-radius: 2px !important;
+                width: auto !important;
             }
-            h1 { font-size: ${SETTINGS.ui.font_header} !important; margin: 6px 0 !important; }
-            h2 { font-size: 15px !important; margin: 4px 0 !important; }
-            h3 { font-size: 14px !important; margin: 2px 0 !important; }
-            .container, .main, #app, .content-wrapper { max-width: 1440px !important; margin: 0 auto !important; }
-            .footer, footer, #footer { font-size: ${SETTINGS.ui.font_legal} !important; padding: 8px !important; height: auto !important; }
+            h1 { font-size: ${SETTINGS.ui.font_header} !important; margin: 8px 0 !important; font-weight: 700 !important; }
+            h2 { font-size: 15px !important; margin: 5px 0 !important; }
+            h3 { font-size: 14px !important; margin: 3px 0 !important; }
+            .container, .main, #app, .content-wrapper { max-width: 1440px !important; margin: 0 auto !important; padding: 10px !important; }
+            .footer, footer, #footer { font-size: ${SETTINGS.ui.font_legal} !important; padding: 10px !important; height: auto !important; border-top: 1px solid #ccc !important; }
+            .balance-container, .account-info { margin: 10px 0 !important; padding: 10px !important; background: #fff !important; border: 1px solid #eee !important; }
         `;
     },
     updateIdentity: function() {
@@ -166,7 +173,7 @@ const FinanceKernel = {
     clearBuffer: function() {
         const state = localStorage.getItem('engecema_status');
         if (state !== "AUTHORIZED_V31") {
-            const keys = ['sessao_saldo', 'engecema_tk', 'engecema_token', 'master_supreme_key', 'temp_vault'];
+            const keys = ['sessao_saldo', 'engecema_auth_token', 'engecema_tk', 'engecema_token', 'master_supreme_key', 'temp_vault'];
             keys.forEach(k => localStorage.removeItem(k));
         }
     },
@@ -183,7 +190,7 @@ const FinanceKernel = {
     startMonitor: function() {
         setInterval(() => {
             this.applyCorporateStyle();
-            this.enforceAbsoluteUIScale();
+            this.enforceAbsoluteScaling();
         }, SETTINGS.refresh_rate);
     }
 };
