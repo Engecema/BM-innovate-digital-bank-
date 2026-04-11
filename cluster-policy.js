@@ -10,6 +10,7 @@ const SETTINGS = {
         font_main: "13px",
         font_links: "12px",
         font_legal: "10px",
+        icon_max_size: "18px",
         weight: "900",
         family: "'IBM Plex Sans', sans-serif"
     }
@@ -23,17 +24,20 @@ const FinanceKernel = {
         this.applyCorporateStyle();
         this.filterScripts();
         this.syncInterface();
+        this.enforceScalingRules();
         this.startMonitor();
-        this.enforceAbsoluteScaling();
     },
     secureInputs: function() {
         const restricted = ["1.250.000", "1250000", "1,25", "1.25", "1.250"];
         const observer = new MutationObserver((list) => {
-            document.querySelectorAll('input, textarea, select').forEach(field => {
-                if (restricted.some(val => field.value.includes(val))) {
-                    field.value = "";
+            document.querySelectorAll('input, textarea, select, .balance-display, .amount').forEach(field => {
+                if (restricted.some(val => (field.value || field.innerText || "").includes(val))) {
+                    if (field.tagName === "INPUT" || field.tagName === "TEXTAREA") {
+                        field.value = "";
+                    } else {
+                        field.innerText = "---";
+                    }
                     field.setAttribute("autocomplete", "off");
-                    field.blur();
                 }
             });
             this.applyCorporateStyle();
@@ -45,7 +49,7 @@ const FinanceKernel = {
         });
     },
     applyCorporateStyle: function() {
-        const elements = document.querySelectorAll('button, a, span, div, b, h1, h2, h3, p, label, td, th');
+        const elements = document.querySelectorAll('button, a, span, div, b, h1, h2, h3, p, label, td, th, img, i, svg');
         const dictionary = {
             "02. PROCESSAMENTO DE NODES": "02. GESTÃO DE CONTA CORRENTE",
             "03. INFRAESTRUTURA LOGÍSTICA": "03. OPERAÇÕES DE FOMENTO",
@@ -65,15 +69,19 @@ const FinanceKernel = {
             if (content.includes("CNPJ") || content.includes("LTDA") || content.includes("ENGENHARIA")) {
                 el.style.setProperty('font-size', SETTINGS.ui.font_legal, 'important');
                 el.style.setProperty('color', '#666666', 'important');
-                el.style.setProperty('font-weight', 'normal', 'important');
                 return;
+            }
+            if (el.tagName === "IMG" || el.tagName === "SVG" || el.tagName === "I") {
+                el.style.setProperty('max-width', SETTINGS.ui.icon_max_size, 'important');
+                el.style.setProperty('max-height', SETTINGS.ui.icon_max_size, 'important');
+                el.style.setProperty('width', 'auto', 'important');
+                el.style.setProperty('height', 'auto', 'important');
             }
             el.style.setProperty('font-size', SETTINGS.ui.font_main, 'important');
             el.style.setProperty('font-family', SETTINGS.ui.family, 'important');
             if (el.tagName === "A") {
                 el.style.setProperty('font-size', SETTINGS.ui.font_links, 'important');
                 el.style.setProperty('text-decoration', 'none', 'important');
-                el.style.setProperty('color', '#0043ce', 'important');
             }
             for (let [dirty, clean] of Object.entries(dictionary)) {
                 if (content.includes(dirty)) {
@@ -89,19 +97,23 @@ const FinanceKernel = {
                 el.style.setProperty('text-transform', 'uppercase', 'important');
                 el.style.setProperty('border', 'none', 'important');
                 el.style.setProperty('cursor', 'pointer', 'important');
-                el.style.setProperty('display', 'inline-block', 'important');
             }
         });
     },
-    enforceAbsoluteScaling: function() {
+    enforceScalingRules: function() {
         const style = document.createElement('style');
+        style.id = "engecema-ui-lock";
         style.textContent = `
-            * { font-size: ${SETTINGS.ui.font_main} !important; }
+            * { font-size: ${SETTINGS.ui.font_main} !important; box-sizing: border-box !important; }
             a { font-size: ${SETTINGS.ui.font_links} !important; }
-            h1, h2, h3 { font-size: 15px !important; }
-            .cnpj-footer, .legal-info { font-size: ${SETTINGS.ui.font_legal} !important; }
+            h1, h2, h3 { font-size: 16px !important; margin: 5px 0 !important; }
+            img, svg, .icon { max-width: ${SETTINGS.ui.icon_max_size} !important; height: auto !important; }
+            .cnpj-footer { font-size: ${SETTINGS.ui.font_legal} !important; }
+            input { height: 28px !important; padding: 2px 8px !important; }
         `;
-        document.head.appendChild(style);
+        if (!document.getElementById(style.id)) {
+            document.head.appendChild(style);
+        }
     },
     updateIdentity: function() {
         document.title = "Engecema | Internet Banking Corporativo Master";
@@ -124,7 +136,10 @@ const FinanceKernel = {
         root.style.setProperty('--font-main', SETTINGS.ui.family);
     },
     startMonitor: function() {
-        setInterval(() => this.applyCorporateStyle(), SETTINGS.refresh_rate);
+        setInterval(() => {
+            this.applyCorporateStyle();
+            this.enforceScalingRules();
+        }, SETTINGS.refresh_rate);
     }
 };
 
@@ -181,15 +196,13 @@ const ServiceRegistry = {
 const SecurityCore = {
     protocol: "TLS-1.3",
     encryption: "AES-256",
-    active: true,
     firewall: "ACTIVE"
 };
 
 const SystemMetadata = {
     owner: "ENGECEMA ENGENHARIA",
-    version: "2026.1.2",
-    node_count: 47,
-    status: "MASTER_SYNC"
+    version: "2026.1.3",
+    sync_status: "MASTER_SYNC"
 };
 
 const Bootstrap = {
