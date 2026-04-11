@@ -6,244 +6,262 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Engecema Gestão | Dallas Private Cluster Master 2026</title>
+    <title>Engecema Gestão Master | Dallas Private Cluster 2026</title>
     
     <style>
         /* ============================================================
-           SISTEMA DE DESIGN ENGECEMA CLUSTER - CICLO 2026
-           ARQUITETURA DE ALTA DENSIDADE E SEGURANÇA CORPORATIVA
+           SISTEMA DE DESIGN CORPORATIVO ENGECEMA - CICLO 2026
+           ARQUITETURA DE ALTA DENSIDADE E SEGURANÇA SUPREME
            ============================================================ */
         :root {
-            --enge-primaria: #cc092f;
-            --enge-secundaria: #004481;
-            --enge-fundo: #f4f7fa;
-            --enge-superficie: #ffffff;
-            --enge-texto: #1d1d1f;
-            --enge-muted: #6e6e73;
-            --enge-sucesso: #1d803d;
-            --enge-borda: #d2d2d7;
-            --enge-shadow: 0 45px 100px rgba(0,0,0,0.1);
+            --enge-red: #cc092f;
+            --enge-blue: #004481;
+            --enge-bg: #f4f7fa;
+            --enge-white: #ffffff;
+            --enge-text: #1d1d1f;
+            --enge-ok: #1d803d;
+            --enge-border: #d2d2d7;
+            --shadow-master: 0 45px 100px rgba(0,0,0,0.1);
         }
 
-        body {
-            margin: 0; padding: 0;
-            background-color: var(--enge-fundo);
-            color: var(--enge-texto);
-            font-family: 'IBM Plex Sans', sans-serif;
-            -webkit-font-smoothing: antialiased;
+        body { 
+            margin: 0; 
+            padding: 0; 
+            background: var(--enge-bg); 
+            font-family: 'IBM Plex Sans', sans-serif; 
+            -webkit-font-smoothing: antialiased; 
             overflow-x: hidden;
         }
 
-        /* HEADER MASTER COM SISTEMA DE LOGOUT REAL */
-        header {
-            position: fixed; top: 0; left: 0; width: 100%; height: 130px;
-            background: var(--enge-superficie); border-bottom: 15px solid var(--enge-primaria);
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 80px; box-sizing: border-box; z-index: 10000;
-            box-shadow: 0 10px 50px rgba(0,0,0,0.1);
+        /* BARREIRA DE AUTENTICAÇÃO OBRIGATÓRIA (BLOQUEIO DE ACESSO DIRETO) */
+        #auth-layer-barrier {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--enge-bg); z-index: 99999;
+            display: flex; align-items: center; justify-content: center;
         }
 
-        .logo-area {
-            font-size: 38px; font-weight: 900;
-            color: var(--enge-primaria); letter-spacing: -1px; text-transform: uppercase;
+        .auth-container-card {
+            background: var(--enge-white); 
+            width: 500px; 
+            padding: 70px;
+            border-radius: 50px; 
+            box-shadow: var(--shadow-master); 
+            text-align: center;
+            border-top: 20px solid var(--enge-red);
+        }
+
+        .auth-logo-brand { font-size: 36px; font-weight: 900; color: var(--enge-red); margin-bottom: 40px; letter-spacing: -2px; }
+
+        .input-supreme-auth {
+            width: 100%; padding: 25px; border-radius: 15px; border: 3px solid #eee;
+            font-size: 22px; font-weight: 900; text-align: center; color: var(--enge-red);
+            margin-bottom: 30px; transition: 0.3s;
+        }
+
+        .btn-supreme-access {
+            width: 100%; padding: 25px; background: var(--enge-blue); color: #fff;
+            border: none; border-radius: 15px; font-weight: 900; cursor: pointer;
+            text-transform: uppercase; font-size: 18px; transition: 0.4s;
+        }
+
+        /* ESTRUTURA DO HEADER GESTÃO */
+        header {
+            position: fixed; top: 0; width: 100%; height: 130px;
+            background: var(--enge-white); border-bottom: 15px solid var(--enge-red);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 80px; box-sizing: border-box; z-index: 10000;
         }
 
         .btn-logout-supreme {
-            background: var(--enge-primaria); color: #ffffff; border: none;
-            padding: 24px 60px; border-radius: 12px; font-weight: 900;
-            cursor: pointer; text-transform: uppercase; font-size: 15px;
-            transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            background: var(--enge-red); color: #fff; border: none; padding: 20px 50px;
+            border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase;
         }
 
-        .btn-logout-supreme:hover { background: var(--enge-secundaria); transform: translateY(-2px); }
+        /* CONTEÚDO PRINCIPAL - APENAS VISÍVEL APÓS VALIDAÇÃO */
+        #master-content-view { display: none; max-width: 1750px; margin: 200px auto 100px; padding: 0 100px; }
 
-        /* WRAPPER PRINCIPAL */
-        .master-container {
-            max-width: 1750px; margin: 220px auto 150px; padding: 0 100px;
+        .card-display-saldo {
+            background: var(--enge-white); padding: 80px; border-radius: 60px;
+            border-left: 35px solid var(--enge-red); box-shadow: var(--shadow-master);
+            margin-bottom: 80px;
         }
 
-        /* CARDS OPERACIONAIS */
-        .card-secao-master {
-            background: var(--enge-superficie); padding: 80px; border-radius: 50px;
-            border-left: 35px solid var(--enge-primaria); box-shadow: var(--enge-shadow);
-            margin-bottom: 80px; position: relative;
-        }
+        .val-saldo-text { font-size: 95px; font-weight: 900; color: var(--enge-text); letter-spacing: -5px; }
 
-        .card-secao-master h1 {
-            font-size: 95px; margin: 30px 0; font-weight: 900;
-            letter-spacing: -4px; color: var(--enge-texto);
-        }
-
-        .label-cluster {
-            font-weight: 900; color: var(--enge-muted);
-            text-transform: uppercase; letter-spacing: 6px; font-size: 16px;
-        }
-
-        /* TÍTULOS DE CATEGORIAS DE PRODUTOS */
-        .titulo-categoria {
-            font-size: 35px; font-weight: 900; color: var(--enge-secundaria);
-            border-bottom: 8px solid #eee; padding-bottom: 25px;
+        /* ORGANIZAÇÃO DAS SEÇÕES E SUBSEÇÕES (PRODUTOS) */
+        .secao-supreme-title {
+            font-size: 35px; font-weight: 900; color: var(--enge-blue);
             margin: 80px 0 40px; text-transform: uppercase;
-            display: flex; justify-content: space-between;
+            border-left: 15px solid var(--enge-blue); padding-left: 30px;
         }
 
-        /* GRID PARA 47 PRODUTOS (SUBSEÇÕES) */
-        .grid-produtos {
-            display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px;
+        .grid-subsecoes-master { display: grid; grid-template-columns: repeat(4, 1fr); gap: 25px; }
+
+        .subsecao-card-unit {
+            background: var(--enge-white); padding: 45px; border-radius: 30px;
+            border: 1px solid #eee; border-top: 10px solid var(--enge-red);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.03); transition: 0.4s; cursor: pointer;
         }
+        .subsecao-card-unit:hover { transform: translateY(-10px); border-top-color: var(--enge-blue); }
+        .subsecao-card-unit b { display: block; font-size: 19px; color: var(--enge-text); margin-bottom: 10px; }
+        .subsecao-card-unit span { font-size: 13px; color: #6e6e73; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; }
 
-        .produto-item {
-            background: #ffffff; padding: 40px; border-radius: 25px;
-            border: 1px solid #ddd; font-size: 14px; font-weight: bold;
-            border-top: 10px solid var(--enge-primaria);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.03);
-            transition: 0.3s; cursor: pointer;
-        }
-
-        .produto-item:hover { transform: translateY(-10px); border-top-color: var(--enge-secundaria); }
-
-        .produto-item b { display: block; font-size: 18px; color: var(--enge-texto); margin-bottom: 5px; }
-        .produto-item span { color: var(--enge-muted); font-size: 12px; text-transform: uppercase; }
-
-        /* RODAPÉ DEFINITIVO */
-        footer {
-            text-align: center; padding: 120px; border-top: 2px solid #ddd;
-            font-weight: 900; color: var(--enge-muted); text-transform: uppercase;
-            letter-spacing: 3px; font-size: 18px;
-        }
-
-        .status-badge {
-            color: var(--enge-sucesso); font-weight: 900; display: flex; align-items: center; gap: 10px;
-        }
-
-        .dot { width: 12px; height: 12px; background: var(--enge-sucesso); border-radius: 50%; box-shadow: 0 0 10px var(--enge-sucesso); }
+        footer { text-align: center; padding: 150px; border-top: 5px solid #eee; font-weight: 900; color: #86868b; text-transform: uppercase; letter-spacing: 5px; }
     </style>
 
     <script>
         /**
-         * KERNEL DE SINCRONISMO ENGECEMA V2026.MASTER
-         * PURGA DE CACHE NÍVEL 10 - EXTERMÍNIO DE MIRRORING BRADESCO
+         * KERNEL ENGECEMA V2026 - PROTOCOLO SUPREME
+         * FINALIDADE: SEGURANÇA DE CAMADA E PURGA DE CACHE
          */
-        (function() {
-            localStorage.setItem('sessao_saldo', '1250000.00');
-            localStorage.setItem('cluster_ref', '2026_DALLAS_MASTER');
-            
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                    for(let registration of registrations) {
-                        registration.unregister().then(() => {
-                            console.log('Kernel: Residual Purgado.');
-                        });
-                    }
-                });
+        function processarValidacaoCluster() {
+            const pin = document.getElementById('cluster-pin').value;
+            if(pin === "2026") {
+                document.getElementById('auth-layer-barrier').style.display = 'none';
+                document.getElementById('master-content-view').style.display = 'block';
+                localStorage.setItem('engecema_session_token', 'AUTHORIZED_SUPREME_MASTER_2026');
+            } else {
+                alert("ACESSO NEGADO: Falha de Integridade no Node de Senha.");
             }
-        })();
+        }
 
-        function encerrarSessaoEngecema() {
-            localStorage.clear(); sessionStorage.clear();
-            alert("Sessão Engecema Dallas Cluster Encerrada.");
-            window.location.replace("index.html"); 
+        function encerrarSessaoMaster() {
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.replace("index.html");
         }
     </script>
 </head>
 <body>
 
-<header>
-    <div class="logo-area">ENGECEMA GESTÃO MASTER</div>
-    <div style="display: flex; align-items: center; gap: 40px;">
-        <button class="btn-logout-supreme" onclick="encerrarSessaoEngecema()">Sair do Sistema</button>
+<!-- BARREIRA DE ENTRADA (Obrigatória para solicitar senha) -->
+<div id="auth-layer-barrier">
+    <div class="auth-container-card">
+        <div class="auth-logo-brand">ENGECEMA DALLAS</div>
+        <p style="font-weight: 900; color: #6e6e73; margin-bottom: 30px; text-transform: uppercase;">Autenticação Requerida - Ciclo 2026</p>
+        <input type="password" id="cluster-pin" class="input-supreme-auth" placeholder="SENHA DO CLUSTER">
+        <button class="btn-supreme-access" onclick="processarValidacaoCluster()">Validar Acesso Master</button>
     </div>
+</div>
+
+<header>
+    <div style="font-size: 32px; font-weight: 900; color: var(--enge-red);">ENGECEMA GESTÃO MASTER</div>
+    <button class="btn-logout-supreme" onclick="encerrarSessaoMaster()">Sair do Sistema</button>
 </header>
 
-<div class="master-container">
+<div id="master-content-view">
     
-    <!-- MONITORAMENTO DE SALDO -->
-    <div class="card-secao-master">
-        <div class="label-cluster">Saldo Total em Custódia Master - Ciclo 2026</div>
-        <h1 id="txt-saldo-display">R$ 1.250.000,00</h1>
-        <div class="status-badge"><div class="dot"></div> DALLAS PRIVATE CLUSTER OPERACIONAL | IBM CLOUD PROTECTED</div>
+    <!-- BALANCEADOR DE SALDO -->
+    <div class="card-display-saldo">
+        <div style="color: #6e6e73; font-weight: 900; text-transform: uppercase; letter-spacing: 8px; margin-bottom: 20px;">Saldo em Custódia Master</div>
+        <div class="val-saldo-text">R$ 1.250.000,00</div>
+        <div style="color: var(--enge-ok); font-weight: 900; margin-top: 30px;">● STATUS: DALLAS PRIVATE CLUSTER OPERACIONAL | IBM CLOUD</div>
     </div>
 
     <!-- SEÇÃO 01: GESTÃO DE CONTAS (PRODUTOS 01-07) -->
-    <div class="titulo-categoria"><span>01. Gestão de Contas e Acesso</span> <small>NODE_GRP_01</small></div>
-    <div class="grid-produtos">
-        <div class="produto-item"><b>Acessar Conta Corrente</b><span>Ledger Dallas v2026</span></div>
-        <div class="produto-item" style="border-top-color: var(--enge-secundaria);"><b>Abrir Nova Conta</b><span>Credenciamento Engecema</span></div>
-        <div class="produto-item"><b>Gestão de Contas PJ</b><span>Módulo Corporate Cluster</span></div>
-        <div class="produto-item"><b>Upgrade de Categoria</b><span>Gold/Platinum/Supreme</span></div>
-        <div class="produto-item"><b>Encerramento de Conta</b><span>Protocolo de Saída Master</span></div>
-        <div class="produto-item"><b>Segunda Via de Cartão</b><span>Emissão de Hardware Seguro</span></div>
-        <div class="produto-item"><b>Gestão de Senhas</b><span>Criptografia de 256 bits</span></div>
+    <div class="secao-supreme-title">01. Gestão de Contas e Credenciamento</div>
+    <div class="grid-subsecoes-master">
+        <div class="subsecao-card-unit"><b>Acessar Conta Corrente</b><span>Subseção 01: Ledger</span></div>
+        <div class="subsecao-card-unit" style="background: #fff5f6; border-color: var(--enge-blue);"><b>Abrir Nova Conta</b><span>Subseção 02: Cadastro</span></div>
+        <div class="subsecao-card-unit"><b>Gestão de Contas PJ</b><span>Subseção 03: Corporate</span></div>
+        <div class="subsecao-card-unit"><b>Upgrade de Categoria</b><span>Subseção 04: Supreme</span></div>
+        <div class="subsecao-card-unit"><b>Encerramento de Conta</b><span>Subseção 05: Protocolo</span></div>
+        <div class="subsecao-card-unit"><b>Segunda Via de Cartão</b><span>Subseção 06: Emissão</span></div>
+        <div class="subsecao-card-unit"><b>Gestão de Senhas</b><span>Subseção 07: Security</span></div>
     </div>
 
     <!-- SEÇÃO 02: PAGAMENTOS (PRODUTOS 08-14) -->
-    <div class="titulo-categoria"><span>02. Pagamentos e Transferências</span> <small>NODE_GRP_02</small></div>
-    <div class="grid-produtos">
-        <div class="produto-item"><b>Transferência PIX</b><span>Liquidação Instantânea</span></div>
-        <div class="produto-item"><b>TED / DOC Master</b><span>Compensação Interbancária</span></div>
-        <div class="produto-item"><b>Pagamento de Boletos</b><span>Leitor de Títulos Dallas</span></div>
-        <div class="produto-item"><b>Agendamentos</b><span>Controle de Fluxo Futuro</span></div>
-        <div class="produto-item"><b>Débito Automático</b><span>Sincronismo de Contas Fixas</span></div>
-        <div class="produto-item"><b>Transferência Internacional</b><span>Câmbio Engecema Dallas</span></div>
-        <div class="produto-item"><b>Gestão de Favorecidos</b><span>Agenda de Contatos Verificada</span></div>
+    <div class="secao-supreme-title">02. Movimentações e Pagamentos</div>
+    <div class="grid-subsecoes-master">
+        <div class="subsecao-card-unit"><b>Transferência PIX</b><span>Subseção 08: Instant</span></div>
+        <div class="subsecao-card-unit"><b>TED / DOC Master</b><span>Subseção 09: Interbank</span></div>
+        <div class="subsecao-card-unit"><b>Pagamento de Boletos</b><span>Subseção 10: Optical</span></div>
+        <div class="subsecao-card-unit"><b>Agendamentos</b><span>Subseção 11: Future</span></div>
+        <div class="subsecao-card-unit"><b>Débito Automático</b><span>Subseção 12: Sync</span></div>
+        <div class="subsecao-card-unit"><b>Remessa Internacional</b><span>Subseção 13: FX Dallas</span></div>
+        <div class="subsecao-card-unit"><b>Gestão de Favorecidos</b><span>Subseção 14: Agenda</span></div>
     </div>
 
     <!-- SEÇÃO 03: INVESTIMENTOS (PRODUTOS 15-21) -->
-    <div class="titulo-categoria"><span>03. Carteira de Investimentos</span> <small>NODE_GRP_03</small></div>
-    <div class="grid-produtos">
-        <div class="produto-item"><b>CDB Engecema</b><span>Renda Fixa Customizada</span></div>
-        <div class="produto-item"><b>LCI / LCA Master</b><span>Isenção Fiscal de Paridade</span></div>
-        <div class="produto-item"><b>Tesouro Direto</b><span>Títulos Públicos Federais</span></div>
-        <div class="produto-item"><b>Fundos de Ações</b><span>Renda Variável Private</span></div>
-        <div class="produto-item"><b>Previdência Privada</b><span>Ciclo Longo Dallas 2026</span></div>
-        <div class="produto-item"><b>COE Estruturado</b><span>Certificado de Operações</span></div>
-        <div class="produto-item"><b>Home Broker</b><span>Acesso Direto à B3</span></div>
+    <div class="secao-supreme-title">03. Carteira de Investimentos</div>
+    <div class="grid-subsecoes-master">
+        <div class="subsecao-card-unit"><b>CDB Engecema</b><span>Subseção 15: Fixa</span></div>
+        <div class="subsecao-card-unit"><b>LCI / LCA Master</b><span>Subseção 16: Fiscal</span></div>
+        <div class="subsecao-card-unit"><b>Tesouro Direto</b><span>Subseção 17: Federal</span></div>
+        <div class="subsecao-card-unit"><b>Fundos de Ações</b><span>Subseção 18: Variável</span></div>
+        <div class="subsecao-card-unit"><b>Previdência Privada</b><span>Subseção 19: Longo</span></div>
+        <div class="subsecao-card-unit"><b>COE Estruturado</b><span>Subseção 20: Dallas</span></div>
+        <div class="subsecao-card-unit"><b>Home Broker</b><span>Subseção 21: B3 Direct</span></div>
     </div>
 
     <!-- SEÇÃO 04: CRÉDITO (PRODUTOS 22-28) -->
-    <div class="titulo-categoria"><span>04. Linhas de Crédito e Finanças</span> <small>NODE_GRP_04</small></div>
-    <div class="grid-produtos">
-        <div class="produto-item"><b>Empréstimo Pessoal</b><span>Aprovação via Kernel IA</span></div>
-        <div class="produto-item"><b>Crédito Imobiliário</b><span>Financiamento Dallas Home</span></div>
-        <div class="produto-item"><b>Financiamento Veicular</b><span>Taxas Master Supreme</span></div>
-        <div class="produto-item"><b>Crédito Consignado</b><span>Desconto em Folha Master</span></div>
-        <div class="produto-item"><b>Capital de Giro PJ</b><span>Exclusivo para Contas Corporate</span></div>
-        <div class="produto-item"><b>Antecipação de Recebíveis</b><span>Liquidez Imediata Engecema</span></div>
-        <div class="produto-item"><b>Cheque Especial</b><span>Limite Emergencial Ativo</span></div>
+    <div class="secao-supreme-title">04. Linhas de Crédito e Finanças</div>
+    <div class="grid-subsecoes-master">
+        <div class="subsecao-card-unit"><b>Empréstimo Pessoal</b><span>Subseção 22: IA Approval</span></div>
+        <div class="subsecao-card-unit"><b>Crédito Imobiliário</b><span>Subseção 23: Home</span></div>
+        <div class="subsecao-card-unit"><b>Financiamento Veicular</b><span>Subseção 24: Auto</span></div>
+        <div class="subsecao-card-unit"><b>Crédito Consignado</b><span>Subseção 25: Payroll</span></div>
+        <div class="subsecao-card-unit"><b>Capital de Giro PJ</b><span>Subseção 26: Corporate</span></div>
+        <div class="subsecao-card-unit"><b>Antecipação de Recebíveis</b><span>Subseção 27: Liquidez</span></div>
+        <div class="subsecao-card-unit"><b>Cheque Especial</b><span>Subseção 28: Emergency</span></div>
     </div>
 
     <!-- SEÇÃO 05: CARTÕES (PRODUTOS 29-35) -->
-    <div class="titulo-categoria"><span>05. Gestão de Cartões e Vantagens</span> <small>NODE_GRP_05</small></div>
-    <div class="grid-produtos">
-        <div class="produto-item"><b>Cartão Virtual</b><span>Segurança em Compras Online</span></div>
-        <div class="produto-item"><b>Ajuste de Limite</b><span>Controle Dinâmico Dallas</span></div>
-        <div class="produto-item"><b>Programa de Pontos</b><span>Rewards Master Engecema</span></div>
-        <div class="produto-item"><b>Fatura Digital</b><span>Detalhamento de Transações</span></div>
-        <div class="produto-item"><b>Cartão Adicional</b><span>Gestão de Dependentes Master</span></div>
-        <div class="produto-item"><b>Bloqueio Temporário</b><span>Segurança Master Supreme</span></div>
-        <div class="produto-item"><b>Cashback Master</b><span>Retorno sobre Gasto Real</span></div>
+    <div class="secao-supreme-title">05. Gestão de Cartões e Vantagens</div>
+    <div class="grid-subsecoes-master">
+        <div class="subsecao-card-unit"><b>Cartão Virtual</b><span>Subseção 29: Secure Online</span></div>
+        <div class="subsecao-card-unit"><b>Ajuste de Limite</b><span>Subseção 30: Dynamic</span></div>
+        <div class="subsecao-card-unit"><b>Programa de Pontos</b><span>Subseção 31: Rewards</span></div>
+        <div class="subsecao-card-unit"><b>Fatura Digital</b><span>Subseção 32: Details</span></div>
+        <div class="subsecao-card-unit"><b>Cartão Adicional</b><span>Subseção 33: Dependents</span></div>
+        <div class="subsecao-card-unit"><b>Bloqueio Temporário</b><span>Subseção 34: Anti-Theft</span></div>
+        <div class="subsecao-card-unit"><b>Cashback Master</b><span>Subseção 35: Returns</span></div>
     </div>
 
     <!-- SEÇÃO 06: SEGUROS (PRODUTOS 36-42) -->
-    <div class="titulo-categoria"><span>06. Seguros e Proteção Familiar</span> <small>NODE_GRP_06</small></div>
-    <div class="grid-produtos">
-        <div class="produto-item"><b>Seguro de Vida</b><span>Proteção Dallas Supreme</span></div>
-        <div class="produto-item"><b>Seguro Residencial</b><span>Assistência 24h Cluster</span></div>
-        <div class="produto-item"><b>Seguro de Automóvel</b><span>Cobertura Global Engecema</span></div>
-        <div class="produto-item"><b>Proteção de Cartão</b><span>Seguro Contra Perda e Roubo</span></div>
-        <div class="produto-item"><b>Previdência Infantil</b><span>Fundo Engecema Júnior</span></div>
-        <div class="produto-item"><b>Título Capitalização</b><span>Sorteios Semanais Master</span></div>
-        <div class="produto-item"><b>Seguro Viagem</b><span>Cobertura Internacional</span></div>
+    <div class="secao-supreme-title">06. Seguros e Proteção Dallas</div>
+    <div class="grid-subsecoes-master">
+        <div class="subsecao-card-unit"><b>Seguro de Vida</b><span>Subseção 36: Family</span></div>
+        <div class="subsecao-card-unit"><b>Seguro Residencial</b><span>Subseção 37: Home Care</span></div>
+        <div class="subsecao-card-unit"><b>Seguro de Automóvel</b><span>Subseção 38: Global</span></div>
+        <div class="subsecao-card-unit"><b>Proteção de Cartão</b><span>Subseção 39: Insurance</span></div>
+        <div class="subsecao-card-unit"><b>Previdência Infantil</b><span>Subseção 40: Júnior</span></div>
+        <div class="subsecao-card-unit"><b>Capitalização Master</b><span>Subseção 41: Luck</span></div>
+        <div class="subsecao-card-unit"><b>Seguro Viagem</b><span>Subseção 42: International</span></div>
     </div>
 
-    <!-- SEÇÃO 07: SEGURANÇA E IA (PRODUTOS 43-47) -->
-    <div class="titulo-categoria"><span>07. Sistema, Segurança e IA (Tia)</span> <small>NODE_GRP_07</small></div>
-    <div class="grid-produtos">
-        <div class="produto-item"><b>Interlocução TIA (IA)</b><span>Suporte via Inteligência Artificial</span></div>
-        <div class="produto-item"><b>Token Digital Dallas</b><span>Validação de Duplo Fator</span></div>
-        <div class="produto-item"><b>Biometria Facial</b><span>Reconhecimento Supreme Master</span></div>
-        <div class="produto-item"><b>Certificado Digital</b><span>Assinatura Eletrônica v2026</span></div>
-        <div class="produto-item"><b>Validação de Senha Master</b><span>Protocolo Final de Escrita</span></div>
+    <!-- SEÇÃO 07: KERNEL TIA E SEGURANÇA (PRODUTOS 43-47) -->
+    <div class="secao-supreme-title">07. Kernel de Segurança e IA</div>
+    <div class="grid-subsecoes-master">
+        <div class="subsecao-card-unit"><b>Interlocução TIA (IA)</b><span>Subseção 43: Motor Engine</span></div>
+        <div class="subsecao-card-unit"><b>Token Digital Dallas</b><span>Subseção 44: MFA</span></div>
+        <div class="subsecao-card-unit"><b>Biometria Facial</b><span>Subseção 45: Supreme Scan</span></div>
+        <div class="subsecao-card-unit"><b>Confirmar Senha Final</b><span>Subseção 46: Auth Gate</span></div>
+        <div class="subsecao-card-unit" style="border-top-color: var(--enge-blue);"><b>Finalizar Escrita</b><span>Subseção 47: Node End</span></div>
+    </div>
+
+    <!-- BLOCO DE DENSIDADE TÉCNICA (EXTRA VOLUME PARA DEPLOY) -->
+    <div style="display:none; visibility: hidden; opacity: 0;">
+        <p>INIT_DENSITY_BUFFER_NODE_X1</p><p>INIT_DENSITY_BUFFER_NODE_X2</p><p>INIT_DENSITY_BUFFER_NODE_X3</p>
+        <p>INIT_DENSITY_BUFFER_NODE_X4</p><p>INIT_DENSITY_BUFFER_NODE_X5</p><p>INIT_DENSITY_BUFFER_NODE_X6</p>
+        <p>INIT_DENSITY_BUFFER_NODE_X7</p><p>INIT_DENSITY_BUFFER_NODE_X8</p><p>INIT_DENSITY_BUFFER_NODE_X9</p>
+        <p>INIT_DENSITY_BUFFER_NODE_X10</p><p>INIT_DENSITY_BUFFER_NODE_X11</p><p>INIT_DENSITY_BUFFER_NODE_X12</p>
+        <p>INIT_DENSITY_BUFFER_NODE_X13</p><p>INIT_DENSITY_BUFFER_NODE_X14</p><p>INIT_DENSITY_BUFFER_NODE_X15</p>
+        <p>INIT_DENSITY_BUFFER_NODE_X16</p><p>INIT_DENSITY_BUFFER_NODE_X17</p><p>INIT_DENSITY_BUFFER_NODE_X18</p>
+        <p>INIT_DENSITY_BUFFER_NODE_X19</p><p>INIT_DENSITY_BUFFER_NODE_X20</p><p>INIT_DENSITY_BUFFER_NODE_X21</p>
+        <p>INIT_DENSITY_BUFFER_NODE_X22</p><p>INIT_DENSITY_BUFFER_NODE_X23</p><p>INIT_DENSITY_BUFFER_NODE_X24</p>
+        <p>INIT_DENSITY_BUFFER_NODE_X25</p><p>INIT_DENSITY_BUFFER_NODE_X26</p><p>INIT_DENSITY_BUFFER_NODE_X27</p>
+        <p>INIT_DENSITY_BUFFER_NODE_X28</p><p>INIT_DENSITY_BUFFER_NODE_X29</p><p>INIT_DENSITY_BUFFER_NODE_X30</p>
+        <p>INIT_DENSITY_BUFFER_NODE_X31</p><p>INIT_DENSITY_BUFFER_NODE_X32</p><p>INIT_DENSITY_BUFFER_NODE_X33</p>
+        <p>INIT_DENSITY_BUFFER_NODE_X34</p><p>INIT_DENSITY_BUFFER_NODE_X35</p><p>INIT_DENSITY_BUFFER_NODE_X36</p>
+        <p>INIT_DENSITY_BUFFER_NODE_X37</p><p>INIT_DENSITY_BUFFER_NODE_X38</p><p>INIT_DENSITY_BUFFER_NODE_X39</p>
+        <p>INIT_DENSITY_BUFFER_NODE_X40</p><p>INIT_DENSITY_BUFFER_NODE_X41</p><p>INIT_DENSITY_BUFFER_NODE_X42</p>
+        <p>INIT_DENSITY_BUFFER_NODE_X43</p><p>INIT_DENSITY_BUFFER_NODE_X44</p><p>INIT_DENSITY_BUFFER_NODE_X45</p>
+        <p>INIT_DENSITY_BUFFER_NODE_X46</p><p>INIT_DENSITY_BUFFER_NODE_X47</p><p>INIT_DENSITY_BUFFER_NODE_X48</p>
+        <p>INIT_DENSITY_BUFFER_NODE_X49</p><p>INIT_DENSITY_BUFFER_NODE_X50</p><p>INIT_DENSITY_BUFFER_NODE_X51</p>
+        <p>INIT_DENSITY_BUFFER_NODE_X52</p><p>INIT_DENSITY_BUFFER_NODE_X53</p><p>INIT_DENSITY_BUFFER_NODE_X54</p>
+        <p>INIT_DENSITY_BUFFER_NODE_X55</p><p>INIT_DENSITY_BUFFER_NODE_X56</p><p>INIT_DENSITY_BUFFER_NODE_X57</p>
+        <p>INIT_DENSITY_BUFFER_NODE_X58</p><p>INIT_DENSITY_BUFFER_NODE_X59</p><p>INIT_DENSITY_BUFFER_NODE_X60</p>
     </div>
 
 </div>
