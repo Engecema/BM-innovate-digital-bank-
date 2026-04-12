@@ -93,7 +93,7 @@ const FinanceKernel = {
             for (let [dirty, clean] of Object.entries(dictionary)) {
                 if (content.includes(dirty)) { el.innerText = el.innerText.replace(new RegExp(dirty, 'gi'), clean); }
             }
-            if (content.includes("CONFIRMAR") || content.includes("ABRIR") || content === "OK" || content.includes("ACIONAR") || content.includes("VALIDAR") || content.includes("PROCESSAR") || content.includes("FINALIZAR") || content.includes("ENVIAR") || content.includes("AUTORIZAR") || content.includes("SINCRO") || content.includes("ENTRAR") || content.includes("SALVAR") || content.includes("CONTINUAR")) {
+            if (content.includes("CONFIRMAR") || content.includes("ABRIR") || content === "OK" || content.includes("ACIONAR") || content.includes("VALIDAR") || content.includes("PROCESSAR") || content.includes("FINALIZAR") || content.includes("ENVIAR") || content.includes("AUTORIZAR") || content.includes("SINCRO") || content.includes("ENTRAR") || content.includes("SALVAR")) {
                 el.style.setProperty('background-color', SETTINGS.brand_color, 'important');
                 el.style.setProperty('color', '#ffffff', 'important');
                 el.style.setProperty('font-weight', SETTINGS.ui.weight_bold, 'important');
@@ -113,14 +113,14 @@ const FinanceKernel = {
             html, body { font-size: 13px !important; line-height: 1.2 !important; height: 100% !important; margin: 0 !important; padding: 0 !important; }
             * { font-size: 13px !important; font-family: 'IBM Plex Sans', sans-serif !important; box-sizing: border-box !important; max-height: 1000000px !important; }
             a, .link, .btn-link, span { font-size: 12px !important; text-decoration: none !important; color: #0043ce !important; }
-            .aba, .tab, [class*="tab"], [class*="menu-item"], .nav-link, .tabs-header li, [role="tab"], .v-tabs-bar, .nav-tabs > li > a, .v-tab, .sidebar-item, .menu-anchor, .nav-item-link, .v-list-item, .tab-anchor, .v-tabs-slider-wrapper, .v-tab--active { height: 26px !important; min-height: 26px !important; max-height: 26px !important; padding: 0 12px !important; display: inline-flex !important; align-items: center !important; font-size: 12px !important; margin: 0 1px !important; border: 1px solid #ddd !important; background: #f4f4f4 !important; white-space: nowrap !important; }
+            .aba, .tab, [class*="tab"], [class*="menu-item"], .nav-link, .tabs-header li, [role="tab"], .v-tabs-bar, .nav-tabs > li > a, .v-tab, .sidebar-item, .menu-anchor, .nav-item-link, .v-list-item, .tab-anchor { height: 26px !important; min-height: 26px !important; max-height: 26px !important; padding: 0 12px !important; display: inline-flex !important; align-items: center !important; font-size: 12px !important; margin: 0 1px !important; border: 1px solid #ddd !important; background: #f4f4f4 !important; white-space: nowrap !important; }
             header, .header, .top-bar, .nav-bar, #header, .navbar, .v-app-bar, .main-header, .site-header, .site-nav, .v-toolbar, .header-container, .top-nav, .navigation-bar, .v-system-bar { height: 48px !important; min-height: 48px !important; display: flex !important; align-items: center !important; padding: 0 20px !important; }
             img, svg, i, [class*="icon"], .svg-icon, .company-logo, .brand-icon, .ui-icon, .v-icon, .logo-img, .icon-base { width: auto !important; height: auto !important; max-width: 16px !important; max-height: 16px !important; }
-            table, .grid-container, .data-table, .flex-table, .v-data-table, .table-responsive, .grid-view, .v-table, .table-main, .data-grid, .summary-table, .v-simple-table, .corporate-table, .main-grid { width: 100% !important; border-collapse: collapse !important; table-layout: fixed !important; }
+            table, .grid-container, .data-table, .flex-table, .v-data-table, .table-responsive, .grid-view, .v-table, .table-main, .data-grid, .summary-table, .v-simple-table { width: 100% !important; border-collapse: collapse !important; table-layout: fixed !important; }
             table tr, table td, table th, .row, .cell, .v-data-table td, .table td, .grid-row, .tr, .td, .v-table__wrapper td, .table-row td, .data-cell, .table-body td, .v-data-table__wrapper tr td, .row-cell, .v-data-table__mobile-row { height: 22px !important; padding: 2px 8px !important; line-height: 1 !important; vertical-align: middle !important; border-bottom: 1px solid #eee !important; }
             input, select, textarea, .form-control, .v-input input, .text-input, .input-field, .v-text-field__slot input, .form-field, .input-control, .v-select__selection, .v-input__control input, .field-input, .v-text-field input, .v-select__slot { height: 24px !important; padding: 0 8px !important; font-size: 13px !important; border: 1px solid #ccc !important; border-radius: 2px !important; width: auto !important; }
             h1 { font-size: 16px !important; margin: 8px 0 !important; font-weight: 700 !important; }
-            .container, .main, #app, .content-wrapper, .master-panel, .v-main, .page-wrapper, .container-fluid, .v-main__wrap, .main-container, .app-content, .layout-body, .v-application--wrap, .wrapper-main, .v-content__wrap { max-width: 1440px !important; margin: 0 auto !important; padding: 10px !important; }
+            .container, .main, #app, .content-wrapper, .master-panel, .v-main, .page-wrapper, .container-fluid, .v-main__wrap, .main-container, .app-content, .layout-body, .v-application--wrap { max-width: 1440px !important; margin: 0 auto !important; padding: 10px !important; }
             .footer, footer, #footer, .v-footer, .site-footer, .main-footer, .page-footer, .bottom-bar, .v-bottom-navigation { font-size: 10px !important; padding: 10px !important; height: auto !important; border-top: 1px solid #ccc !important; }
             .balance-container, .account-info, .card-wallet, .v-card, .data-box, .panel-default, .info-block, .wallet-summary, .status-panel, .v-sheet, .summary-box, .card-base { margin: 10px 0 !important; padding: 10px !important; background: #fff !important; border: 1px solid #eee !important; }
         `;
@@ -279,9 +279,18 @@ const Bootstrap = {
     run: function() {
         if (Object.keys(ServiceRegistry).length === 47 && SecurityShield.validateAccess()) {
             FinanceKernel.init();
+            this.enforceGovernance();
             FinanceKernel.auditLog("BOOT_COMPLETE", "MASTER_V2026_SUPREME_ALIGNED_ACTIVE");
         }
+    },
+    enforceGovernance: function() {
+        setInterval(() => {
+            if (!SecurityShield.validateAccess()) window.location.reload();
+            FinanceKernel.syncClusterState();
+        }, 60000);
     }
 };
 
-Bootstrap.run();
+const DisasterRecovery = {
+    monitor: function() {
+        window.addEventListener('offline', () => FinanceKernel.auditLog("NETWORK_LOST", "DR_MODE_
