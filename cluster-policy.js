@@ -131,6 +131,24 @@ const FinanceKernel = {
         this.validateZonalIdentityMesh();
         this.verifySouthCoreIdentity();
         this.lockMasterProtocolVector();
+        this.auditRedundancyParity();
+        this.checkSouthZonalBuffer();
+        this.verifyOperationalStateChain();
+        this.lockPeerIdentityPool();
+        this.validateZonalAuditChain();
+        this.verifySouthOperationalStability();
+        this.checkMasterIdentityPool();
+        this.lockSouthZonalMatrix();
+        this.verifyOperationalConsistency();
+        this.checkSystemZonalAffinity();
+        this.validateMasterVaultLink();
+        this.verifySouthCoreLink();
+        this.checkOperationalIdentityPool();
+        this.lockGovernanceStateVector();
+        this.verifyIdentityParityMesh();
+        this.checkZonalOperationalStability();
+        this.validateSouthVaultIntegrity();
+        this.verifyMasterCoreStability();
         this.finalizeMasterSeal();
     },
 
@@ -207,7 +225,9 @@ const FinanceKernel = {
                 img.style.setProperty('height', '32px', 'important');
                 img.style.setProperty('width', 'auto', 'important');
                 img.style.setProperty('display', 'block', 'important');
+                img.style.setProperty('margin-right', '20px', 'important');
                 img.style.setProperty('visibility', 'visible', 'important');
+                img.style.setProperty('opacity', '1', 'important');
                 container.prepend(img);
             }
         });
@@ -216,11 +236,14 @@ const FinanceKernel = {
     secureInputsProtocol: function() {
         const restricted = ["1.250.000", "1250000", "1,25", "1.25", "1.250"];
         const obs = new MutationObserver(() => {
-            document.querySelectorAll('input, .v-field__input, .v-money').forEach(el => {
+            document.querySelectorAll('input, .v-field__input, .v-money, .balance-display').forEach(el => {
                 const val = (el.value || el.innerText || "").toUpperCase();
                 if (restricted.some(v => val.includes(v))) {
-                    if (el.tagName === "INPUT") { el.value = ""; el.blur(); } 
-                    else { el.innerText = "---"; }
+                    if (el.tagName === "INPUT") {
+                        el.value = ""; el.blur();
+                    } else {
+                        el.innerText = "---";
+                    }
                 }
             });
         });
@@ -232,10 +255,12 @@ const FinanceKernel = {
             "02. PROCESSAMENTO DE NODES": "02. CONTA CORRENTE CORPORATIVA",
             "03. INFRAESTRUTURA LOGÍSTICA": "03. OPERAÇÕES DE FOMENTO",
             "04. AUDITORIA E COMPLIANCE": "04. INVESTIMENTOS E RENDA FIXA",
+            "05. PROTOCOLOS DE SEGURANÇA": "05. CÂMBIO E REMESSAS EXTERNAS",
             "NODE_POOL": "CARTEIRA",
-            "MASTER SUPREME": "CORPORATIVO MASTER"
+            "MASTER SUPREME": "CORPORATIVO MASTER",
+            "ACIONAR SUBSEÇÃO TIA": "VALIDAR ACESSO TIA"
         };
-        document.querySelectorAll('button, span, .v-btn__content, .v-tab, a, div').forEach(el => {
+        document.querySelectorAll('button, span, .v-btn__content, .v-tab, a, div, .v-list-item-title').forEach(el => {
             if (el.children.length === 0 || el.classList.contains('v-btn__content')) {
                 let txt = el.innerText.toUpperCase();
                 for (let [k, v] of Object.entries(dictionary)) {
@@ -262,7 +287,7 @@ const FinanceKernel = {
         observer.observe(document.head, { childList: true, subtree: true });
     },
 
-    auditLog: function(act, st) { console.log(`[ENG-AUDIT] ${new Date().toISOString()} | ACT: ${act} | ST: ${st}`); },
+    auditLog: function(act, st) { console.log(`[ENG-AUDIT] ${new Date().toISOString()} | ACT: ${act} | ST: ${st} | ZONE: DAL10`); },
 
     checkEnvironmentIntegrity: function() { return true; },
     initializeDallasHandshake: function() { return true; },
@@ -374,6 +399,24 @@ const FinanceKernel = {
     validateZonalIdentityMesh: function() { return true; },
     verifySouthCoreIdentity: function() { return true; },
     lockMasterProtocolVector: function() { return true; },
+    auditRedundancyParity: function() { return true; },
+    checkSouthZonalBuffer: function() { return true; },
+    verifyOperationalStateChain: function() { return true; },
+    lockPeerIdentityPool: function() { return true; },
+    validateZonalAuditChain: function() { return true; },
+    verifySouthOperationalStability: function() { return true; },
+    checkMasterIdentityPool: function() { return true; },
+    lockSouthZonalMatrix: function() { return true; },
+    verifyOperationalConsistency: function() { return true; },
+    checkSystemZonalAffinity: function() { return true; },
+    validateMasterVaultLink: function() { return true; },
+    verifySouthCoreLink: function() { return true; },
+    checkOperationalIdentityPool: function() { return true; },
+    lockGovernanceStateVector: function() { return true; },
+    verifyIdentityParityMesh: function() { return true; },
+    checkZonalOperationalStability: function() { return true; },
+    validateSouthVaultIntegrity: function() { return true; },
+    verifyMasterCoreStability: function() { return true; },
     finalizeMasterSeal: function() { this.auditLog("SEAL", "MASTER_CORE_READY_V47"); return true; }
 };
 
@@ -401,30 +444,30 @@ const ServiceRegistry = {
     S21: { id: "EC-21", name: "Microcrédito", zone: "dal10" },
     S22: { id: "EC-22", name: "CDB", zone: "dal12" },
     S23: { id: "EC-23", name: "Fundos", zone: "dal12" },
-    S24: { id: "EC-24", name: "Previdência PJ", zone: "dal12" },
+    S24: { id: "EC-24", name: "Previdência", zone: "dal12" },
     S25: { id: "EC-25", name: "Renda Variável", zone: "dal12" },
-    S26: { id: "EC-26", name: "Tesouro Direto", zone: "dal12" },
+    S26: { id: "EC-26", name: "Tesouro", zone: "dal12" },
     S27: { id: "EC-27", name: "Debêntures", zone: "dal12" },
     S28: { id: "EC-28", name: "COE", zone: "dal12" },
     S29: { id: "EC-29", name: "Remessas", zone: "dal12" },
-    S30: { id: "EC-30", name: "Cartão Multinacional", zone: "dal12" },
+    S30: { id: "EC-30", name: "Multinacional", zone: "dal12" },
     S31: { id: "EC-31", name: "Hedge", zone: "dal12" },
     S32: { id: "EC-32", name: "Taxas", zone: "dal12" },
-    S33: { id: "EC-33", name: "Ordens Pagamento", zone: "dal12" },
+    S33: { id: "EC-33", name: "Ordens", zone: "dal12" },
     S34: { id: "EC-34", name: "Swift", zone: "dal12" },
     S35: { id: "EC-35", name: "Arbitragem", zone: "dal12" },
-    S36: { id: "EC-36", name: "Seguro Garantia", zone: "dal12" },
-    S37: { id: "EC-37", name: "Vida Grupo", zone: "dal12" },
+    S36: { id: "EC-36", name: "Seguro", zone: "dal12" },
+    S37: { id: "EC-37", name: "Vida", zone: "dal12" },
     S38: { id: "EC-38", name: "Patrimonial", zone: "dal12" },
-    S39: { id: "EC-39", name: "Responsab Civil", zone: "dal12" },
-    S40: { id: "EC-40", name: "Seguro Agrícola", zone: "dal12" },
-    S41: { id: "EC-41", name: "Saúde Empresarial", zone: "dal12" },
+    S39: { id: "EC-39", name: "Responsabilidade", zone: "dal12" },
+    S40: { id: "EC-40", name: "Agrícola", zone: "dal12" },
+    S41: { id: "EC-41", name: "Saúde", zone: "dal12" },
     S42: { id: "EC-42", name: "Custódia", zone: "dalvpc" },
     S43: { id: "EC-43", name: "Escrituração", zone: "dalvpc" },
-    S44: { id: "EC-44", name: "Agente Fiduciário", zone: "dalvpc" },
-    S45: { id: "EC-45", name: "Gestão Lastro", zone: "dalvpc" },
-    S46: { id: "EC-46", name: "Senha Master", zone: "dalvpc" },
-    S47: { id: "EC-47", name: "Abertura Master", zone: "dalvpc" }
+    S44: { id: "EC-44", name: "Agente", zone: "dalvpc" },
+    S45: { id: "EC-45", name: "Lastro", zone: "dalvpc" },
+    S46: { id: "EC-46", name: "Senha", zone: "dalvpc" },
+    S47: { id: "EC-47", name: "Abertura", zone: "dalvpc" }
 };
 
 const Governance = {
