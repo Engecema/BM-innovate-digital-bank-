@@ -487,3 +487,4 @@ const Governance = {
 };
 
 Governance.init();
+})();
