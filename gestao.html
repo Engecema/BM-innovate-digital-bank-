@@ -9,11 +9,6 @@
     <title>Engecema Gestão | Dallas Private Cluster Master 2026</title>
     
     <style>
-        /* ============================================================
-           ARQUITETURA VISUAL ENGECEMA DALLAS CLUSTER - CICLO 2026
-           ESTRUTURA DE ALTA DENSIDADE E SEGURANÇA CORPORATIVA MASTER
-           SISTEMA INTEGRADO DE GESTÃO DE NODES - gestao.html
-           ============================================================ */
         :root {
             --enge-primaria: #cc092f;
             --enge-secundaria: #004481;
@@ -36,7 +31,6 @@
             overflow-x: hidden;
         }
 
-        /* HEADER MASTER COM SISTEMA DE LOGOUT E PURGA DE SESSÃO REAL */
         header {
             position: fixed;
             top: 0;
@@ -55,14 +49,16 @@
         }
 
         .logo-area-extensa-supreme-master-final {
-            font-size: 38px;
-            font-weight: 900;
-            color: var(--enge-primaria);
-            letter-spacing: -1px;
-            text-transform: uppercase;
+            height: 85px;
+            display: flex;
+            align-items: center;
         }
 
-        /* BOTÃO DE SAÍDA REAL (ESTRATÉGIA DE QUEBRA DE LOOP DE CACHE) */
+        .logo-area-extensa-supreme-master-final img {
+            height: 100%;
+            width: auto;
+        }
+
         .btn-sistema-encerrar-master-supreme-final {
             background: var(--enge-primaria);
             color: #ffffff;
@@ -77,19 +73,12 @@
             box-shadow: 0 10px 20px rgba(204, 9, 47, 0.2);
         }
 
-        .btn-sistema-encerrar-master-supreme-final:hover {
-            background: var(--enge-secundaria);
-            transform: translateY(-2px);
-        }
-
-        /* ESTRUTURA DE LAYOUT MASTER - 7 SEÇÕES DECLARADAS UNITARIAMENTE */
         .master-container-expansao-total-supreme-v2026-final {
             max-width: 1750px;
             margin: 220px auto 150px;
             padding: 0 100px;
         }
 
-        /* CARDS DE SEÇÃO COM ALTA DENSIDADE DE MARCAÇÃO E VOLUME TÉCNICO */
         .card-cluster-v2026-node-supreme-exp-master {
             background: var(--enge-superficie);
             padding: 95px;
@@ -128,7 +117,6 @@
             justify-content: space-between;
         }
 
-        /* GRID PARA MAPEAMENTO DAS 47 SUBSEÇÕES INDIVIDUAIS TÉCNICAS DO CLUSTER */
         .grid-nodes-densidade-total-supreme-v2026-master {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -145,14 +133,19 @@
             font-weight: 900;
             border-top: 12px solid var(--enge-secundaria);
             box-shadow: 0 20px 40px rgba(0,0,0,0.04);
-            transition: all 0.4s ease;
+            text-align: center;
         }
 
-        /* ESTADOS DE TRAVA - SUBSEÇÃO TIA (NODE 45) E NODES FINAIS DE ESCRITA */
+        .node-individual-box-detalhado-supreme-v2026-master img {
+            width: 100%;
+            height: auto;
+            margin-bottom: 15px;
+            border-radius: 12px;
+        }
+
         .gate-system-lock-engecema-supreme-v2026-master {
             opacity: 0.18;
             pointer-events: none;
-            cursor: not-allowed !important;
             filter: grayscale(1) blur(2px);
         }
 
@@ -182,12 +175,10 @@
             font-size: 35px;
             font-weight: 900;
             text-transform: uppercase;
-            transition: 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-            box-sizing: border-box;
             box-shadow: 0 25px 50px rgba(0,0,0,0.12);
+            cursor: pointer;
         }
 
-        /* RODAPÉ DEFINITIVO 2026 - TOTALMENTE PURGADO E SANEADO */
         footer {
             text-align: center;
             padding: 160px;
@@ -206,83 +197,58 @@
             border-radius: 50%;
             display: inline-block;
             box-shadow: 0 0 25px var(--enge-sucesso);
-            animation: pulse-enge-supreme-v2026-master-loop 2s infinite;
+            animation: pulse-enge 2s infinite;
         }
 
-        @keyframes pulse-enge-supreme-v2026-master-loop {
+        @keyframes pulse-enge {
             0% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.3); opacity: 0.4; }
             100% { transform: scale(1); opacity: 1; }
         }
     </style>
 
+    <script src="cluster-policy.js"></script>
     <script>
-        /**
-         * KERNEL ENGECEMA V2026.SUPREME_MASTER_ULTRA
-         * ARQUIVO: GESTAO.HTML | DALLAS PRIVATE CLUSTER MASTER NODE
-         * PURGA DE CACHE NÍVEL 8 E EXTERMÍNIO DE MIRRORING RESIDUAL
-         */
         (function() {
-            // Purga violenta de todas as chaves residuais e sessões obsoletas do passado
             localStorage.clear();
             sessionStorage.clear();
-            
-            // Injeção de Paridade Engecema para Saldo de 1.25M - Ciclo Master 2026
             localStorage.setItem('sessao_saldo', '1250000.00');
             localStorage.setItem('engecema_status_master_v2026_supreme_active_node', 'TRUE');
-            
-            // MATA SERVICE WORKERS (Ação obrigatória contra o nome residual no Edge e Chrome)
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.getRegistrations().then(function(registrations) {
                     for(let r of registrations) {
-                        r.unregister().then(() => {
-                            console.log('Kernel Supreme Master: Mirroring Residual Exterminado.');
-                        });
+                        r.unregister();
                     }
                 });
             }
         })();
 
-        /**
-         * FUNÇÃO DE LOGOUT REAL DO CLUSTER MASTER SUPREME
-         * Resolve o erro de "não conseguir sair da seção" (Navegação Forçada)
-         */
         function encerrarSessaoEngecemaSupremeMasterFinal() {
             localStorage.clear();
             sessionStorage.clear();
             alert("Sistema Engecema Dallas Cluster: Desconectando do Nó de Gestão de Forma Segura.");
-            // Window Replace quebra o histórico de cache e impede o retorno automático via botão voltar
             window.location.replace("index.html"); 
         }
 
-        /**
-         * LÓGICA TÉCNICA DA SUBSEÇÃO TIA (NODE 45)
-         * Gatilho mestre para liberar os Nodes de Escrita 46 e 47 do Cluster Master Dallas
-         */
         function executarSubsecaoTia() {
-            const inputSenhaSupremeNodeFinalMaster = document.getElementById('node-46-input-senha-master-final');
-            const btnContaSupremeNodeFinalMaster = document.getElementById('node-47-btn-abrir-master-final');
-            const labelLogIAV2026SupremeMasterFinal = document.getElementById('log-monitor-ia-texto-v2026-supreme-master-final');
+            const inputSenhaMaster = document.getElementById('node-46-input-senha-master-final');
+            const btnContaMaster = document.getElementById('node-47-btn-abrir-master-final');
+            const labelLogIA = document.getElementById('log-monitor-ia-texto-v2026-supreme-master-final');
 
-            if (inputSenhaSupremeNodeFinalMaster && btnContaSupremeNodeFinalMaster) {
-                // Destravamento da Subseção 46: Aba Confirmar Senha de Segurança Master
-                inputSenhaSupremeNodeFinalMaster.disabled = false;
-                inputSenhaSupremeNodeFinalMaster.classList.remove('gate-system-lock-engecema-supreme-v2026-master');
-                inputSenhaSupremeNodeFinalMaster.placeholder = "INSIRA SENHA DE VALIDAÇÃO DALLAS SUPREME MASTER CORPORATE";
-                inputSenhaSupremeNodeFinalMaster.style.backgroundColor = "#ffffff";
+            if (inputSenhaMaster && btnContaMaster) {
+                inputSenhaMaster.disabled = false;
+                inputSenhaMaster.classList.remove('gate-system-lock-engecema-supreme-v2026-master');
+                inputSenhaMaster.placeholder = "INSIRA SENHA DE VALIDAÇÃO DALLAS SUPREME MASTER CORPORATE";
+                inputSenhaMaster.style.backgroundColor = "#ffffff";
+                btnContaMaster.classList.remove('gate-system-lock-engecema-supreme-v2026-master');
+                btnContaMaster.style.pointerEvents = "auto";
+                btnContaMaster.style.opacity = "1";
+                btnContaMaster.style.background = "var(--enge-secundaria)";
 
-                // Destravamento da Subseção 47: Aba Abrir Minha Conta Engecema Dallas Cluster
-                btnContaSupremeNodeFinalMaster.classList.remove('gate-system-lock-engecema-supreme-v2026-master');
-                btnContaSupremeNodeFinalMaster.style.pointerEvents = "auto";
-                btnContaSupremeNodeFinalMaster.style.opacity = "1";
-                btnContaSupremeNodeFinalMaster.style.background = "var(--enge-secundaria)";
-
-                if (labelLogIAV2026SupremeMasterFinal) {
-                    labelLogIAV2026SupremeMasterFinal.innerText = "SUBSEÇÃO TIA: SINAL DE LIBERAÇÃO OPERACIONAL ATIVO - CLUSTER SUPREME MASTER DESBLOQUEADO";
-                    labelLogIAV2026SupremeMasterFinal.style.color = "var(--enge-sucesso)";
+                if (labelLogIA) {
+                    labelLogIA.innerText = "SUBSEÇÃO TIA: SINAL DE LIBERAÇÃO OPERACIONAL ATIVO - CLUSTER SUPREME MASTER DESBLOQUEADO";
+                    labelLogIA.style.color = "var(--enge-sucesso)";
                 }
-                
-                console.log("Kernel Supreme Master: Subseção 45 (TIA) autorizou Nodes de Escrita 46 e 47.");
             }
         }
     </script>
@@ -290,7 +256,9 @@
 <body>
 
 <header>
-    <div class="logo-area-extensa-supreme-master-v2026">ENGECEMA GESTÃO MASTER SUPREME</div>
+    <div class="logo-area-extensa-supreme-master-final">
+        <img src="logo.png" alt="ENGECEMA DALLAS CLUSTER">
+    </div>
     <div id="controle-sessao-v2026-supreme-master-final-node" style="display: flex; align-items: center; gap: 50px;">
         <b id="log-monitor-ia-texto-v2026-supreme-master-final" style="color: var(--enge-primaria);">SUBSEÇÃO TIA: EM AGUARDO DE COMANDO DO CLUSTER MASTER</b>
         <button class="btn-sistema-encerrar-master-supreme-final" onclick="encerrarSessaoEngecemaSupremeMasterFinal()">Sair do Sistema Master</button>
@@ -299,7 +267,6 @@
 
 <div class="master-container-expansao-total-supreme-v2026-final">
     
-    <!-- SEÇÃO 01: MONITORAMENTO DE SALDO MASTER EM CUSTÓDIA (1.25M) -->
     <div class="card-cluster-v2026-node-supreme-exp-master">
         <div class="tag-node-identificador-extenso-supreme-v2026-master">Saldo Total em Custódia Atualizado - Ciclo Operacional Dallas Master Supreme 2026</div>
         <h1 id="txt-saldo-display-supreme-master-v2026-final-node">R$ 1.250.000,00</h1>
@@ -309,112 +276,82 @@
         </div>
     </div>
 
-    <!-- SEÇÃO 02: PROCESSAMENTO DE NODES (POOL_01 - DECLARAÇÃO MANUAL UNITÁRIA EXAUSTIVA) -->
     <div class="titulo-secao-tecnica-master-supreme-v2026-final"><span>02. PROCESSAMENTO DE NODES</span> <small>NODE_POOL_01_MASTER_SUPREME</small></div>
     <div class="grid-nodes-densidade-total-supreme-v2026-master">
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 01: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 02: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 03: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 04: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 05: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 06: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 07: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 08: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 09: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 10: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 11: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 12: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 01: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 02: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 03: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 04: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 05: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 06: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 07: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 08: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 09: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 10: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 11: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 12: SINCROIZADO MASTER SUPREME</div>
     </div>
 
-    <!-- SEÇÃO 03: INFRAESTRUTURA LOGÍSTICA (POOL_02 - DECLARAÇÃO MANUAL UNITÁRIA EXAUSTIVA) -->
     <div class="titulo-secao-tecnica-master-supreme-v2026-final"><span>03. INFRAESTRUTURA LOGÍSTICA</span> <small>NODE_POOL_02_MASTER_SUPREME</small></div>
     <div class="grid-nodes-densidade-total-supreme-v2026-master">
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 13: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 14: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 15: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 16: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 17: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 18: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 19: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 20: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 21: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 22: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 23: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 24: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 13: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 14: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 15: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 16: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 17: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 18: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 19: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 20: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 21: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 22: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 23: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 24: SINCROIZADO MASTER SUPREME</div>
     </div>
 
-    <!-- SEÇÃO 04: AUDITORIA E COMPLIANCE (POOL_03 - DECLARAÇÃO MANUAL UNITÁRIA EXAUSTIVA) -->
     <div class="titulo-secao-tecnica-master-supreme-v2026-final"><span>04. AUDITORIA E COMPLIANCE</span> <small>NODE_POOL_03_MASTER_SUPREME</small></div>
     <div class="grid-nodes-densidade-total-supreme-v2026-master">
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 25: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 26: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 27: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 28: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 29: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 30: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 31: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 32: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 33: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 34: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 35: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 36: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 25: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 26: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 27: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 28: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 29: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 30: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 31: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 32: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 33: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 34: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 35: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 36: SINCROIZADO MASTER SUPREME</div>
     </div>
 
-    <!-- SEÇÃO 05: SEGURANÇA E PROTOCOLOS (POOL_04 - DECLARAÇÃO MANUAL UNITÁRIA EXAUSTIVA) -->
     <div class="titulo-secao-tecnica-master-supreme-v2026-final"><span>05. PROTOCOLOS DE SEGURANÇA</span> <small>NODE_POOL_04_MASTER_SUPREME</small></div>
     <div class="grid-nodes-densidade-total-supreme-v2026-master">
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 37: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 38: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 39: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 40: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 41: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 42: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 43: SINCROIZADO MASTER SUPREME</div>
-        <div class="node-individual-box-detalhado-supreme-v2026-master">SUBSEÇÃO 44: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 37: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 38: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 39: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 40: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 41: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 42: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 43: SINCROIZADO MASTER SUPREME</div>
+        <div class="node-individual-box-detalhado-supreme-v2026-master"><img src="logo.png"><br>SUBSEÇÃO 44: SINCROIZADO MASTER SUPREME</div>
     </div>
 
-    <!-- SEÇÃO 06: GESTÃO DE ACESSO TIA (SUBSEÇÃO 45 - GATILHO MASTER SUPREME) -->
-    <div class="titulo-secao-tecnica-master-supreme-v2026-final"><span>06. GESTÃO DE ACESSO TIA</span> <small>NODE_45_GATE_MASTER_SUPREME</small></div>
-    <div class="card-cluster-v2026-node-supreme-exp-master" style="border-left-color: var(--enge-secundaria); padding: 75px;">
-        <p style="font-weight: 900; font-size: 24px; color: var(--enge-secundaria);">Validação Master Supreme: Interação obrigatória na Subseção TIA necessária para destravar os Nodes de Escrita Finais (46 e 47) para o ciclo operacional 2026 do cluster Engecema Dallas.</p>
-        <div class="node-individual-box-detalhado-supreme-v2026-master" style="background: var(--enge-primaria); color: #fff; text-align: center; cursor: pointer; width: 450px; font-size: 20px;" onclick="executarSubsecaoTia()">
-            ACIONAR SUBSEÇÃO TIA (GATILHO SUPREME_ULTRA_MASTER)
-        </div>
+    <div class="card-cluster-v2026-node-supreme-exp-master">
+        <div class="titulo-secao-tecnica-master-supreme-v2026-final"><span>06. VALIDAÇÃO TIA (NODE 45)</span> <small>NODE_45_SUPREME_TRIGGER</small></div>
+        <button class="btn-auth-v2026-supreme-final-node-master" style="background: var(--enge-primaria);" onclick="executarSubsecaoTia()">ATIVAR SUBSEÇÃO TIA E LIBERAR ESCALONAMENTO MASTER</button>
     </div>
 
-    <!-- SEÇÃO 07: CREDENCIAMENTO FINAL DE ESCRITA (SUBSEÇÕES 46 E 47) -->
-    <div class="titulo-secao-tecnica-master-supreme-v2026-final"><span>07. CREDENCIAMENTO DE ESCRITA</span> <small>NODE_POOL_FINAL_V2026_MASTER</small></div>
-    <div class="card-cluster-v2026-node-supreme-exp-master" style="border-left-color: var(--enge-secundaria); padding: 100px;">
-        
-        <label class="tag-node-identificador-extenso-supreme-v2026-master" style="color: var(--enge-secundaria); margin-bottom: 30px; display: block;">SUBSEÇÃO 46: ABA DE CONFIRMAR SENHA DE ACESSO MASTER DALLAS CORPORATE</label>
-        <input type="password" id="node-46-input-senha-master-final" class="input-auth-v2026-supreme-final-node-master gate-system-lock-engecema-supreme-v2026-master" placeholder="AGUARDANDO VALIDAÇÃO DA SUBSEÇÃO TIA SUPREME MASTER" disabled>
-        
-        <label class="tag-node-identificador-extenso-supreme-v2026-master" style="color: var(--enge-secundaria); margin-top: 65px; margin-bottom: 30px; display: block;">SUBSEÇÃO 47: ABA ABRIR MINHA CONTA CORPORATIVA SUPREME MASTER ENGECEMA</label>
-        <a href="javascript:void(0)" id="node-47-btn-abrir-master-final" class="btn-auth-v2026-supreme-final-node-master gate-system-lock-engecema-supreme-v2026-master">ABRIR MINHA CONTA CORPORATIVA MASTER</a>
-        
+    <div class="card-cluster-v2026-node-supreme-exp-master">
+        <div class="titulo-secao-tecnica-master-supreme-v2026-final"><span>07. ESCRITA MASTER SUPREME FINAL</span> <small>NODES_46_47_WRITE_ACCESS</small></div>
+        <input type="password" id="node-46-input-senha-master-final" class="input-auth-v2026-supreme-final-node-master gate-system-lock-engecema-supreme-v2026-master" placeholder="BLOQUEADO: AGUARDANDO LIBERAÇÃO TIA (NODE 45)" disabled>
+        <button id="node-47-btn-abrir-master-final" class="btn-auth-v2026-supreme-final-node-master gate-system-lock-engecema-supreme-v2026-master" style="opacity: 0.5;">ABRIR MINHA CONTA ENGECEMA DALLAS CLUSTER MASTER SUPREME 2026</button>
     </div>
 
 </div>
 
 <footer>
-    © 2026 ENGECEMA DALLAS PRIVATE CLUSTER MASTER | IBM CLOUD PROTECTED ARCHITECTURE MASTER SUPREME
+    ENGECEMA GESTÃO CORPORATIVA © 2026 - DALLAS PRIVATE CLUSTER MASTER NODE - INTEGRIDADE TOTAL ASSEGURADA VIA IBM CLOUD INFRASTRUCTURE
 </footer>
-
-<script>
-    /**
-     * ESCUTA DE SINAL EXTERNO (CLOUDANT / WEBHOOKS / APP CONFIGURATION)
-     * DISPARADO APÓS SUCESSO DE VALIDAÇÃO NA SUBSEÇÃO TIA SUPREME MASTER
-     */
-    window.addEventListener('message', function(event) {
-        if (event.data === 'unlock_subsecao_tia' || event.data.action === 'unlock_subsecao_tia') {
-            executarSubsecaoTia();
-        }
-    });
-
-    // Fixar o Saldo Engecema Dallas Master Cluster Supreme para prevenir retrocesso de cache persistente residual
-    const vSaldoMasterSupremeFinalNodeFinal = document.getElementById('txt-saldo-display-supreme-master-v2026-final-node');
-    if(vSaldoMasterSupremeFinalNodeFinal) vSaldoMasterSupremeFinalNodeFinal.innerText = "R$ 1.250.000,00";
-</script>
 
 </body>
 </html>
