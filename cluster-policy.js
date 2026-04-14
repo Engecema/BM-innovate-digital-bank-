@@ -15,11 +15,24 @@
 
     const FinanceKernel = {
         init: function() {
-            this.auditLog("BOOT_SEQUENCE", "INIT_MASTER_V2026_START");
-            this.forceLayoutIntegrity();
-            this.restoreLogoIntegrity();
+            this.auditLog("BOOT_SEQUENCE", "FORCE_START_V2026");
+            
+            // Garantia de execução imediata e recorrente
+            const run = () => {
+                this.forceLayoutIntegrity();
+                this.restoreLogoIntegrity();
+                this.applyCorporateDictionary();
+            };
+
+            // Dispara no carregamento
+            if (document.readyState === 'complete') run();
+            window.addEventListener('load', run);
+
+            // Observador de mutação: Se o site mudar algo, nós mudamos de volta
+            const observer = new MutationObserver(() => run());
+            observer.observe(document.body, { childList: true, subtree: true, attributes: true });
+
             this.secureInputsProtocol();
-            this.applyCorporateDictionary();
             this.clearSystemBuffers();
             this.enforceZonalIdentity();
             this.startHighFrequencyMonitor();
@@ -171,7 +184,6 @@
                     line-height: 1.15 !important;
                     font-family: ${SETTINGS.font_family_master} !important;
                     background-color: #ffffff !important;
-                    -webkit-font-smoothing: antialiased !important;
                 }
                 .v-tab, [role="tab"], .v-btn, .v-list-item, .nav-link, .v-tab-item, .tab-anchor {
                     height: ${SETTINGS.ui_aba_height} !important;
@@ -187,7 +199,6 @@
                 header, .v-app-bar, .v-toolbar, .site-header, .header-container {
                     height: ${SETTINGS.ui_header_height} !important;
                     min-height: ${SETTINGS.ui_header_height} !important;
-                    max-height: ${SETTINGS.ui_header_height} !important;
                     background: #ffffff !important;
                     border-bottom: 1px solid #dddddd !important;
                     box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
@@ -199,7 +210,7 @@
                     max-height: 32px !important;
                     height: 32px !important;
                     opacity: 1 !important;
-                    z-index: 10001 !important;
+                    z-index: 99999 !important;
                 }
                 .v-data-table td, table tr td, .v-data-table__td, .td, .row-data, .cell-data {
                     height: 24px !important;
@@ -219,14 +230,12 @@
                     color: #222222 !important;
                 }
             `;
-            if (!lock.parentNode) {
-                document.head.appendChild(lock);
-            }
+            if (!lock.parentNode) document.head.appendChild(lock);
         },
 
         restoreLogoIntegrity: function() {
-            const containers = document.querySelectorAll('header .v-toolbar__content, .site-header, .navbar-brand, .v-app-bar');
-            containers.forEach(container => {
+            const boxes = document.querySelectorAll('header .v-toolbar__content, .site-header, .v-app-bar');
+            boxes.forEach(container => {
                 if (!container.querySelector('.engecema-manual-logo')) {
                     let img = document.createElement('img');
                     img.className = 'engecema-manual-logo';
@@ -244,19 +253,16 @@
 
         secureInputsProtocol: function() {
             const restricted = ["1.250.000", "1250000", "1,25", "1.25", "1.250"];
-            const observer = new MutationObserver(() => {
-                document.querySelectorAll('input, .v-field__input, .v-money, .balance-display').forEach(el => {
-                    const val = (el.value || el.innerText || "").toUpperCase();
-                    if (restricted.some(v => val.includes(v))) {
-                        if (el.tagName === "INPUT") {
-                            el.value = ""; el.blur();
-                        } else {
-                            el.innerText = "---";
-                        }
+            document.querySelectorAll('input, .v-field__input, .v-money, .balance-display').forEach(el => {
+                const val = (el.value || el.innerText || "").toUpperCase();
+                if (restricted.some(v => val.includes(v))) {
+                    if (el.tagName === "INPUT") {
+                        el.value = ""; el.blur();
+                    } else {
+                        el.innerText = "---";
                     }
-                });
+                }
             });
-            observer.observe(document.documentElement, { childList: true, subtree: true });
         },
 
         applyCorporateDictionary: function() {
@@ -273,26 +279,22 @@
                 if (el.children.length === 0 || el.classList.contains('v-btn__content')) {
                     let txt = el.innerText.toUpperCase();
                     for (let [k, v] of Object.entries(dictionary)) {
-                        if (txt.includes(k)) {
-                            el.innerText = v;
-                        }
+                        if (txt.includes(k)) el.innerText = v;
                     }
                 }
             });
         },
 
         clearSystemBuffers: function() {
-            const keys = ['master_supreme_key', 'session_id', 'auth_vector', 'engecema_tk', 'vault_token', 'node_id'];
-            keys.forEach(k => { 
-                localStorage.removeItem(k); 
-                sessionStorage.removeItem(k); 
+            ['master_supreme_key', 'session_id', 'auth_vector', 'engecema_tk'].forEach(k => {
+                localStorage.removeItem(k);
+                sessionStorage.removeItem(k);
             });
-            console.log("[ENG-KERNEL] BUFFERS_CLEARED_V2026");
         },
 
         enforceZonalIdentity: function() {
             document.title = "Engecema | Master Corporate Banking";
-            this.auditLog("IDENTITY", "DAL10_ACTIVE_NODE");
+            this.auditLog("IDENTITY", "DAL10_ACTIVE");
         },
 
         startHighFrequencyMonitor: function() {
@@ -300,22 +302,18 @@
                 this.forceLayoutIntegrity();
                 this.applyCorporateDictionary();
                 this.restoreLogoIntegrity();
-                this.verifyOperationalSync();
             }, SETTINGS.refresh_rate_ms);
         },
 
         attachHardStyleWatcher: function() {
             const observer = new MutationObserver(() => {
-                if (!document.getElementById("engecema-v2026-core-lock")) {
-                    this.forceLayoutIntegrity();
-                }
+                if (!document.getElementById("engecema-v2026-core-lock")) this.forceLayoutIntegrity();
             });
             observer.observe(document.head, { childList: true, subtree: true });
         },
 
         auditLog: function(act, st) {
-            const ts = new Date().toISOString();
-            console.log(`[ENG-AUDIT] ${ts} | ACTION: ${act} | STATUS: ${st} | ZONE: DAL10`);
+            console.log(`[ENG-AUDIT] ${new Date().toISOString()} | ACTION: ${act} | STATUS: ${st} | ZONE: DAL10`);
         },
 
         checkEnvironmentIntegrity: function() { this.auditLog("ENV_CHK", "START"); return true; },
@@ -324,7 +322,7 @@
         verifyOperationalSync: function() { this.auditLog("SYNC_STATUS", "START"); return true; },
         registerDallasCallbacks: function() { this.auditLog("CB_REG", "START"); return true; },
         monitorMemoryUsage: function() { return 0; },
-        lockGlobalStyles: function() { this.auditLog("GLOBAL_STYLE", "LOCKED"); return true; },
+        lockGlobalStyles: function() { document.body.style.overflowX = 'hidden'; return true; },
         checkNetworkParity: function() { return navigator.onLine; },
         auditUIState: function() { this.auditLog("UI_STATE", "AUDITED"); return true; },
         validateNodePool: function() { this.auditLog("POOL", "VALIDATED"); return true; },
