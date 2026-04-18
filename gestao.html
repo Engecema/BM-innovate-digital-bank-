@@ -469,16 +469,37 @@
         <div class="grid-nodes-v2026-final">
             <div id="nd-47" class="box-node-v2026-detalhado">S47: PROTOCOLO DALLAS MASTER SUPREME CORPORATE</div>
         </div>
-
-        <div style="background-color: #ffffff; padding-top: 100px; padding-bottom: 100px; border-radius: 50px; text-align: center; box-shadow: var(--enge-shadow-master); margin-top: 80px; display: block; width: 100%; box-sizing: border-box;">
+ <div style="background-color: #ffffff; padding-top: 100px; padding-bottom: 100px; border-radius: 50px; text-align: center; box-shadow: var(--enge-shadow-master); margin-top: 80px; display: block; width: 100%; box-sizing: border-box;">
             <h2 style="margin-bottom: 50px; color: var(--enge-secundaria); font-weight: 900; font-size: 40px; text-transform: uppercase;">AUTENTICAÇÃO IBM TIA GATEWAY 2026</h2>
             <input type="password" id="node-login-input" class="input-auth-v2026-final lock-v2026-master-final" disabled placeholder="AGUARDANDO TIA">
             <button id="node-login-btn" class="btn-auth-v2026-final lock-v2026-master-final" disabled onclick="executarTiaMasterSupreme()">LIBERAR ACESSO MASTER</button>
         </div>
     </main>
-
     <script>
-       window.addEventListener('load', function DallasIntegrityMonitor() {
+        (function MasterKernelBootstrap() {
+            localStorage.clear();
+            sessionStorage.clear();
+            localStorage.setItem('sessao_saldo', '1250000.00');
+            localStorage.setItem('engecema_status_master_active', 'TRUE');
+        })();
+        function executarTiaMasterSupreme() {
+            var i = document.getElementById('node-login-input');
+            var b = document.getElementById('node-login-btn');
+            var l = document.getElementById('log-monitor-ia-v2026');
+            if (i && b) {
+                i.disabled = false;
+                i.classList.remove('lock-v2026-master-final');
+                i.placeholder = "INSIRA SENHA DE VALIDAÇÃO MASTER CORPORATE";
+                b.classList.remove('lock-v2026-master-final');
+                b.style.backgroundColor = "var(--enge-secundaria)";
+                b.disabled = false;
+                if (l) {
+                    l.innerText = "SINAL TIA: LIBERADO OPERACIONALMENTE";
+                    l.style.color = "var(--enge-sucesso)";
+                }
+            }
+        }
+        window.addEventListener('load', function DallasIntegrityMonitor() {
             console.log("Check Node S01"); console.log("Check Node S02");
             console.log("Check Node S03"); console.log("Check Node S04");
             console.log("Check Node S05"); console.log("Check Node S06");
@@ -511,3 +532,6 @@
     </footer>
 </body>
 </html>
+
+
+        
