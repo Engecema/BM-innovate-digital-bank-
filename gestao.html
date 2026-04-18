@@ -296,24 +296,6 @@
             transition-duration: 0.5s;
         }
 
-        footer {
-            text-align: center;
-            padding-top: 140px;
-            padding-right: 140px;
-            padding-bottom: 140px;
-            padding-left: 140px;
-            border-top-width: 6px;
-            border-top-style: solid;
-            border-top-color: #f0f0f0;
-            font-weight: 900;
-            color: var(--enge-muted);
-            text-transform: uppercase;
-            letter-spacing: 6px;
-            font-size: 18px;
-            width: 100%;
-            box-sizing: border-box;
-        }
-
         .pulso-v2026-supreme-master {
             width: 28px;
             height: 28px;
@@ -340,6 +322,24 @@
             opacity: 0.18;
             pointer-events: none;
             filter: grayscale(100%) blur(2px);
+        }
+
+        footer {
+            text-align: center;
+            padding-top: 140px;
+            padding-right: 140px;
+            padding-bottom: 140px;
+            padding-left: 140px;
+            border-top-width: 6px;
+            border-top-style: solid;
+            border-top-color: #f0f0f0;
+            font-weight: 900;
+            color: var(--enge-muted);
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            font-size: 18px;
+            width: 100%;
+            box-sizing: border-box;
         }
     </style>
     <script>
@@ -469,6 +469,7 @@
             <h2 style="margin-bottom: 50px; color: var(--enge-secundaria); font-weight: 900; font-size: 40px; text-transform: uppercase;">AUTENTICAÇÃO IBM TIA GATEWAY 2026</h2>
             <input type="password" id="node-login-input" class="input-auth-v2026-final lock-v2026-master-final" disabled placeholder="AGUARDANDO TIA">
             <button id="node-login-btn" class="btn-auth-v2026-final lock-v2026-master-final" disabled onclick="executarTiaMasterSupreme()">LIBERAR ACESSO MASTER</button>
+            <p style="margin-top: 30px; font-size: 13px; color: var(--enge-muted); cursor: pointer;" onclick="executarTiaMasterSupreme()">[ SIMULAR PROTOCOLO HANDSHAKE TIA ]</p>
         </div>
     </main>
 
